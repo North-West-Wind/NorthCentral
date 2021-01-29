@@ -1,12 +1,10 @@
 const express = require('express');
 const app = express();
-const chrome = require('chrome-aws-lambda');
-const puppeteer = require('puppeteer-core');
+const puppeteer = require('puppeteer');
 var browser;
 async function launchBrowser() {
     browser = await puppeteer.launch({
-        args: chrome.args.concat(['--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage', '--disable-accelerated-2d-canvas', '--no-first-run', '--no-zygote', '--single-process', '--disable-gpu', "--proxy-server='direct://'", '--proxy-bypass-list=*']),
-        executablePath: await chrome.executablePath,
+        args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage', '--disable-accelerated-2d-canvas', '--no-first-run', '--no-zygote', '--single-process', '--disable-gpu', "--proxy-server='direct://'", '--proxy-bypass-list=*'],
         headless: true
     });
     console.log("Browser Initialized!");
