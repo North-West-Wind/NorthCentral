@@ -1,15 +1,16 @@
 const express = require('express');
 const app = express();
-const puppeteer = require('puppeteer');
 var browser;
 async function launchBrowser() {
+    const chrome = require('chrome-aws-lambda');
+    const puppeteer = require('puppeteer-core');
     browser = await puppeteer.launch({
         args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage', '--disable-accelerated-2d-canvas', '--no-first-run', '--no-zygote', '--single-process', '--disable-gpu', "--proxy-server='direct://'", '--proxy-bypass-list=*'],
-        headless: true
+        headless: true,
+        executablePath: await chrome.executablePath
     });
     console.log("Browser Initialized!");
 }
-launchBrowser();
 
 app.get('/', async (req, res) => {
     if (!req.query.code) return res.json({ error: "No code input." });
@@ -27,4 +28,9 @@ app.get('/', async (req, res) => {
     }
 });
 
-app.listen(process.env.PORT || 3000);
+const server = app.listen(process.env.PORT || 3000, async () => {
+    const host = server.address().address;
+    const port = server.address().port;
+    console.log('REST Puppeteer listening at http://%s:%s', host, port);
+    await launchBrowser();
+});
