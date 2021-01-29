@@ -14,11 +14,8 @@ async function launchBrowser() {
 
 app.get('/', async (req, res) => {
     if (!req.query.code) return res.json({ error: "No code input." });
-    if (!browser) {
-        await launchBrowser();
-        return res.json({ error: "Browser hasn't been initialized." });
-    }
     try {
+        if (!browser) await launchBrowser();
         const page = await browser.newPage();
         const result = await(Object.getPrototypeOf(async function () { }).constructor("page", req.query.code))(page);
         res.json({ result, error: null });
