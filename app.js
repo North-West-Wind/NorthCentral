@@ -16,4 +16,5 @@ app.get('/', async (req, res) => {
 
 app.listen(process.env.PORT || 3000, async () => {
     browser = await puppeteer.launch(options);
+    console.log("Browser Initialized!");
 });
