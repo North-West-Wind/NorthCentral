@@ -6,7 +6,7 @@ async function launchBrowser() {
     const puppeteer = require('puppeteer-core');
     browser = await puppeteer.launch({
         args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage', '--disable-accelerated-2d-canvas', '--no-first-run', '--no-zygote', '--single-process', '--disable-gpu', "--proxy-server='direct://'", '--proxy-bypass-list=*'],
-        headless: true,
+        headless: false,
         executablePath: await chrome.executablePath
     });
     console.log("Browser Initialized!");
