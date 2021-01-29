@@ -10,6 +10,10 @@
   "license": "GPL-3.0-or-later",
   "dependencies": {
     "chrome-aws-lambda": "^5.5.0",
-    "express": "^4.17.1"
+    "express": "^4.17.1",
+    "puppeteer-core": "^5.5.0"
+  },
+  "devDependencies": {
+    "puppeteer": "^5.5.0"
   }
 }
