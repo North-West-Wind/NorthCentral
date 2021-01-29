@@ -1,6 +1,6 @@
 {
     "version": 2,
-    "name": "nodejs-mysql",
+    "name": "rest-puppeteer",
     "builds": [
         {
             "src": "app.js",
