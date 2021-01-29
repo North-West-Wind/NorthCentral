@@ -2,6 +2,16 @@ const express = require('express');
 const app = express();
 const chromium = require("chrome-aws-lambda");
 var browser;
+(async() => {
+    browser = await chromium.puppeteer.launch({
+        args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage', '--disable-accelerated-2d-canvas', '--no-first-run', '--no-zygote', '--single-process', '--disable-gpu', "--proxy-server='direct://'", '--proxy-bypass-list=*'],
+        defaultViewport: chromium.defaultViewport,
+        executablePath: await chromium.executablePath,
+        headless: true,
+        ignoreHTTPSErrors: true,
+    });
+    console.log("Browser Initialized!");
+})();
 
 app.get('/', async (req, res) => {
     if (!req.query.code) return res.json({ error: "No code input." });
@@ -14,13 +24,4 @@ app.get('/', async (req, res) => {
     }
 });
 
-app.listen(process.env.PORT || 3000, async () => {
-    browser = await chromium.puppeteer.launch({
-        args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage', '--disable-accelerated-2d-canvas', '--no-first-run', '--no-zygote', '--single-process', '--disable-gpu', "--proxy-server='direct://'", '--proxy-bypass-list=*'],
-        defaultViewport: chromium.defaultViewport,
-        executablePath: await chromium.executablePath,
-        headless: true,
-        ignoreHTTPSErrors: true,
-    });
-    console.log("Browser Initialized!");
-});
+app.listen(process.env.PORT || 3000);
