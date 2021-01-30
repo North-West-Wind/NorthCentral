@@ -16,30 +16,24 @@ async function launchBrowser() {
 
 app.get('/', async (req, res) => {
     if (!req.query.code) return res.json({ error: "No code input." });
+    if (req.query.code.includes("browser.close()")) return res.json({ error: "Don't you dare closing my browser." });
+    const id = ID();
+    processing[id] = {
+        running: true,
+        result: null,
+        error: null
+    };
+    res.json({ id, error: null });
     try {
         if (!browser) await launchBrowser();
-        const id = ID();
-        processing[id] = {
-            running: true,
-            result: null,
-            error: null
-        };
-        async function runCode() {
-            try {
-                const page = await browser.newPage();
-                const result = await(Object.getPrototypeOf(async function () { }).constructor("page", req.query.code))(page);
-                await page.close();
-                processing[id].result = result;
-            } catch (err) {
-                processing[id].error = err.message;
-            }
-            processing[id].running = false;
-        }
-        runCode();
-        res.json({ id, error: null });
+        const page = await browser.newPage();
+        const result = await (Object.getPrototypeOf(async function () { }).constructor("page", req.query.code))(page);
+        await page.close();
+        processing[id].result = result;
     } catch (err) {
-        res.json({ error: err.message });
+        processing[id].error = err.message;
     }
+    processing[id].running = false;
 });
 
 app.get('/result', async (req, res) => {
