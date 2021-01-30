@@ -51,6 +51,7 @@ app.get('/', async (req, res) => {
 app.get('/result', async (req, res) => {
     if (!req.query.id) return res.json({ error: "No ID received." });
     const process = processing[req.query.id];
+    return res.json(process);
     if (!process) return res.json({ error: "ID not found." });
     if (process.running) return res.json({ error: "Run is not completed." });
     res.json(processing[req.query.id]);
