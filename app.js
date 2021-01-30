@@ -13,6 +13,7 @@ async function launchBrowser() {
     });
     console.log("Browser Initialized!");
 }
+launchBrowser();
 
 app.get('/', async (req, res) => {
     if (!req.query.code) return res.json({ error: "No code input." });
@@ -24,7 +25,7 @@ app.get('/', async (req, res) => {
             result: null,
             error: null
         };
-        (async() => {
+        async function runCode() {
             try {
                 const page = await browser.newPage();
                 const result = await(Object.getPrototypeOf(async function () { }).constructor("page", req.query.code))(page);
@@ -41,7 +42,8 @@ app.get('/', async (req, res) => {
                     error: err.message
                 };
             }
-        })();
+        }
+        runCode();
         res.json({ id, error: null });
     } catch (err) {
         res.json({ error: err.message });
