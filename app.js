@@ -30,18 +30,11 @@ app.get('/', async (req, res) => {
                 const page = await browser.newPage();
                 const result = await(Object.getPrototypeOf(async function () { }).constructor("page", req.query.code))(page);
                 await page.close();
-                processing[id] = {
-                    running: false,
-                    result: result,
-                    error: null
-                };
+                processing[id].result = result;
             } catch (err) {
-                processing[id] = {
-                    running: false,
-                    result: null,
-                    error: err.message
-                };
+                processing[id].error = err.message;
             }
+            processing[id].running = false;
         }
         runCode();
         res.json({ id, error: null });
