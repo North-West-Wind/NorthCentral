@@ -13,7 +13,6 @@ async function launchBrowser() {
     });
     console.log("Browser Initialized!");
 }
-launchBrowser();
 
 app.get('/', async (req, res) => {
     if (!req.query.code) return res.json({ error: "No code input." });
