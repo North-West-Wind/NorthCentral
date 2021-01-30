@@ -1,5 +1,7 @@
 const express = require('express');
 const app = express();
+const processing = {};
+var ID = () => '_' + Math.random().toString(36).substr(2, 9);
 var browser;
 async function launchBrowser() {
     const chrome = require('chrome-aws-lambda');
@@ -16,13 +18,43 @@ app.get('/', async (req, res) => {
     if (!req.query.code) return res.json({ error: "No code input." });
     try {
         if (!browser) await launchBrowser();
-        const page = await browser.newPage();
-        const result = await(Object.getPrototypeOf(async function () { }).constructor("page", req.query.code))(page);
-        res.json({ result, error: null });
-        await page.close();
+        const id = ID();
+        processing[id] = {
+            running: true,
+            result: null,
+            error: null
+        };
+        (async() => {
+            try {
+                const page = await browser.newPage();
+                const result = await(Object.getPrototypeOf(async function () { }).constructor("page", req.query.code))(page);
+                await page.close();
+                processing[id] = {
+                    running: false,
+                    result: result,
+                    error: null
+                };
+            } catch (err) {
+                processing[id] = {
+                    running: false,
+                    result: null,
+                    error: err.message
+                };
+            }
+        })();
+        res.json({ id, error: null });
     } catch (err) {
         res.json({ error: err.message });
     }
+});
+
+app.get('/result', async (req, res) => {
+    if (!req.query.id) return res.json({ error: "No ID received." });
+    const process = processing[req.query.id];
+    if (!process) return res.json({ error: "ID not found." });
+    if (process.running) return res.json({ error: "Run is not completed." });
+    res.json(processing[req.query.id]);
+    delete processing[req.query.id];
 });
 
 const server = app.listen(process.env.PORT || 3000, async () => {
