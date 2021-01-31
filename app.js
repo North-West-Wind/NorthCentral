@@ -20,6 +20,7 @@ app.get('/', async (req, res) => {
         await page.close();
         res.json({ result, error: null })
     } catch (err) {
+        console.error(err);
         res.json({ error: err.message });
     }
 });
