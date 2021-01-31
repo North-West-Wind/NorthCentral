@@ -36,6 +36,9 @@ app.get('/', async (req, res) => {
         console.log("Code Finished with Error");
     }
     processes[id].running = false;
+    setTimeout(() => {
+        if (processes[id]) delete processes[id];
+    }, 1800000);
 });
 
 app.get("/result", (req, res) => {
@@ -44,6 +47,7 @@ app.get("/result", (req, res) => {
     if (!process) return res.json({ error: "ID not found." });
     if (process.running) return res.json({ error: "Process is running." });
     res.json(process);
+    delete processes[req.query.id];
 });
 
 const server = app.listen(process.env.PORT || 3000, async () => {
