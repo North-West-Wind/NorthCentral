@@ -18,6 +18,7 @@ app.get('/', async (req, res) => {
         const page = await browser.newPage();
         const result = await (Object.getPrototypeOf(async function () { }).constructor("page", req.query.code))(page);
         await page.close();
+        res.json({ result, error: null })
     } catch (err) {
         res.json({ error: err.message });
     }
