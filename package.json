@@ -1,19 +1,25 @@
 {
-  "name": "restpuppeteer",
-  "version": "1.0.0",
-  "description": "REST Puppeteer API",
-  "main": "app.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node app.js"
-  },
-  "engines": {
-    "node" : "14.x"
-  },
-  "author": "NorthWestWind",
-  "license": "GPL-3.0-or-later",
-  "dependencies": {
-    "express": "^4.17.1",
-    "puppeteer": "^5.5.0"
-  }
+    "name": "northhub",
+    "version": "1.0.0",
+    "description": "REST Puppeteer API",
+    "main": "app.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "start": "node --optimize_for_size --max_old_space_size=341 --gc_interval=50 index.js"
+    },
+    "engines": {
+        "node": "16.x"
+    },
+    "author": "NorthWestWind",
+    "license": "GPL-3.0-or-later",
+    "dependencies": {
+        "express": "^4.17.1",
+        "puppeteer": "^5.5.0",
+        "three": "^0.131.3",
+        "ws": "^8.2.0"
+    },
+    "devDependencies": {
+        "@types/three": "^0.131.0",
+        "@types/ws": "^7.4.7"
+    }
 }
