@@ -1,6 +1,7 @@
 const express = require("express");
 const { Server } = require("ws");
 const runCode = require("./puppeteer.js");
+const bodyParser = require("body-parser"); 
 const app = express();
 
 const socketServer = new Server({ port: 3030 });
@@ -23,6 +24,13 @@ socketServer.on('connection', (socketClient) => {
 });
 
 app.use(express.static("public"));
+app.use(bodyParser.urlencoded({ extended: false })); 
+app.set('views', __dirname + '/views');
+app.set('view engine', 'ejs');
+
+app.get("/", (req, res) => res.render("index", { page: 0 }));
+
+app.get("/:page", (req, res) => res.render("index", { page: req.params.page }));
 
 const server = app.listen(process.env.PORT || 3000, async () => {
     const info = server.address();

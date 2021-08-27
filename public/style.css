@@ -1,9 +1,4 @@
 @font-face {
-    font-family: 'DotMatrix';
-    src: url('/assets/dot-matrix.ttf');
-}
-
-@font-face {
     font-family: 'OdinRounded';
     src: url('/assets/odin-rounded.regular.otf') format("opentype");
 }
@@ -20,31 +15,42 @@ canvas {
     left: 0;
 }
 
-#info {
-	position: absolute;
+.info {
+    position: absolute;
     top: 0;
     left: 0;
-	width: 0;
-    height: 0;
-	text-align: center;
-	z-index: 100;
-	display: none;
-    background-color: #333;
-    opacity: 0.5;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    z-index: 100;
+    background-color: rgba(51, 51, 51, 0.5);
+    transition: all 1s linear;
+    display: block;
+    overflow: auto;
 }
 
-#info h1 {
+.hidden {
+    display: none;
+}
+
+.visuallyhidden {
+    opacity: 0;
+}
+
+.info h1 {
     font-size: 5vw;
 }
 
-#info h2 {
+.info h2 {
     font-size: 3vw;
     margin-bottom: 0;
 }
 
-#info p {
-    font-size: 2vw;
-    margin-top: 0;
+.info p {
+    font-size: 1.75vw;
+    margin-top: 1vh;
+    padding-left: 12vw;
+    padding-right: 12vw;
 }
 
 .floors {
@@ -55,4 +61,27 @@ canvas {
 .floors th {
     text-align: right;
     padding-right: 1vw;
+}
+
+.info iframe {
+    width: 48vw;
+    height: 27vw;
+}
+
+.hidescroll::-webkit-scrollbar {
+    display: none;
+}
+
+.hidescroll {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+a {
+	text-decoration: none;
+	color: #fcba03;
+}
+
+a:hover {
+	text-decoration: underline;
 }

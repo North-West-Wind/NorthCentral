@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>North's Elevator</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://threejs.org/build/three.js"></script>
+    <script src="/js/GLTFLoader.js"></script>
+    <script src="/js/constants.js"></script>
+</head>
+
+<body>
+    <canvas id="bg"></canvas>
+    <div id="info" class="info hidescroll hidden visuallyhidden"></div>
+    <script src="/js/generators.js"></script>
+    <script src="/js/renderer.js"></script>
+    <script src="/js/handler.js"></script>
+    <script>
+        const floor = PAGES.indexOf("<%= page %>") + 1;
+        if (floor > 0) {
+            diff = gotoFloor = floor;
+            pendingMove = true;
+            const xm = new THREE.MeshStandardMaterial({ map: displayTexture(gotoFloor), transparent: true });
+            xm.map.needsUpdate = true;
+            display.material.splice(4, 1, xm);
+        }
+    </script>
+</body>
+
+</html>

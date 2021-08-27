@@ -1,3 +1,5 @@
+
+
 function makeLift(scene) {
     const { rectL, rectR, rectT, rectB, doorL, doorR } = makeDoors(scene);
     const { floor } = makeFloor(scene);
@@ -143,12 +145,10 @@ function makeSign(scene) {
 }
 
 function makeOutside(scene) {
-    const geometry = new THREE.BoxGeometry(55, 2, 500);
-    const material = new THREE.MeshStandardMaterial({ color: 0xcccccc });
-    const floor = new THREE.Mesh(geometry, material);
-    floor.position.set(0, -31, -300);
-    scene.add(floor);
-    return { floor };
+    const { floor } = makeGroundFloor(scene);
+    const { ocean, oakFloor, fishingRod, string, holder } = makeAutoFishFloor(scene);
+    const { armorStand } = makeMoreBootsFloor(scene);
+    return { floor, ocean, oakFloor, fishingRod, string, holder, armorStand };
 }
 
 function createRain(scene, amount) {
@@ -176,7 +176,8 @@ function displayTexture(floor) {
     xc.font = "256px 'Courier New'";
     xc.textAlign = "center";
     xc.textBaseline = "middle";
-    xc.fillText(floor <= 0 ? "G" : floor, x.width / 2, x.height / 2);
+    if (isNaN(floor)) xc.fillText(floor, x.width / 2, x.height / 2);
+    else xc.fillText(floor <= 0 ? "G" : floor, x.width / 2, x.height / 2);
     return new THREE.Texture(x);
 }
 
@@ -197,3 +198,84 @@ PrismGeometry = function (vertices, height) {
 };
 
 PrismGeometry.prototype = Object.create(THREE.ExtrudeGeometry.prototype);
+
+function makeGroundFloor(scene) {
+    const geometry = new THREE.BoxGeometry(55, 2, 500);
+    const material = new THREE.MeshStandardMaterial({ color: 0xcccccc });
+    const floor = new THREE.Mesh(geometry, material);
+    floor.position.set(0, -31, -300);
+    scene.add(floor);
+    return { floor };
+}
+
+const WATER_TEXTURES = [];
+function makeAutoFishFloor(scene) {
+    for (let i = 0; i < 32; i++) {
+        const water = LOADER.load(`/assets/textures/water/water_still-00-${(i < 10 ? "0" : "") + i}.png`, texture => {
+            texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
+            texture.offset.set(0, 0);
+            texture.repeat.set(100, 100);
+            texture.magFilter = THREE.NearestFilter;
+            texture.minFilter = THREE.LinearMipMapLinearFilter;
+        });
+        WATER_TEXTURES.push(water);
+    }
+
+    const geometryW = new THREE.BoxGeometry(1000, 10, 1000);
+    const materialW = new THREE.MeshBasicMaterial({ map: WATER_TEXTURES[0], opacity: 0.4, transparent: true });
+    materialW.map.needsUpdate = true;
+    const ocean = new THREE.Mesh(geometryW, materialW);
+    ocean.position.set(0, 946.5, -550);
+    scene.add(ocean);
+
+    const geometryF = new THREE.BoxGeometry(128, 16, 80);
+    const oakF = LOADER.load("/assets/textures/oak_planks.png", texture => {
+        texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
+        texture.offset.set(0, 0);
+        texture.repeat.set(8, 5);
+        texture.magFilter = THREE.NearestFilter;
+        texture.minFilter = THREE.LinearMipMapLinearFilter;
+    });
+    const materialF = new THREE.MeshStandardMaterial({ map: oakF });
+    const oakFloor = new THREE.Mesh(geometryF, materialF);
+    oakFloor.position.set(0, 959.5, -90);
+    scene.add(oakFloor);
+
+    const geometryR = new THREE.BoxGeometry(3, 80, 3);
+    const materialR = new THREE.MeshStandardMaterial({ color: 0xad7726 });
+    const fishingRod = new THREE.Mesh(geometryR, materialR);
+    fishingRod.position.set(56, 991.5, -122);
+    fishingRod.setRotationFromAxisAngle(new THREE.Vector3(-1, 0, 0), Math.PI / 6);
+    scene.add(fishingRod);
+
+    const geometryS = new THREE.BoxGeometry(1, 80, 1);
+    const materialS = new THREE.MeshStandardMaterial({ color: 0xffffff });
+    const string = new THREE.Mesh(geometryS, materialS);
+    string.position.set(56, 984, -140);
+    scene.add(string);
+
+    const geometryH = new THREE.BoxGeometry(8, 16, 8);
+    const materialH = new THREE.MeshStandardMaterial({ color: 0x7d4700 });
+    const holder = new THREE.Mesh(geometryH, materialH);
+    holder.position.set(56, 975.5, -118);
+    scene.add(holder);
+
+    var oceanCounter = 0;
+    setInterval(() => {
+        oceanCounter = ++oceanCounter % 32;
+        const materialW = new THREE.MeshBasicMaterial({ map: WATER_TEXTURES[oceanCounter], opacity: 0.4, transparent: true });
+        materialW.map.needsUpdate = true;
+        ocean.material = materialW;
+        renderer.render(scene, camera);
+    }, 250);
+    return { ocean, oakFloor, fishingRod, string, holder };
+}
+
+function makeMoreBootsFloor(scene) {
+    const gltf = GLTF_LOADER.loadAsync("./assets/models/armor_stand.gltf");
+    const armorStand = gltf.scene;
+    armorStand.position.set(0, 2000, -100);
+    scene.add(armorStand);
+
+    return { armorStand };
+}
