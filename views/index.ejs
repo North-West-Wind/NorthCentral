@@ -14,15 +14,14 @@
 <body>
     <canvas id="bg"></canvas>
     <div id="info" class="info hidescroll hidden visuallyhidden"></div>
+    <script>const passedInFloor = PAGES.indexOf("<%= page %>") + 1;</script>
     <script src="/js/generators.js"></script>
     <script src="/js/renderer.js"></script>
     <script src="/js/handler.js"></script>
     <script>
-        const floor = PAGES.indexOf("<%= page %>") + 1;
-        if (floor > 0) {
-            diff = gotoFloor = floor;
-            pendingMove = true;
-            const xm = new THREE.MeshStandardMaterial({ map: displayTexture(gotoFloor), transparent: true });
+        if (passedInFloor > 0) {
+            currentFloor = gotoFloor = passedInFloor;
+            const xm = new THREE.MeshStandardMaterial({ map: displayTexture(passedInFloor), transparent: true });
             xm.map.needsUpdate = true;
             display.material.splice(4, 1, xm);
         }

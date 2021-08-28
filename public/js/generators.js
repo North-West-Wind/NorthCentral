@@ -7,6 +7,9 @@ function makeLift(scene) {
     const { base, buttonU, buttonD, display } = makeButtons(scene);
     const { sign } = makeSign(scene);
     const obj = { rectL, rectR, rectT, rectB, doorL, doorR, floor, wallFL, wallFR, wallFT, wallL, wallR, ceiling, base, buttonU, buttonD, display, sign };
+    if (passedInFloor > 0) {
+        Object.values(obj).forEach(mesh => mesh.position.y += 1000 * passedInFloor);
+    }
     return obj;
 }
 
@@ -147,8 +150,8 @@ function makeSign(scene) {
 function makeOutside(scene) {
     const { floor } = makeGroundFloor(scene);
     const { ocean, oakFloor, fishingRod, string, holder } = makeAutoFishFloor(scene);
-    const { armorStand } = makeMoreBootsFloor(scene);
-    return { floor, ocean, oakFloor, fishingRod, string, holder, armorStand };
+    const { corridor, platform, bootL, bootR } = makeMoreBootsFloor(scene);
+    return { floor, ocean, oakFloor, fishingRod, string, holder, corridor, platform, bootL, bootR };
 }
 
 function createRain(scene, amount) {
@@ -272,10 +275,38 @@ function makeAutoFishFloor(scene) {
 }
 
 function makeMoreBootsFloor(scene) {
-    const gltf = GLTF_LOADER.loadAsync("./assets/models/armor_stand.gltf");
-    const armorStand = gltf.scene;
-    armorStand.position.set(0, 2000, -100);
-    scene.add(armorStand);
+    GLTF_LOADER.load("/assets/models/armor_stand.gltf", (gltf) => {
+        const armorStand = gltf.scene;
+        armorStand.position.set(0, 1969.5, -156.5);
+        armorStand.scale.set(20, 20, 20);
+        scene.add(armorStand);
+    });
 
-    return { armorStand };
+    const geometryC = new THREE.BoxGeometry(16, 16, 80);
+    const material = new THREE.MeshBasicMaterial({ color: 0xa0a6a7 });
+    const corridor = new THREE.Mesh(geometryC, material);
+    corridor.position.set(0, 1961.5, -92.5);
+    scene.add(corridor);
+
+    const geometryP = new THREE.BoxGeometry(48, 16, 48);
+    const platform = new THREE.Mesh(geometryP, material);
+    platform.position.set(0, 1961.5, -156.5);
+    scene.add(platform);
+
+    const geometryB = new THREE.BoxGeometry(5, 7.5, 5);
+    const materials = [
+        new THREE.MeshBasicMaterial({ map: LOADER.load("/assets/textures/diamond_boots/side_0.png", tex => { tex.magFilter = THREE.NearestFilter; tex.minFilter = THREE.LinearMipMapLinearFilter; }) }),
+        new THREE.MeshBasicMaterial({ map: LOADER.load("/assets/textures/diamond_boots/side_1.png", tex => { tex.magFilter = THREE.NearestFilter; tex.minFilter = THREE.LinearMipMapLinearFilter; }) }),
+        new THREE.MeshBasicMaterial({ map: LOADER.load("/assets/textures/diamond_boots/bottom.png", tex => { tex.magFilter = THREE.NearestFilter; tex.minFilter = THREE.LinearMipMapLinearFilter; }) }),
+        new THREE.MeshBasicMaterial({ map: LOADER.load("/assets/textures/diamond_boots/side_2.png", tex => { tex.magFilter = THREE.NearestFilter; tex.minFilter = THREE.LinearMipMapLinearFilter; }) }),
+        new THREE.MeshBasicMaterial({ map: LOADER.load("/assets/textures/diamond_boots/side_3.png", tex => { tex.magFilter = THREE.NearestFilter; tex.minFilter = THREE.LinearMipMapLinearFilter; }) }),
+        new THREE.MeshBasicMaterial({ map: LOADER.load("/assets/textures/diamond_boots/bottom.png", tex => { tex.magFilter = THREE.NearestFilter; tex.minFilter = THREE.LinearMipMapLinearFilter; }) }),
+    ];
+    const bootL = new THREE.Mesh(geometryB, materials);
+    const bootR = new THREE.Mesh(geometryB, materials);
+    bootL.position.set(-2.5, 1974, -156.5);
+    bootR.position.set(2.5, 1974, -156.5);
+    scene.add(bootL, bootR);
+
+    return { corridor, platform, bootL, bootR };
 }

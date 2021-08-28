@@ -3,6 +3,7 @@ window.addEventListener("resize", (e) => {
 }, true);
 
 var rotatedX = 0;
+var rotatedY = 0;
 const offsets = { x: 0, y: 0 }
 window.addEventListener("mousemove", (e) => {
     const offsetX = -((e.clientY - midY) / midY) / 2;
@@ -49,10 +50,6 @@ window.addEventListener("mousedown", (e) => {
 window.addEventListener("mouseup", (e) => {
     if (buttonU.material.color.getHex() != 0xbbbbbb) { buttonU.material.color.setHex(0xbbbbbb); buttonU.position.z = -48.25 }
     if (buttonD.material.color.getHex() != 0xbbbbbb) { buttonD.material.color.setHex(0xbbbbbb); buttonD.position.z = -48.25 }
-});
-
-window.addEventListener("keydown", (e) => {
-    if (e.key == " ") camera.translateZ(-50);//openOrCloseInfo(currentFloor);
 });
 
 window.addEventListener("wheel", handleWheel);
@@ -129,7 +126,7 @@ function update() {
             audio.play();
         }, 1500 * Math.abs(diff));
     }
-    camera.setRotationFromAxisAngle(new THREE.Vector3(offsets.x, offsets.y + rotatedX, 0), Math.PI / 9);
+    camera.setRotationFromAxisAngle(new THREE.Vector3(offsets.x + rotatedY, offsets.y + rotatedX, 0), Math.PI / 9);
 }
 
 resize();
@@ -148,8 +145,9 @@ div.addEventListener("scroll", (e) => {
     else topped = false;
 });
 div.addEventListener("wheel", (e) => {
-    if (!div.scrollTop && e.deltaY < 0 && Date.now() - scrollStopped > 1000) openOrCloseInfo();
-    else scrollStopped = Date.now();
+    if (!div.scrollTop && e.deltaY < 0 && Date.now() - scrollStopped > 1000) {
+        if ([1, 2].includes(currentFloor)) openOrCloseInfo();
+    } else scrollStopped = Date.now();
 });
 
 function hideOrUnhideInfo(cb = () => { }) {
@@ -176,7 +174,7 @@ function openOrCloseInfo(index = 0) {
 }
 
 function handleWheel(e) {
-    const scroll = e.deltaY / 50;
+    const scroll = e.deltaY / 20;
     if (!div.classList.contains('hidden')) return;
     if (camera.position.y != currentFloor * 1000) camera.position.y = currentFloor * 1000;
     if (currentFloor <= 0) {
@@ -191,14 +189,25 @@ function handleWheel(e) {
         }
     } else if (!opened) {} else if (currentFloor == 1) {
         const rotateAngle = -1 / 2;
+        const maxDist = 70;
         if (camera.position.z > 0) camera.position.z = 0;
-        else if (camera.position.z < -70) camera.position.z = -70;
-        else if (camera.position.z == -70 && scroll > 0) {
+        else if (camera.position.z < -maxDist) camera.position.z = -maxDist;
+        else if (camera.position.z == -maxDist && scroll > 0) {
             if (div.classList.contains('hidden')) openOrCloseInfo(currentFloor);
         } else if (!(camera.position.z == 0 && scroll < 0)) camera.translateZ(-scroll);
 
 
         if (camera.position.x != 0) camera.position.x = 0;
-        rotatedX = rotateAngle * Math.abs(camera.position.z) / 70;
+        rotatedX = rotateAngle * Math.abs(camera.position.z) / maxDist;
+    } else if (currentFloor == 2) {
+        const rotateAngle = -1.2;
+        const maxDist = 100;
+        if (camera.position.z > 0) camera.position.z = 0;
+        else if (camera.position.z < -maxDist) camera.position.z = -maxDist;
+        else if (camera.position.z == -maxDist && scroll > 0) {
+            if (div.classList.contains('hidden')) openOrCloseInfo(currentFloor);
+        } else if (!(camera.position.z == 0 && scroll < 0)) camera.translateZ(-scroll);
+        if (camera.position.x != 0) camera.position.x = 0;
+        rotatedY = rotateAngle * Math.abs(camera.position.z) / maxDist;
     }
 }
