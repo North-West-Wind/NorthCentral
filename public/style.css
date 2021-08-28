@@ -53,6 +53,11 @@ canvas {
     padding-right: 12vw;
 }
 
+p.hint {
+    font-size: 1.25vw;
+    opacity: 0.5;
+}
+
 .floors {
     margin: auto;
     font-size: 1.5vw;

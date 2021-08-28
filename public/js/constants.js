@@ -21,6 +21,3 @@ for (const page of PAGES) {
 
 const LOADER = new THREE.TextureLoader();
 const GLTF_LOADER = new GLTFLoader();
-const X_AXIS = new THREE.Vector3(1, 0, 0);
-const Y_AXIS = new THREE.Vector3(0, 1, 0);
-const Z_AXIS = new THREE.Vector3(0, 0, 1);

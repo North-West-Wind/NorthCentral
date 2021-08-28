@@ -151,8 +151,8 @@ function makeOutside(scene) {
     const { floor } = makeGroundFloor(scene);
     const { ocean, oakFloor, fishingRod, string, holder } = makeAutoFishFloor(scene);
     const { corridor, platform, bootL, bootR } = makeMoreBootsFloor(scene);
-    const { skyT, skyB, skyL, skyR, skyF } = makeSkyFarmFloor(scene);
-    return { floor, ocean, oakFloor, fishingRod, string, holder, corridor, platform, bootL, bootR, skyT, skyB, skyL, skyR, skyF };
+    const { skyT, skyB, skyL, skyR, skyF, block, logs, leaves0, leaves1, leaves2, leaves3 } = makeSkyFarmFloor(scene);
+    return { floor, ocean, oakFloor, fishingRod, string, holder, corridor, platform, bootL, bootR, skyT, skyB, skyL, skyR, skyF, block, logs, leaves0, leaves1, leaves2, leaves3 };
 }
 
 function createRain(scene, amount) {
@@ -350,10 +350,10 @@ function makeSkyFarmFloor(scene) {
     const materialsL = [
         matSideL,
         matSideL,
-        new THREE.MeshBasicMaterial({ color: 0x888888, map: LOADER.load("/assets/textures/grass/top.png", tex => { tex.magFilter = THREE.NearestFilter; tex.minFilter = THREE.LinearMipMapLinearFilter; }) }),
+        new THREE.MeshBasicMaterial({ color: 0x888888, map: LOADER.load("/assets/textures/tree/top.png", tex => { tex.magFilter = THREE.NearestFilter; tex.minFilter = THREE.LinearMipMapLinearFilter; }) }),
         matSideL,
         matSideL,
-        new THREE.MeshBasicMaterial({ color: 0x888888, map: LOADER.load("/assets/textures/grass/top.png", tex => { tex.magFilter = THREE.NearestFilter; tex.minFilter = THREE.LinearMipMapLinearFilter; }) })
+        new THREE.MeshBasicMaterial({ color: 0x888888, map: LOADER.load("/assets/textures/tree/top.png", tex => { tex.magFilter = THREE.NearestFilter; tex.minFilter = THREE.LinearMipMapLinearFilter; }) })
     ];
     const logs = new THREE.Mesh(geometryL, materialsL);
     logs.position.set(0, 2994, -175);
@@ -382,5 +382,5 @@ function makeSkyFarmFloor(scene) {
     const leaves3 = new THREE.Mesh(geometryL3, [matSideL2, matTopL2, matSideL3, matSideL2, matTopL2, matSideL3]);
     leaves3.position.set(0, 3018, -175);
     scene.add(leaves0, leaves1, leaves2, leaves3);
-    return { skyT, skyB, skyL, skyR, skyF, block };
+    return { skyT, skyB, skyL, skyR, skyF, block, logs, leaves0, leaves1, leaves2, leaves3 };
 }

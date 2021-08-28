@@ -52,10 +52,10 @@ window.addEventListener("mouseup", (e) => {
     if (buttonD.material.color.getHex() != 0xbbbbbb) { buttonD.material.color.setHex(0xbbbbbb); buttonD.position.z = -48.25 }
 });
 
-window.addEventListener("wheel", handleWheel);
+window.addEventListener("wheel", e => scrollDisplacement += e.deltaY);
 
 var displayPressed = false, opened = false, moving = false, started = false, starting = false, pendingMove = false, poppedState = false;
-var currentFloor = 0, gotoFloor = 0, time = 0, diff = 0;
+var currentFloor = 0, gotoFloor = 0, time = 0, diff = 0, scrollDisplacement = 0, lastDisplacement = 0, scrollVelocity = 0;
 var allRains = [];
 function update() {
     if (displayPressed) {
@@ -126,6 +126,22 @@ function update() {
             audio.play();
         }, 1500 * Math.abs(diff));
     }
+    if (scrollDisplacement) {
+        var tmpDisplacement = scrollDisplacement;
+        scrollVelocity += (scrollDisplacement < 0 ? -1 : 1) * (Math.abs(scrollVelocity) > Math.abs(scrollDisplacement) ? -1 : 1);
+        tmpDisplacement -= scrollVelocity;
+        if ((scrollDisplacement > 0 && tmpDisplacement < 0) || (scrollDisplacement < 0 && tmpDisplacement > 0)) scrollVelocity = scrollDisplacement;
+        scrollDisplacement -= scrollVelocity;
+    } else if (scrollVelocity) {
+        if (scrollVelocity < 0) {
+            if (scrollVelocity > -1) scrollVelocity = 0;
+            else scrollVelocity += 1;
+        } else {
+            if (scrollVelocity < 1) scrollVelocity = 0;
+            else scrollVelocity -= 1;
+        }
+    }
+    if (scrollVelocity) handleWheel(scrollVelocity);
     camera.setRotationFromAxisAngle(new THREE.Vector3(offsets.x + rotatedY, offsets.y + rotatedX, 0), Math.PI / 9);
 }
 
@@ -148,6 +164,7 @@ div.addEventListener("wheel", (e) => {
     if (!div.scrollTop && e.deltaY < 0 && Date.now() - scrollStopped > 1000) {
         if ([1, 2, 3].includes(currentFloor)) openOrCloseInfo();
     } else scrollStopped = Date.now();
+    scrollDisplacement = lastDisplacement = scrollVelocity = 0;
 });
 
 function hideOrUnhideInfo(cb = () => { }) {
@@ -173,8 +190,8 @@ function openOrCloseInfo(index = 0) {
     });
 }
 
-function handleWheel(e) {
-    const scroll = e.deltaY / 20;
+function handleWheel(scroll) {
+    scroll = scroll / 10;
     if (!div.classList.contains('hidden')) return;
     if (currentFloor <= 0) {
         if (camera.position.y != 0) camera.position.y = 0;
