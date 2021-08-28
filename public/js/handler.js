@@ -146,7 +146,7 @@ div.addEventListener("scroll", (e) => {
 });
 div.addEventListener("wheel", (e) => {
     if (!div.scrollTop && e.deltaY < 0 && Date.now() - scrollStopped > 1000) {
-        if ([1, 2].includes(currentFloor)) openOrCloseInfo();
+        if ([1, 2, 3].includes(currentFloor)) openOrCloseInfo();
     } else scrollStopped = Date.now();
 });
 
@@ -176,8 +176,8 @@ function openOrCloseInfo(index = 0) {
 function handleWheel(e) {
     const scroll = e.deltaY / 20;
     if (!div.classList.contains('hidden')) return;
-    if (camera.position.y != currentFloor * 1000) camera.position.y = currentFloor * 1000;
     if (currentFloor <= 0) {
+        if (camera.position.y != 0) camera.position.y = 0;
         const absoluted = Math.abs(scroll);
         if (camera.position.x != 0) {
             camera.translateX(camera.position.x > 0 ? -absoluted : absoluted);
@@ -187,27 +187,55 @@ function handleWheel(e) {
             camera.translateZ(camera.position.z > 0 ? -absoluted : absoluted);
             if (Math.abs(camera.position.z) <= absoluted) camera.position.z = 0;
         }
-    } else if (!opened) {} else if (currentFloor == 1) {
+    } else if (!opened) { } else if (currentFloor == 1) {
+        if (camera.position.y != currentFloor * 1000) camera.position.y = currentFloor * 1000;
         const rotateAngle = -1 / 2;
         const maxDist = 70;
-        if (camera.position.z > 0) camera.position.z = 0;
-        else if (camera.position.z < -maxDist) camera.position.z = -maxDist;
-        else if (camera.position.z == -maxDist && scroll > 0) {
+        if (camera.position.z == -maxDist && scroll > 0) {
             if (div.classList.contains('hidden')) openOrCloseInfo(currentFloor);
-        } else if (!(camera.position.z == 0 && scroll < 0)) camera.translateZ(-scroll);
-
+        } else if (!(camera.position.z == 0 && scroll < 0)) {
+            camera.translateZ(-scroll);
+            if (camera.position.z > 0) camera.position.z = 0;
+            else if (camera.position.z < -maxDist) camera.position.z = -maxDist;
+        }
 
         if (camera.position.x != 0) camera.position.x = 0;
         rotatedX = rotateAngle * Math.abs(camera.position.z) / maxDist;
     } else if (currentFloor == 2) {
+        if (camera.position.y != currentFloor * 1000) camera.position.y = currentFloor * 1000;
         const rotateAngle = -1.2;
         const maxDist = 100;
-        if (camera.position.z > 0) camera.position.z = 0;
-        else if (camera.position.z < -maxDist) camera.position.z = -maxDist;
-        else if (camera.position.z == -maxDist && scroll > 0) {
+        if (camera.position.z == -maxDist && scroll > 0) {
             if (div.classList.contains('hidden')) openOrCloseInfo(currentFloor);
-        } else if (!(camera.position.z == 0 && scroll < 0)) camera.translateZ(-scroll);
+        } else if (!(camera.position.z == 0 && scroll < 0)) {
+            camera.translateZ(-scroll);
+            if (camera.position.z > 0) camera.position.z = 0;
+            else if (camera.position.z < -maxDist) camera.position.z = -maxDist;
+        }
         if (camera.position.x != 0) camera.position.x = 0;
         rotatedY = rotateAngle * Math.abs(camera.position.z) / maxDist;
+    } else if (currentFloor == 3) {
+        const rotateAngle = -1;
+        const maxDist0 = 100;
+        const maxDist1 = 162;
+        const maxDist2 = 8;
+        const maxDist3 = 17.5;
+        if (camera.position.z <= -maxDist0) {
+            if (camera.position.z > -maxDist1 || scroll < 0) {
+                camera.translateZ(-scroll);
+                if (camera.position.z < -maxDist1) camera.position.z = -maxDist1;
+                camera.position.x = -(Math.abs(camera.position.z) - maxDist0) * maxDist2 / (maxDist1 - maxDist0);
+                camera.position.y = -(Math.abs(camera.position.z) - maxDist0) * maxDist3 / (maxDist1 - maxDist0) + currentFloor * 1000;
+                rotatedX = rotateAngle * (Math.abs(camera.position.z) - maxDist0) / (maxDist1 - maxDist0);
+            } else if (scroll > 0) {
+                if (div.classList.contains('hidden')) openOrCloseInfo(currentFloor);
+            }
+        } else {
+            camera.translateZ(-scroll);
+            if (camera.position.z > 0) camera.position.z = 0;
+            if (camera.position.x != 0) camera.position.x = 0;
+            if (camera.position.y != currentFloor * 1000) camera.position.y = currentFloor * 1000;
+            if (rotatedX != 0) rotatedX = 0;
+        }
     }
 }
