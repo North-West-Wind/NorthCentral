@@ -9,7 +9,6 @@
     <script src="https://threejs.org/build/three.js"></script>
     <script src="/js/GLTFLoader.js"></script>
     <script src="/js/constants.js"></script>
-    <script src="/js/utils.js"></script>
 </head>
 
 <body>
@@ -21,7 +20,7 @@
     <script src="/js/handler.js"></script>
     <script>
         if (passedInFloor > 0) {
-            currentFloor = gotoFloor = passedInFloor;
+            actualFloor = currentFloor = gotoFloor = passedInFloor;
             const xm = new THREE.MeshStandardMaterial({ map: displayTexture(passedInFloor), transparent: true });
             xm.map.needsUpdate = true;
             display.material.splice(4, 1, xm);

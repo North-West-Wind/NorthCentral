@@ -53,9 +53,13 @@ canvas {
     padding-right: 12vw;
 }
 
-p.hint {
+.hint {
     font-size: 1.25vw;
     opacity: 0.5;
+}
+
+.credits {
+    font-size: 0.75vw;
 }
 
 .floors {
@@ -71,6 +75,27 @@ p.hint {
 .info iframe {
     width: 48vw;
     height: 27vw;
+}
+
+.info iframe.manual {
+    width: 80vw;
+    height: 70vh;
+}
+
+.list {
+    margin-left: 10vw;
+    margin-right: 10vw;
+    text-align: left;
+}
+
+.list li {
+    font-size: 2vw;
+    color: #ffdbdb;
+}
+
+.list p {
+    padding-left: 0;
+    padding-right: 0;
 }
 
 .hidescroll::-webkit-scrollbar {
@@ -89,4 +114,27 @@ a {
 
 a:hover {
 	text-decoration: underline;
+}
+
+.avatar {
+	border-radius: 50%;
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+	width: 15vw;
+	border: 0.75vw solid #fcba03;
+	margin-top: 1vw;
+}
+
+.button {
+	background-color: #7289DA;
+	border: none;
+	color: white;
+	padding: 1vw 2vw;
+	text-align: center;
+	text-decoration: none;
+	display: inline-block;
+	font-size: 2.5vw;
+	margin-top: 1vw;
+	border-radius: 5%;
 }

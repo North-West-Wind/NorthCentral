@@ -8,16 +8,26 @@ const PAGES = [
     "other-packages"
 ];
 
-const CONTENTS = [`<h1>North's Elevator</h1> <div class="help"> <h2>Usage</h2><br> <p> Use the arrow buttons to set the floor.<br> Click on the display to go to that floor.<br> Click on the sign again to close this. </p> <h2>Floors</h2> <table class="floors"> <tr><th>7/F</th><td>Other Projects</td></tr> <tr><th>6/F</th><td>Other Mods</td></tr> <tr><th>5/F</th><td>Node.js Packages</td></tr> <tr><th>4/F</th><td>N0rthWestW1nd</td></tr> <tr><th>3/F</th><td>Sky Farm</td></tr> <tr><th>2/F</th><td>More Boots</td></tr> <tr><th>1/F</th><td>Auto Fish</td></tr> </table> <br> <p>Scroll to move out at the floor.</p> </div>`];
+const CONTENTS = [];
+const N0RTHWESTW1ND_CONTENTS = [];
 
-for (const page of PAGES) {
+function readPage(url, arr) {
     var rawFile = new XMLHttpRequest();
-    rawFile.open("GET", `contents/${page}.html`, false);
+    rawFile.open("GET", url, false);
     rawFile.onreadystatechange = () => {
-        if(rawFile.readyState === 4 && (rawFile.status === 200 || rawFile.status == 0)) CONTENTS.push(rawFile.responseText);
+        if(rawFile.readyState === 4 && (rawFile.status === 200 || rawFile.status == 0)) arr.push(rawFile.responseText);
     };
     rawFile.send(null);
 }
 
+readPage("/contents/information.html", CONTENTS);
+for (const page of PAGES) readPage(`/contents/${page}.html`, CONTENTS);
+for (let i = 0; i < 3; i++) readPage(`/contents/n0rthwestw1nd/info-${i}.html`, N0RTHWESTW1ND_CONTENTS);
+
 const LOADER = new THREE.TextureLoader();
 const GLTF_LOADER = new GLTFLoader();
+
+const PARTICLE_DISTANCE = 200;
+const SHRINK_PARTICLE_DISTANCE = 20;
+
+const MAX_FLOOR = 4;

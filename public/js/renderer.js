@@ -1,5 +1,5 @@
 const scene = new THREE.Scene();
-const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 500);
+const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 500);
 const renderer = new THREE.WebGLRenderer({
     canvas: document.querySelector(`#bg`)
 });
@@ -14,7 +14,7 @@ pointLight.castShadow = true;
 scene.add(pointLight);
 const obj = makeLift(scene);
 const { doorL, doorR, buttonU, buttonD, sign, display } = obj;
-const { ocean } = makeOutside(scene);
+const { ocean, paper0, paper1, paper2 } = makeOutside(scene);
 
 function resize() {
     camera.aspect = window.innerWidth / window.innerHeight;
@@ -29,7 +29,9 @@ function resize() {
 
 function animate() {
     requestAnimationFrame(animate);
-    update();
 
     renderer.render(scene, camera);
 }
+
+resize();
+animate();

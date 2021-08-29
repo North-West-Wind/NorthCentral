@@ -152,7 +152,8 @@ function makeOutside(scene) {
     const { ocean, oakFloor, fishingRod, string, holder } = makeAutoFishFloor(scene);
     const { corridor, platform, bootL, bootR } = makeMoreBootsFloor(scene);
     const { skyT, skyB, skyL, skyR, skyF, block, logs, leaves0, leaves1, leaves2, leaves3 } = makeSkyFarmFloor(scene);
-    return { floor, ocean, oakFloor, fishingRod, string, holder, corridor, platform, bootL, bootR, skyT, skyB, skyL, skyR, skyF, block, logs, leaves0, leaves1, leaves2, leaves3 };
+    const { paper0, paper1, paper2 } = makeN0rthWestW1ndFloor(scene);
+    return { floor, ocean, oakFloor, fishingRod, string, holder, corridor, platform, bootL, bootR, skyT, skyB, skyL, skyR, skyF, block, logs, leaves0, leaves1, leaves2, leaves3, paper0, paper1, paper2 };
 }
 
 function createRain(scene, amount) {
@@ -166,6 +167,20 @@ function createRain(scene, amount) {
         scene.add(rain);
     }
     return rains;
+}
+
+function createParticle(scene, amount) {
+    const particles = [];
+    const geometryP = new THREE.SphereGeometry(0.25);
+    const materialP = new THREE.MeshBasicMaterial({ color: 0x00ffff });
+    for (let i = 0; i < amount; i++) {
+        const particle = new THREE.Mesh(geometryP, materialP);
+        const angle = THREE.MathUtils.randFloat(0, Math.PI * 2);
+        particle.position.set(Math.sin(angle) * PARTICLE_DISTANCE, currentFloor * 1000 + Math.cos(angle) * PARTICLE_DISTANCE, -151);
+        particles.push({ particle, angle, distance: PARTICLE_DISTANCE });
+        scene.add(particle);
+    }
+    return particles;
 }
 
 function displayTexture(floor) {
@@ -383,4 +398,32 @@ function makeSkyFarmFloor(scene) {
     leaves3.position.set(0, 3018, -175);
     scene.add(leaves0, leaves1, leaves2, leaves3);
     return { skyT, skyB, skyL, skyR, skyF, block, logs, leaves0, leaves1, leaves2, leaves3 };
+}
+
+function makeN0rthWestW1ndFloor(scene) {
+    GLTF_LOADER.load("/assets/models/desk/scene.gltf", (gltf) => {
+        const monitor = gltf.scene;
+        monitor.position.set(-0.25, 3993.5, -150);
+        monitor.setRotationFromAxisAngle(new THREE.Vector3(0, 1, 0), -Math.PI / 2);
+        monitor.scale.set(2, 2, 2);
+        scene.add(monitor);
+    });
+
+    const geometry = new THREE.BoxGeometry(0.5, 0.1, 0.75);
+    const material = new THREE.MeshStandardMaterial({ color: 0x777777 });
+    const paper0 = new THREE.Mesh(geometry, material);
+    const paper1 = new THREE.Mesh(geometry, material);
+    const paper2 = new THREE.Mesh(geometry, material);
+    paper0.position.set(4, 3998.2, -150);
+    paper0.setRotationFromAxisAngle(new THREE.Vector3(0, 1, 0), -Math.PI / 6);
+    paper1.position.set(2.5, 3998.2, -148.5);
+    paper1.setRotationFromAxisAngle(new THREE.Vector3(0, 1, 0), Math.PI / 3);
+    paper2.position.set(4.2, 3998.2, -148.75);
+    paper2.setRotationFromAxisAngle(new THREE.Vector3(0, 1, 0), -Math.PI / 4);
+    scene.add(paper0, paper1, paper2);
+
+    const pointLight = new THREE.PointLight(0xfff8be, 1, 50, 2);
+    pointLight.position.set(3.5, 4001, -148.725);
+    scene.add(pointLight);
+    return { paper0, paper1, paper2 };
 }
