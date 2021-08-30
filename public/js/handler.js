@@ -62,6 +62,10 @@ window.addEventListener("wheel", e => {
 
 window.addEventListener("keydown", e => {
     if (e.key == "Escape" && !div.classList.contains("hidden")) openOrCloseInfo();
+    else if (e.key == " " && currentFloor == 4 && bottomed && !phase) {
+        openOrCloseInfo();
+        phase = 1;
+    }
 });
 
 var displayPressed = false, opened = false, moving = false, started = false, starting = false, pendingMove = false, poppedState = false;
@@ -207,13 +211,8 @@ div.addEventListener("scroll", (e) => {
 div.addEventListener("wheel", (e) => {
     //console.log("Top: %s, Height: %s, Offset: %s", div.scrollTop, div.scrollHeight, div.offsetHeight);
     //console.log("Topped: %s, Bottomed: %s", topped, bottomed);
-    if (Date.now() - scrollStopped >= 500) {
-        if (topped && e.deltaY < 0 && [1, 2, 3, 4].includes(currentFloor) && !phase) openOrCloseInfo();
-        else if (bottomed && e.deltaY > 0 && currentFloor == 4 && !phase) {
-            openOrCloseInfo();
-            phase = 1;
-        } else scrollStopped = Date.now();
-    } else scrollStopped = Date.now();
+    if (Date.now() - scrollStopped >= 500 && topped && e.deltaY < 0 && [1, 2, 3, 4].includes(currentFloor) && !phase) openOrCloseInfo();
+    else scrollStopped = Date.now();
     //console.log("Scroll Stopped: %s", scrollStopped);
     scrollDisplacement = lastDisplacement = scrollVelocity = 0;
 });
@@ -235,12 +234,16 @@ function hideOrUnhideInfo(cb = () => { }) {
 }
 
 function openOrCloseInfo(index = 0) {
-    topped = !div.scrollTop;
-    bottomed = div.scrollTop === (div.scrollHeight - div.offsetHeight);
-    scrollStopped = Date.now();
     hideOrUnhideInfo(hidden => {
-        if (hidden) div.innerHTML = "";
-        else div.innerHTML = CONTENTS[index];
+        if (hidden) {
+            div.innerHTML = "";
+            bottomed = topped = false;
+        } else {
+            topped = !div.scrollTop;
+            bottomed = div.scrollTop === (div.scrollHeight - div.offsetHeight);
+            div.innerHTML = CONTENTS[index];
+        }
+        scrollStopped = Date.now();
     });
 }
 
