@@ -4,13 +4,29 @@ window.addEventListener("resize", (e) => {
 
 var rotatedX = 0;
 var rotatedY = 0;
-const offsets = { x: 0, y: 0 }
-window.addEventListener("mousemove", (e) => {
+const offsets = { x: 0, y: 0 };
+const touchPos = { x: 0, y: 0 };
+window.addEventListener("touchstart", (e) => {
+    touchPos.x = e.clientX;
+    touchPos.y = e.clientY;
+});
+
+function moveEventsCommon(e, xMul) {
     const offsetX = -((e.clientY - midY) / midY) / 2;
-    const offsetY = -((e.clientX - midX) / midX) / 2;
+    const offsetY = -((e.clientX - midX) / midX) / 2 * xMul;
     offsets.x = offsetX;
     offsets.y = offsetY;
-
+}
+window.addEventListener("touchmove", (e) => {
+    moveEventsCommon(e, 3);
+    const newY = e.clientY;
+    const wheelEvent = new WheelEvent("wheel", { deltaY: touchPos.y - newY });
+    window.dispatchEvent(wheelEvent);
+    touchPos.x = e.clientX;
+    touchPos.y = newY;
+});
+window.addEventListener("mousemove", (e) => {
+    moveEventsCommon(e, 1);
     const mouse3D = new THREE.Vector3((e.clientX / window.innerWidth) * 2 - 1, -(e.clientY / window.innerHeight) * 2 + 1, 0.5);
     const raycaster = new THREE.Raycaster();
     raycaster.setFromCamera(mouse3D, camera);
@@ -19,7 +35,7 @@ window.addEventListener("mousemove", (e) => {
     else document.body.style.cursor = "default";
 });
 
-window.addEventListener("mousedown", (e) => {
+function clickEventsCommon(e) {
     const mouse3D = new THREE.Vector3((e.clientX / window.innerWidth) * 2 - 1, -(e.clientY / window.innerHeight) * 2 + 1, 0.5);
     const raycaster = new THREE.Raycaster();
     raycaster.setFromCamera(mouse3D, camera);
@@ -49,7 +65,15 @@ window.addEventListener("mousedown", (e) => {
         started = true;
         if (start && !pendingMove) starting = true;
     }
+}
+window.addEventListener("touchend", (e) => {
+    clickEventsCommon(e);
+    if (currentFloor == 4 && bottomed && !phase) {
+        openOrCloseInfo();
+        phase = 1;
+    }
 });
+window.addEventListener("mousedown", clickEventsCommon);
 
 window.addEventListener("mouseup", (e) => {
     if (buttonU.material.color.getHex() != 0xbbbbbb) { buttonU.material.color.setHex(0xbbbbbb); buttonU.position.z = -48.25 }
