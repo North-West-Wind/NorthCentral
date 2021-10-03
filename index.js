@@ -31,6 +31,7 @@ app.set('view engine', 'ejs');
 app.get("/", (req, res) => res.render("index", { page: 0 }));
 
 app.get("/:page", (req, res) => res.render("index", { page: req.params.page }));
+app.get("/n0rthwestw1nd/manual", (req, res) => res.sendFile(__dirname + "/public/assets/manual.pdf"));
 
 const server = app.listen(process.env.PORT || 3000, async () => {
     const info = server.address();
