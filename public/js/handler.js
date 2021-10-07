@@ -4,26 +4,31 @@ window.addEventListener("resize", (e) => {
 
 var rotatedX = 0;
 var rotatedY = 0;
+var touched = false, moved = false;
 const offsets = { x: 0, y: 0 };
 const touchPos = { x: 0, y: 0 };
 window.addEventListener("touchstart", (e) => {
-    touchPos.x = e.clientX;
-    touchPos.y = e.clientY;
+    const touch = e.touches[0];
+    touchPos.x = touch.clientX;
+    touchPos.y = touch.clientY;
+    touched = true;
 });
 
-function moveEventsCommon(e, xMul) {
-    const offsetX = -((e.clientY - midY) / midY) / 2;
-    const offsetY = -((e.clientX - midX) / midX) / 2 * xMul;
+function moveEventsCommon(e, mul) {
+    const offsetX = -((e.clientY - midY) / midY) / 2 * mul;
+    const offsetY = -((e.clientX - midX) / midX) / 2 * mul;
     offsets.x = offsetX;
     offsets.y = offsetY;
 }
 window.addEventListener("touchmove", (e) => {
-    moveEventsCommon(e, 3);
-    const newY = e.clientY;
-    const wheelEvent = new WheelEvent("wheel", { deltaY: touchPos.y - newY });
+    const touch = e.touches[0];
+    moveEventsCommon(touch, 5);
+    const newY = touch.clientY;
+    const wheelEvent = new WheelEvent("wheel", { deltaY: (touchPos.y - newY) || 0 });
     window.dispatchEvent(wheelEvent);
-    touchPos.x = e.clientX;
+    touchPos.x = touch.clientX;
     touchPos.y = newY;
+    if (!moved) moved = true;
 });
 window.addEventListener("mousemove", (e) => {
     moveEventsCommon(e, 1);
@@ -67,11 +72,13 @@ function clickEventsCommon(e) {
     }
 }
 window.addEventListener("touchend", (e) => {
-    clickEventsCommon(e);
+    if (touched && !moved) clickEventsCommon({ clientX: touchPos.x, clientY: touchPos.y });
     if (currentFloor == 4 && bottomed && !phase) {
         openOrCloseInfo();
         phase = 1;
     }
+    touched = false;
+    moved = false;
 });
 window.addEventListener("mousedown", clickEventsCommon);
 
@@ -207,6 +214,7 @@ function update() {
         }
     }
     if (scrollVelocity) handleWheel(scrollVelocity);
+    console.log("X: %s, Y: %s", offsets.x, offsets.y)
     camera.setRotationFromAxisAngle(new THREE.Vector3(offsets.x + rotatedY, offsets.y + rotatedX, 0), Math.PI / 9);
 }
 

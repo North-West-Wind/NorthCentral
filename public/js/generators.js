@@ -211,7 +211,7 @@ PrismGeometry = function (vertices, height) {
     })(Shape);
 
     var settings = {};
-    settings.amount = height;
+    settings.depth = height;
     settings.bevelEnabled = false;
     return new THREE.ExtrudeGeometry(Shape, settings);
 };

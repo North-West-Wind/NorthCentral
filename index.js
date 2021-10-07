@@ -31,7 +31,12 @@ app.set('view engine', 'ejs');
 app.get("/", (req, res) => res.render("index", { page: 0 }));
 
 app.get("/:page", (req, res) => res.render("index", { page: req.params.page }));
-app.get("/n0rthwestw1nd/manual", (req, res) => res.sendFile(__dirname + "/public/assets/manual.pdf"));
+app.get("/n0rthwestw1nd/manual", (req, res) => res.sendFile(__dirname + "/public/assets/safe_manual.pdf"));
+app.get("/n0rthwestw1nd/manual/:ver", (req, res) => {
+    if (req.params.ver === "unsafe") res.sendFile(__dirname + "/public/assets/unsafe_manual.pdf");
+    else if (req.params.ver === "tradew1nd") res.sendFile(__dirname + "/public/assets/tradew1nd_manual.pdf");
+    else res.sendFile(__dirname + "/public/assets/safe_manual.pdf");
+});
 
 const server = app.listen(process.env.PORT || 3000, async () => {
     const info = server.address();
