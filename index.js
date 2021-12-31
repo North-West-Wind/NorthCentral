@@ -30,7 +30,10 @@ app.set('view engine', 'ejs');
 
 app.get("/", (req, res) => res.render("index", { page: 0 }));
 
-app.get("/:page", (req, res) => res.render("index", { page: req.params.page }));
+app.get("/:page", (req, res) => {
+    if (req.params.page === "newyear") res.render("newyear");
+    else res.render("index", { page: req.params.page });
+});
 app.get("/n0rthwestw1nd/manual", (req, res) => res.sendFile(__dirname + "/public/assets/safe_manual.pdf"));
 app.get("/n0rthwestw1nd/manual/:ver", (req, res) => {
     if (req.params.ver === "unsafe") res.sendFile(__dirname + "/public/assets/unsafe_manual.pdf");
