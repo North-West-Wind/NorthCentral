@@ -241,11 +241,8 @@ div.addEventListener("scroll", (e) => {
     scrollStopped = Date.now();
 });
 div.addEventListener("wheel", (e) => {
-    //console.log("Top: %s, Height: %s, Offset: %s", div.scrollTop, div.scrollHeight, div.offsetHeight);
-    //console.log("Topped: %s, Bottomed: %s", topped, bottomed);
     if (Date.now() - scrollStopped >= 500 && topped && e.deltaY < 0 && [1, 2, 3, 4].includes(currentFloor) && !phase) openOrCloseInfo();
     else scrollStopped = Date.now();
-    //console.log("Scroll Stopped: %s", scrollStopped);
     scrollDisplacement = lastDisplacement = scrollVelocity = 0;
 });
 
