@@ -178,6 +178,9 @@ function update() {
             moving = true;
             const audio = new Audio('/assets/lift.mp3');
             audio.play();
+
+            const audioEle = document.getElementById("player");
+            if (!audioEle.played.length) audioEle.play();
         }
     }
     if (moving) {
