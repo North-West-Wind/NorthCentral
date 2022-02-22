@@ -40,6 +40,9 @@ app.get("/n0rthwestw1nd/manual/:ver", (req, res) => {
     else if (req.params.ver === "tradew1nd") res.sendFile(__dirname + "/public/assets/tradew1nd_manual.pdf");
     else res.sendFile(__dirname + "/public/assets/safe_manual.pdf");
 });
+app.get("/rest/ping", (_req, res) => {
+    res.sendStatus(200);
+});
 
 const server = app.listen(process.env.PORT || 3000, async () => {
     const info = server.address();
