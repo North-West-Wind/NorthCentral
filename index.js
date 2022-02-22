@@ -28,7 +28,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs');
 
-app.get("/", (req, res) => res.render("index", { page: 0 }));
+app.get("/", (_req, res) => res.render("index", { page: 0 }));
 
 app.get("/:page", (req, res) => {
     if (req.params.page === "newyear") res.render("newyear");

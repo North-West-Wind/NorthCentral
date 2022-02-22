@@ -31,7 +31,10 @@
 </head>
 
 <body>
-    <audio src="/assets/bg.wav" loop autoplay></audio>
+    <iframe src="/assets/silence.mp3" allow="autoplay" id="audio" style="display: none"></iframe>
+    <audio id="player" loop autoplay>
+        <source src="/assets/bg.mp3" type="audio/mp3">
+    </audio>
     <canvas id="bg"></canvas>
     <div id="info" class="info hidescroll hidden visuallyhidden"></div>
     <script>
