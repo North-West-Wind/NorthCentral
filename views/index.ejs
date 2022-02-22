@@ -25,18 +25,20 @@
     </script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://threejs.org/build/three.js"></script>
+    <script src="/js/helper.js"></script>
     <script src="/js/GLTFLoader.js"></script>
     <script src="/js/SVGLoader.js"></script>
     <script src="/js/constants.js"></script>
 </head>
 
 <body>
-    <audio id="player" loop autoplay>
+    <audio id="player" loop>
         <source src="/assets/bg.mp3" type="audio/mp3">
     </audio>
     <canvas id="bg"></canvas>
     <div id="info" class="info hidescroll hidden visuallyhidden"></div>
     <script>
+        if (!getCookie("no_music") || getCookie("no_music") == 0) document.getElementById("player").play();
         const passedInFloor = PAGES.indexOf("<%= page %>") + 1;
     </script>
     <script src="/js/generators.js"></script>
