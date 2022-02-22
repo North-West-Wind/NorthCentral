@@ -25,6 +25,14 @@ function resize() {
     renderer.render(scene, camera);
     midX = window.innerWidth / 2;
     midY = window.innerHeight / 2;
+    ratio = window.innerWidth / window.innerHeight;
+    if (ratio < 1) {
+        enableStylesheet(document.getElementById("vertical"));
+        disableStylesheet(document.getElementById("horizontal"));
+    } else {
+        enableStylesheet(document.getElementById("horizontal"));
+        disableStylesheet(document.getElementById("vertical"));
+    }
 }
 
 function animate() {
