@@ -14,7 +14,15 @@ pointLight.castShadow = true;
 scene.add(pointLight);
 const obj = makeLift(scene);
 const { doorL, doorR, buttonU, buttonD, sign, display } = obj;
-const { ocean, paper0, paper1, paper2 } = makeOutside(scene);
+var ocean, paper0, paper1, paper2, sheets;
+(async() => {
+    const outside = await makeOutside(scene);
+    ocean = outside.ocean;
+    paper0 = outside.paper0;
+    paper1 = outside.paper1;
+    paper2 = outside.paper2;
+    sheets = outside.sheets;
+})();
 
 function resize() {
     camera.aspect = window.innerWidth / window.innerHeight;

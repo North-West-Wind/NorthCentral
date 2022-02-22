@@ -83,7 +83,10 @@ window.addEventListener("mousemove", (e) => {
     const mouse3D = new THREE.Vector3((e.clientX / window.innerWidth) * 2 - 1, -(e.clientY / window.innerHeight) * 2 + 1, 0.5);
     const raycaster = new THREE.Raycaster();
     raycaster.setFromCamera(mouse3D, camera);
-    const intersect = raycaster.intersectObjects([buttonU, buttonD, display, sign, paper0, paper1, paper2]);
+    const check = [buttonU, buttonD, display, sign];
+    if (paper0 && paper1 && paper2) check.push(paper0, paper1, paper2);
+    if (sheets) check.push(...sheets);
+    const intersect = raycaster.intersectObjects(check);
     if (intersect.length > 0) document.body.style.cursor = "pointer";
     else document.body.style.cursor = "default";
 });
@@ -107,10 +110,16 @@ function clickEventsCommon(e) {
     else if (raycaster.intersectObject(sign).length > 0) {
         openOrCloseInfo(0);
         start = true;
-    } else if (currentFloor == 4 && phase) {
+    } else if (currentFloor == 4 && phase && paper0 && paper1 && paper2) {
         if (raycaster.intersectObject(paper1).length > 0) openOrCloseNWWInfo(0);
         else if (raycaster.intersectObject(paper0).length > 0) openOrCloseNWWInfo(1);
         else if (raycaster.intersectObject(paper2).length > 0) openOrCloseNWWInfo(2);
+    } else if (currentFloor == 5 && sheets && started) {
+        for (let i = 0; i < sheets.length; i++)
+            if (raycaster.intersectObject(sheets[i]).length > 0) {
+                openOrCloseSheetInfo(i);
+                break;
+            }
     } else start = true;
     if (zoomLimitReached) {
         if ([1, 2, 3].includes(currentFloor)) openOrCloseInfo(currentFloor);
@@ -140,10 +149,6 @@ window.addEventListener("wheel", e => {
 
 window.addEventListener("keydown", e => {
     if (e.key == "Escape" && !div.classList.contains("hidden")) openOrCloseInfo();
-    else if (e.key == " " && currentFloor == 4 && bottomed && !phase) {
-        openOrCloseInfo();
-        phase = 1;
-    }
 });
 
 var displayPressed = false, opened = false, moving = false, started = false, starting = false, pendingMove = false, poppedState = false;
@@ -287,8 +292,10 @@ div.addEventListener("scroll", (e) => {
     scrollStopped = Date.now();
 });
 div.addEventListener("wheel", (e) => {
-    if (Date.now() - scrollStopped >= 500 && topped && e.deltaY < 0 && [1, 2, 3, 4].includes(currentFloor) && !phase) openOrCloseInfo();
-    else scrollStopped = Date.now();
+    if (Date.now() - scrollStopped >= 500 && topped && e.deltaY < 0 && [1, 2, 3, 4].includes(currentFloor) && !phase) {
+        openOrCloseInfo();
+        phase = 1;
+    } else scrollStopped = Date.now();
     scrollDisplacement = lastDisplacement = scrollVelocity = 0;
 });
 
@@ -326,6 +333,13 @@ function openOrCloseNWWInfo(index = 0) {
     hideOrUnhideInfo(hidden => {
         if (hidden) div.innerHTML = "";
         else div.innerHTML = N0RTHWESTW1ND_CONTENTS[index];
+    });
+}
+
+function openOrCloseSheetInfo(index = 0) {
+    hideOrUnhideInfo(hidden => {
+        if (hidden) div.innerHTML = "";
+        else div.innerHTML = SHEETMUSIC_CONTENTS[index];
     });
 }
 
@@ -433,5 +447,19 @@ function handleWheel(scroll) {
             if (camera.position.x != 0) camera.position.x = 0;
         }
         if (camera.position.y != currentFloor * 1000) camera.position.y = currentFloor * 1000;
+    } else if (currentFloor == 5) {
+        const rotateAngle = -1.2;
+        const maxDist = 175;
+        if (!(camera.position.z == 0 && scroll < 0)) {
+            camera.translateZ(-scroll);
+            if (camera.position.z > 0) camera.position.z = 0;
+            else if (camera.position.z < -maxDist) {
+                camera.position.z = -maxDist;
+                if (touched) zoomLimitReached = true;
+            } else if (touched) zoomLimitReached = false;
+        }
+        if (camera.position.x != 0) camera.position.x = 0;
+        camera.position.y = currentFloor * 1000 + camera.position.z / 10;
+        rotatedY = rotateAngle * Math.abs(camera.position.z) / maxDist;
     }
 }

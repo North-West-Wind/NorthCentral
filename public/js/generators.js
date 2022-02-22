@@ -147,13 +147,14 @@ function makeSign(scene) {
     return { sign };
 }
 
-function makeOutside(scene) {
+async function makeOutside(scene) {
     const { floor } = makeGroundFloor(scene);
     const { ocean, oakFloor, fishingRod, string, holder } = makeAutoFishFloor(scene);
     const { corridor, platform, bootL, bootR } = makeMoreBootsFloor(scene);
     const { skyT, skyB, skyL, skyR, skyF, block, logs, leaves0, leaves1, leaves2, leaves3 } = makeSkyFarmFloor(scene);
     const { paper0, paper1, paper2 } = makeN0rthWestW1ndFloor(scene);
-    return { floor, ocean, oakFloor, fishingRod, string, holder, corridor, platform, bootL, bootR, skyT, skyB, skyL, skyR, skyF, block, logs, leaves0, leaves1, leaves2, leaves3, paper0, paper1, paper2 };
+    const { floor0, sheets } = await makeSheetMusicFloor(scene);
+    return { floor, ocean, oakFloor, fishingRod, string, holder, corridor, platform, bootL, bootR, skyT, skyB, skyL, skyR, skyF, block, logs, leaves0, leaves1, leaves2, leaves3, paper0, paper1, paper2, floor0, sheets };
 }
 
 function createRain(scene, amount) {
@@ -198,6 +199,23 @@ function displayTexture(floor) {
     if (isNaN(floor)) xc.fillText(floor, x.width / 2, x.height / 2);
     else xc.fillText(floor <= 0 ? "G" : floor, x.width / 2, x.height / 2);
     return new THREE.Texture(x);
+}
+
+async function sheetTexture(index) {
+    const canvas = document.createElement("canvas");
+    const ctx = canvas.getContext("2d");
+    canvas.width = 3508;
+    canvas.height = 2480;
+    ctx.fillStyle = "#ffffff";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    const img = new Image();
+    return new Promise(resolve => {
+        img.onload = () => {
+            ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+            resolve(new THREE.Texture(canvas));
+        }
+        img.src = `/assets/sheets/sheet-${index}.svg`;
+    });
 }
 
 PrismGeometry = function (vertices, height) {
@@ -281,6 +299,7 @@ function makeAutoFishFloor(scene) {
 
     var oceanCounter = 0;
     setInterval(() => {
+        if (!ocean) return;
         oceanCounter = ++oceanCounter % 32;
         const materialW = new THREE.MeshBasicMaterial({ map: WATER_TEXTURES[oceanCounter], opacity: 0.4, transparent: true });
         materialW.map.needsUpdate = true;
@@ -426,4 +445,38 @@ function makeN0rthWestW1ndFloor(scene) {
     pointLight.position.set(3.5, 4001, -148.725);
     scene.add(pointLight);
     return { paper0, paper1, paper2 };
+}
+
+async function makeSheetMusicFloor(scene) {
+    GLTF_LOADER.load("/assets/models/piano/scene.gltf", (gltf) => {
+        const monitor = gltf.scene;
+        monitor.position.set(0, 4956, -200);
+        monitor.setRotationFromAxisAngle(new THREE.Vector3(0, 1, 0), -Math.PI / 2);
+        monitor.scale.set(10, 10, 10);
+        scene.add(monitor);
+    });
+
+    const geometry = new THREE.BoxGeometry(500, 2, 500);
+    const material = new THREE.MeshStandardMaterial({ color: 0x733410 });
+    const floor0 = new THREE.Mesh(geometry, material);
+    floor0.position.set(0, 4965, -200);
+    scene.add(floor0);
+
+    const geometryS = new THREE.BoxGeometry(3, 0.1, 3 * Math.SQRT2);
+    const materialS = new THREE.MeshStandardMaterial({ color: 0x777777 });
+    const sheets = [];
+    for (let i = 0; i < 5; i++) {
+        const xm = new THREE.MeshStandardMaterial({ map: await sheetTexture(i), transparent: true });
+        xm.map.needsUpdate = true;
+        const sheet = new THREE.Mesh(geometryS, [materialS, materialS, xm, materialS, materialS, materialS]);
+        sheet.position.set(THREE.MathUtils.randFloatSpread(40), 4965.9875 + THREE.MathUtils.randFloatSpread(0.0001), THREE.MathUtils.randFloatSpread(20) - 190);
+        sheet.setRotationFromAxisAngle(new THREE.Vector3(0, 1, 0), THREE.MathUtils.randFloatSpread(Math.PI * 2));
+        sheets.push(sheet);
+    }
+    scene.add(...sheets);
+
+    const spotLight = new THREE.SpotLight(0xffffff, 2, 200, Math.PI / 4, 1, 2);
+    spotLight.position.set(0, 5005, -200);
+    scene.add(spotLight);
+    return { floor0, sheets };
 }
