@@ -17,9 +17,10 @@
         "ejs": "^3.1.6",
         "express": "^4.17.1",
         "puppeteer": "^5.5.0",
-        "ws": "^8.2.0"
+        "ws": "^8.5.0"
     },
     "devDependencies": {
-        "@types/ws": "^7.4.7"
+        "@types/ws": "^8.5.3",
+        "three": "^0.138.3"
     }
 }

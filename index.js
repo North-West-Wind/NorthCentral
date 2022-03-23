@@ -6,6 +6,14 @@ const app = express();
 
 const socketServer = new Server({ port: 3030 });
 const running = new Set();
+const PAGES = [
+    "auto-fish",
+    "more-boots",
+    "sky-farm",
+    "n0rthwestw1nd",
+    "sheet-music",
+    "other-projects"
+];
 
 socketServer.on('connection', (socketClient) => {
     console.log('Connected to client');
@@ -29,11 +37,6 @@ app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs');
 
 app.get("/", (_req, res) => res.render("index", { page: 0 }));
-
-app.get("/:page", (req, res) => {
-    if (req.params.page === "newyear") res.render("newyear");
-    else res.render("index", { page: req.params.page });
-});
 app.get("/n0rthwestw1nd/manual", (req, res) => res.sendFile(__dirname + "/public/assets/safe_manual.pdf"));
 app.get("/n0rthwestw1nd/manual/:ver", (req, res) => {
     if (req.params.ver === "unsafe") res.sendFile(__dirname + "/public/assets/unsafe_manual.pdf");
@@ -42,6 +45,17 @@ app.get("/n0rthwestw1nd/manual/:ver", (req, res) => {
 });
 app.get("/rest/ping", (_req, res) => {
     res.sendStatus(200);
+});
+
+app.get("/:page", (req, res, next) => {
+    if (req.params.page === "newyear") res.render("newyear");
+    else if (PAGES.includes(req.params.page)) res.render("index", { page: req.params.page });
+    else next();
+});
+
+app.use(function(req, res, next) {
+    res.status(404);
+    res.render("404");
 });
 
 const server = app.listen(process.env.PORT || 3000, async () => {

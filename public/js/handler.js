@@ -152,7 +152,7 @@ window.addEventListener("keydown", e => {
 });
 
 var displayPressed = false, opened = false, moving = false, started = false, starting = false, pendingMove = false, poppedState = false;
-var currentFloor = 0, gotoFloor = 0, actualFloor = 0, time = 0, diff = 0, scrollDisplacement = 0, lastDisplacement = 0, scrollVelocity = 0;
+var currentFloor = 0, gotoFloor = 0, actualFloor = 0, diff = 0, scrollDisplacement = 0, lastDisplacement = 0, scrollVelocity = 0;
 var allRains = [];
 var allParticles = [];
 function update() {

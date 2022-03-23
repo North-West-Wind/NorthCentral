@@ -1,5 +1,6 @@
-
-
+/**
+ * @param {THREE.Scene} scene
+ */
 function makeLift(scene) {
     const { rectL, rectR, rectT, rectB, doorL, doorR } = makeDoors(scene);
     const { floor } = makeFloor(scene);
@@ -13,6 +14,9 @@ function makeLift(scene) {
     return obj;
 }
 
+/**
+ * @param {THREE.Scene} scene
+ */
 function makeDoors(scene) {
     const geometryS = new THREE.BoxGeometry(5, 50, 5);
     const material = new THREE.MeshStandardMaterial({ color: 0x777777 });
@@ -39,6 +43,9 @@ function makeDoors(scene) {
     return { rectL, rectR, rectT, rectB, doorL, doorR };
 }
 
+/**
+ * @param {THREE.Scene} scene
+ */
 function makeFloor(scene) {
     const geometry = new THREE.BoxGeometry(80, 2, 100);
     const material = new THREE.MeshStandardMaterial({ color: 0x98f5a8 });
@@ -48,6 +55,9 @@ function makeFloor(scene) {
     return { floor };
 }
 
+/**
+ * @param {THREE.Scene} scene
+ */
 function makeWalls(scene) {
     const geometryF = new THREE.BoxGeometry(12.5, 80, 3);
     const material = new THREE.MeshStandardMaterial({ color: 0xfef0bc });
@@ -76,6 +86,9 @@ function makeWalls(scene) {
     return { wallFL, wallFR, wallFT, wallL, wallR, ceiling };
 }
 
+/**
+ * @param {THREE.Scene} scene
+ */
 function makeButtons(scene) {
     const geometryB = new THREE.BoxGeometry(5, 10, 0.5);
     const materialB = new THREE.MeshStandardMaterial({ color: 0xb4eafe });
@@ -116,6 +129,9 @@ function makeButtons(scene) {
     return { base, buttonU, buttonD, display };
 }
 
+/**
+ * @param {THREE.Scene} scene
+ */
 function makeSign(scene) {
     var x = document.createElement("canvas");
     var xc = x.getContext("2d");
@@ -147,6 +163,9 @@ function makeSign(scene) {
     return { sign };
 }
 
+/**
+ * @param {THREE.Scene} scene
+ */
 async function makeOutside(scene) {
     const { floor } = makeGroundFloor(scene);
     const { ocean, oakFloor, fishingRod, string, holder } = makeAutoFishFloor(scene);
@@ -157,6 +176,10 @@ async function makeOutside(scene) {
     return { floor, ocean, oakFloor, fishingRod, string, holder, corridor, platform, bootL, bootR, skyT, skyB, skyL, skyR, skyF, block, logs, leaves0, leaves1, leaves2, leaves3, paper0, paper1, paper2, floor0, sheets };
 }
 
+/**
+ * @param {THREE.Scene} scene
+ * @param {number} amount
+ */
 function createRain(scene, amount) {
     const rains = [];
     const geometryR = new THREE.SphereGeometry(0.25);
@@ -170,6 +193,10 @@ function createRain(scene, amount) {
     return rains;
 }
 
+/**
+ * @param {THREE.Scene} scene
+ * @param {number} amount
+ */
 function createParticle(scene, amount) {
     const particles = [];
     const geometryP = new THREE.SphereGeometry(0.25);
@@ -184,6 +211,9 @@ function createParticle(scene, amount) {
     return particles;
 }
 
+/**
+ * @param {number} floor
+ */
 function displayTexture(floor) {
     var x = document.createElement("canvas");
     var xc = x.getContext("2d");
@@ -196,11 +226,15 @@ function displayTexture(floor) {
     xc.font = "256px 'Courier New'";
     xc.textAlign = "center";
     xc.textBaseline = "middle";
-    if (isNaN(floor)) xc.fillText(floor, x.width / 2, x.height / 2);
+    if (floor !== 0 && !floor) xc.fillText("?", x.width / 2, x.height / 2);
+    else if (isNaN(floor)) xc.fillText(floor, x.width / 2, x.height / 2);
     else xc.fillText(floor <= 0 ? "G" : floor, x.width / 2, x.height / 2);
     return new THREE.Texture(x);
 }
 
+/**
+ * @param {number} index
+ */
 async function sheetTexture(index) {
     const canvas = document.createElement("canvas");
     const ctx = canvas.getContext("2d");
@@ -236,6 +270,9 @@ PrismGeometry = function (vertices, height) {
 
 PrismGeometry.prototype = Object.create(THREE.ExtrudeGeometry.prototype);
 
+/**
+ * @param {THREE.Scene} scene
+ */
 function makeGroundFloor(scene) {
     const geometry = new THREE.BoxGeometry(55, 2, 500);
     const material = new THREE.MeshStandardMaterial({ color: 0xcccccc });
@@ -246,6 +283,9 @@ function makeGroundFloor(scene) {
 }
 
 const WATER_TEXTURES = [];
+/**
+ * @param {THREE.Scene} scene
+ */
 function makeAutoFishFloor(scene) {
     for (let i = 0; i < 32; i++) {
         const water = LOADER.load(`/assets/textures/water/water_still-00-${(i < 10 ? "0" : "") + i}.png`, texture => {
@@ -309,6 +349,9 @@ function makeAutoFishFloor(scene) {
     return { ocean, oakFloor, fishingRod, string, holder };
 }
 
+/**
+ * @param {THREE.Scene} scene
+ */
 function makeMoreBootsFloor(scene) {
     GLTF_LOADER.load("/assets/models/armor_stand.gltf", (gltf) => {
         const armorStand = gltf.scene;
@@ -346,6 +389,9 @@ function makeMoreBootsFloor(scene) {
     return { corridor, platform, bootL, bootR };
 }
 
+/**
+ * @param {THREE.Scene} scene
+ */
 function makeSkyFarmFloor(scene) {
     const geometryS = new THREE.BoxGeometry(250, 2, 250);
     const material = new THREE.MeshBasicMaterial({ color: 0x8da0ff });
@@ -419,6 +465,9 @@ function makeSkyFarmFloor(scene) {
     return { skyT, skyB, skyL, skyR, skyF, block, logs, leaves0, leaves1, leaves2, leaves3 };
 }
 
+/**
+ * @param {THREE.Scene} scene
+ */
 function makeN0rthWestW1ndFloor(scene) {
     GLTF_LOADER.load("/assets/models/desk/scene.gltf", (gltf) => {
         const monitor = gltf.scene;
@@ -447,13 +496,16 @@ function makeN0rthWestW1ndFloor(scene) {
     return { paper0, paper1, paper2 };
 }
 
+/**
+ * @param {THREE.Scene} scene
+ */
 async function makeSheetMusicFloor(scene) {
     GLTF_LOADER.load("/assets/models/piano/scene.gltf", (gltf) => {
-        const monitor = gltf.scene;
-        monitor.position.set(0, 4956, -200);
-        monitor.setRotationFromAxisAngle(new THREE.Vector3(0, 1, 0), -Math.PI / 2);
-        monitor.scale.set(10, 10, 10);
-        scene.add(monitor);
+        const piano = gltf.scene;
+        piano.position.set(0, 4956, -200);
+        piano.setRotationFromAxisAngle(new THREE.Vector3(0, 1, 0), -Math.PI / 6 - Math.random() * Math.PI *2/3);
+        piano.scale.set(10, 10, 10);
+        scene.add(piano);
     });
 
     const geometry = new THREE.BoxGeometry(500, 2, 500);
