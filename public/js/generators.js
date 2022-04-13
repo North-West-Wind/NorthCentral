@@ -502,7 +502,7 @@ function makeN0rthWestW1ndFloor(scene) {
 async function makeSheetMusicFloor(scene) {
     GLTF_LOADER.load("/assets/models/piano/scene.gltf", (gltf) => {
         const piano = gltf.scene;
-        piano.position.set(0, 4956, -200);
+        piano.position.set(0, 4956, -210);
         piano.setRotationFromAxisAngle(new THREE.Vector3(0, 1, 0), -Math.PI / 6 - Math.random() * Math.PI *2/3);
         piano.scale.set(10, 10, 10);
         scene.add(piano);
@@ -528,7 +528,7 @@ async function makeSheetMusicFloor(scene) {
     scene.add(...sheets);
 
     const spotLight = new THREE.SpotLight(0xffffff, 2, 200, Math.PI / 4, 1, 2);
-    spotLight.position.set(0, 5005, -200);
+    spotLight.position.set(0, 5005, -210);
     scene.add(spotLight);
     return { floor0, sheets };
 }
