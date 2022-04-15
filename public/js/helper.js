@@ -3,11 +3,8 @@
  * @param {any} cvalue 
  * @param {number} exdays 
  */
-function setCookie(cname, cvalue, exdays) {
-    const d = new Date();
-    d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
-    let expires = "expires=" + d.toUTCString();
-    document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+function setCookie(cname, cvalue) {
+    document.cookie = cname + "=" + cvalue + ";path=/";
 }
 
 /**
@@ -33,10 +30,10 @@ function getCookie(cname) {
 function toggleMusic() {
     const cookie = getCookie("no_music");
     if (!cookie || cookie == 0) {
-        setCookie("no_music", 1, 3650);
+        setCookie("no_music", 1);
         document.getElementById("player").pause();
     } else {
-        setCookie("no_music", 0, 3650);
+        setCookie("no_music", 0);
         document.getElementById("player").play();
     }
 }

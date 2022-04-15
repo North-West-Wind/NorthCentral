@@ -1,3 +1,9 @@
+const PARTICLE_DISTANCE = 200;
+const SHRINK_PARTICLE_DISTANCE = 20;
+
+const MAX_FLOOR = 5;
+const SHEETS = 6;
+
 const PAGES = [
     "auto-fish",
     "more-boots",
@@ -24,14 +30,9 @@ function readPage(url, arr) {
 readPage("/contents/information.html", CONTENTS);
 for (const page of PAGES) readPage(`/contents/${page}.html`, CONTENTS);
 for (let i = 0; i < 3; i++) readPage(`/contents/n0rthwestw1nd/info-${i}.html`, N0RTHWESTW1ND_CONTENTS);
-for (let i = 0; i < 5; i++) readPage(`/contents/sheetmusic/info-${i}.html`, SHEETMUSIC_CONTENTS);
+for (let i = 0; i < SHEETS; i++) readPage(`/contents/sheetmusic/info-${i}.html`, SHEETMUSIC_CONTENTS);
 
 readPage("/contents/error/information.html", ERROR_CONTENTS);
 
 const LOADER = new THREE.TextureLoader();
 const GLTF_LOADER = new THREE.GLTFLoader();
-
-const PARTICLE_DISTANCE = 200;
-const SHRINK_PARTICLE_DISTANCE = 20;
-
-const MAX_FLOOR = 5;

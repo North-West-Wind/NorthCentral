@@ -1,7 +1,8 @@
 const express = require("express");
+const cookieParser = require("cookie-parser");
 const { Server } = require("ws");
 const runCode = require("./puppeteer.js");
-const bodyParser = require("body-parser"); 
+const bodyParser = require("body-parser");
 const app = express();
 
 const socketServer = new Server({ port: 3030 });
@@ -18,7 +19,7 @@ const PAGES = [
 socketServer.on('connection', (socketClient) => {
     console.log('Connected to client');
     socketClient.send("send_code");
-    socketClient.on('message', async(message) => {
+    socketClient.on('message', async (message) => {
         console.log("Received code from client");
         if (!running.has(socketClient)) {
             running.add(socketClient);
@@ -32,11 +33,15 @@ socketServer.on('connection', (socketClient) => {
 });
 
 app.use(express.static("public"));
-app.use(bodyParser.urlencoded({ extended: false })); 
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(cookieParser());
 app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs');
 
-app.get("/", (_req, res) => res.render("index", { page: 0 }));
+app.get("/", (req, res) => {
+    const plain = parseInt(req.cookies.no_3d);
+    if (!plain) res.render("index", { page: 0 });
+});
 app.get("/n0rthwestw1nd/manual", (req, res) => res.sendFile(__dirname + "/public/assets/safe_manual.pdf"));
 app.get("/n0rthwestw1nd/manual/:ver", (req, res) => {
     if (req.params.ver === "unsafe") res.sendFile(__dirname + "/public/assets/unsafe_manual.pdf");
@@ -48,12 +53,16 @@ app.get("/rest/ping", (_req, res) => {
 });
 
 app.get("/:page", (req, res, next) => {
-    if (req.params.page === "newyear") res.render("newyear");
-    else if (PAGES.includes(req.params.page)) res.render("index", { page: req.params.page });
-    else next();
+    const plain = parseInt(req.cookies.no_3d);
+    if (!plain) {
+        if (req.params.page === "newyear") res.render("newyear");
+        else if (PAGES.includes(req.params.page)) res.render("index", { page: req.params.page });
+        else next();
+    }
+
 });
 
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
     res.status(404);
     res.render("404");
 });

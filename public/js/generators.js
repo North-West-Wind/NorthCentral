@@ -517,7 +517,7 @@ async function makeSheetMusicFloor(scene) {
     const geometryS = new THREE.BoxGeometry(3, 0.1, 3 * Math.SQRT2);
     const materialS = new THREE.MeshStandardMaterial({ color: 0x777777 });
     const sheets = [];
-    for (let i = 0; i < 5; i++) {
+    for (let i = 0; i < SHEETS; i++) {
         const xm = new THREE.MeshStandardMaterial({ map: await sheetTexture(i), transparent: true });
         xm.map.needsUpdate = true;
         const sheet = new THREE.Mesh(geometryS, [materialS, materialS, xm, materialS, materialS, materialS]);
