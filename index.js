@@ -1,9 +1,11 @@
+require("dotenv").config();
 const express = require("express");
 const cookieParser = require("cookie-parser");
 const { Server } = require("ws");
 const runCode = require("./puppeteer.js");
 const bodyParser = require("body-parser");
 const app = express();
+const fetch = require("node-fetch");
 
 const socketServer = new Server({ port: 3030 });
 const running = new Set();
@@ -48,8 +50,13 @@ app.get("/n0rthwestw1nd/manual/:ver", (req, res) => {
     else if (req.params.ver === "tradew1nd") res.sendFile(__dirname + "/public/assets/tradew1nd_manual.pdf");
     else res.sendFile(__dirname + "/public/assets/safe_manual.pdf");
 });
-app.get("/rest/ping", (_req, res) => {
+app.get("/api/ping", (_req, res) => {
     res.sendStatus(200);
+});
+app.get("/api/curseforge/mods/:id", async (req, res) => {
+    const response = await fetch(`https://api.curseforge.com/v1/mods/${req.params.id}`, { headers: { "x-api-key": process.env.CF_API } });
+    if (!response.ok) res.sendStatus(response.status);
+    res.json(await response.json());
 });
 
 app.get("/:page", (req, res, next) => {
