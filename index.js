@@ -53,16 +53,6 @@ app.get("/n0rthwestw1nd/manual/:ver", (req, res) => {
 app.get("/api/ping", (_req, res) => {
     res.sendStatus(200);
 });
-app.get("/api/curseforge/mods/:id", async (req, res) => {
-    const response = await fetch(`https://api.curseforge.com/v1/mods/${req.params.id}`, { headers: { "x-api-key": process.env.CF_API } });
-    if (!response.ok) res.sendStatus(response.status);
-    res.json(await response.json());
-});
-app.get("/api/curseforge/mods/:id/files", async (req, res) => {
-    const response = await fetch(`https://api.curseforge.com/v1/mods/${req.params.id}/files`, { headers: { "x-api-key": process.env.CF_API } });
-    if (!response.ok) res.sendStatus(response.status);
-    res.json(await response.json());
-});
 app.get("/api/curseforge/mods/search", async (req, res) => {
     var url = `https://api.curseforge.com/v1/mods/search`;
     const queries = [];
@@ -70,7 +60,17 @@ app.get("/api/curseforge/mods/search", async (req, res) => {
     if (queries.length) url += `?${queries.join("&")}`;
     const response = await fetch(url, { headers: { "x-api-key": process.env.CF_API } });
     if (!response.ok) res.sendStatus(response.status);
-    res.json(await response.json());
+    res.json((await response.json()).data);
+});
+app.get("/api/curseforge/mods/:id", async (req, res) => {
+    const response = await fetch(`https://api.curseforge.com/v1/mods/${req.params.id}`, { headers: { "x-api-key": process.env.CF_API } });
+    if (!response.ok) res.sendStatus(response.status);
+    res.json((await response.json()).data);
+});
+app.get("/api/curseforge/mods/:id/files", async (req, res) => {
+    const response = await fetch(`https://api.curseforge.com/v1/mods/${req.params.id}/files`, { headers: { "x-api-key": process.env.CF_API } });
+    if (!response.ok) res.sendStatus(response.status);
+    res.json((await response.json()).data);
 });
 
 app.get("/:page", (req, res, next) => {
