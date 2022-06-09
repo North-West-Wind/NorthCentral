@@ -72,6 +72,11 @@ app.get("/api/curseforge/mods/:id/files", async (req, res) => {
     if (!response.ok) res.sendStatus(response.status);
     res.json((await response.json()).data);
 });
+app.get("/api/curseforge/mods/:id/files/:fileId", async (req, res) => {
+    const response = await fetch(`https://api.curseforge.com/v1/mods/${req.params.id}/files/${req.params.fileId}`, { headers: { "x-api-key": process.env.CF_API } });
+    if (!response.ok) res.sendStatus(response.status);
+    res.json((await response.json()).data);
+});
 
 app.get("/:page", (req, res, next) => {
     const plain = parseInt(req.cookies.no_3d);
