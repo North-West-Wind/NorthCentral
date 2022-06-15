@@ -521,7 +521,7 @@ async function makeSheetMusicFloor(scene) {
         const xm = new THREE.MeshStandardMaterial({ map: await sheetTexture(i), transparent: true });
         xm.map.needsUpdate = true;
         const sheet = new THREE.Mesh(geometryS, [materialS, materialS, xm, materialS, materialS, materialS]);
-        sheet.position.set(THREE.MathUtils.randFloatSpread(40), 4965.9875 + THREE.MathUtils.randFloatSpread(0.0001), THREE.MathUtils.randFloatSpread(20) - 190);
+        sheet.position.set(THREE.MathUtils.randFloatSpread(40), 4965.9875 + THREE.MathUtils.randFloatSpread(0.001), THREE.MathUtils.randFloatSpread(20) - 190);
         sheet.setRotationFromAxisAngle(new THREE.Vector3(0, 1, 0), THREE.MathUtils.randFloatSpread(Math.PI * 2));
         sheets.push(sheet);
     }
