@@ -113,7 +113,6 @@ function makeButtons(scene) {
 
     const geometryD = new THREE.BoxGeometry(5, 5, 0.5);
     const xm = new THREE.MeshStandardMaterial({ map: displayTexture(0), transparent: true });
-    xm.map.needsUpdate = true;
     const material = new THREE.MeshStandardMaterial({ color: 0x555555 });
     const materials = [
         material,
@@ -229,7 +228,11 @@ function displayTexture(floor) {
     if (floor !== 0 && !floor) xc.fillText("?", x.width / 2, x.height / 2);
     else if (isNaN(floor)) xc.fillText(floor, x.width / 2, x.height / 2);
     else xc.fillText(floor <= 0 ? "G" : floor, x.width / 2, x.height / 2);
-    return new THREE.Texture(x);
+    const texture = new THREE.Texture(x);
+    texture.generateMipmaps = false;
+    texture.minFilter = THREE.LinearFilter;
+    texture.needsUpdate = true;
+    return texture;
 }
 
 /**
@@ -246,7 +249,11 @@ async function sheetTexture(index) {
     return new Promise(resolve => {
         img.onload = () => {
             ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-            resolve(new THREE.Texture(canvas));
+            const texture = new THREE.Texture(canvas);
+            texture.generateMipmaps = false;
+            texture.minFilter = THREE.LinearFilter;
+            texture.needsUpdate = true;
+            resolve(texture);
         }
         img.src = `/assets/sheets/sheet-${index}.svg`;
     });
@@ -502,9 +509,9 @@ function makeN0rthWestW1ndFloor(scene) {
 async function makeSheetMusicFloor(scene) {
     GLTF_LOADER.load("/assets/models/piano/scene.gltf", (gltf) => {
         const piano = gltf.scene;
-        piano.position.set(0, 4956, -210);
+        piano.position.set(0, 4956, -215);
         piano.setRotationFromAxisAngle(new THREE.Vector3(0, 1, 0), -Math.PI / 6 - Math.random() * Math.PI *2/3);
-        piano.scale.set(10, 10, 10);
+        piano.scale.set(15, 15, 15);
         scene.add(piano);
     });
 
@@ -514,21 +521,20 @@ async function makeSheetMusicFloor(scene) {
     floor0.position.set(0, 4965, -200);
     scene.add(floor0);
 
-    const geometryS = new THREE.BoxGeometry(3, 0.1, 3 * Math.SQRT2);
+    const geometryS = new THREE.BoxGeometry(5, 0.1, 5 * Math.SQRT2);
     const materialS = new THREE.MeshStandardMaterial({ color: 0x777777 });
     const sheets = [];
     for (let i = 0; i < SHEETS; i++) {
         const xm = new THREE.MeshStandardMaterial({ map: await sheetTexture(i), transparent: true });
-        xm.map.needsUpdate = true;
         const sheet = new THREE.Mesh(geometryS, [materialS, materialS, xm, materialS, materialS, materialS]);
-        sheet.position.set(THREE.MathUtils.randFloatSpread(40), 4965.9875 + THREE.MathUtils.randFloatSpread(0.001), THREE.MathUtils.randFloatSpread(20) - 190);
+        sheet.position.set(THREE.MathUtils.randFloatSpread(40), 4965.9875 + THREE.MathUtils.randFloatSpread(0.001), THREE.MathUtils.randFloatSpread(20) - 195);
         sheet.setRotationFromAxisAngle(new THREE.Vector3(0, 1, 0), THREE.MathUtils.randFloatSpread(Math.PI * 2));
         sheets.push(sheet);
     }
     scene.add(...sheets);
 
-    const spotLight = new THREE.SpotLight(0xffffff, 2, 200, Math.PI / 4, 1, 2);
-    spotLight.position.set(0, 5005, -210);
+    const spotLight = new THREE.SpotLight(0xffffff, 2, 300, Math.PI / 4, 1, 2);
+    spotLight.position.set(0, 5006, -215);
     scene.add(spotLight);
     return { floor0, sheets };
 }

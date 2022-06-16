@@ -17,12 +17,17 @@ const CONTENTS = [];
 const ERROR_CONTENTS = [];
 const N0RTHWESTW1ND_CONTENTS = [];
 const SHEETMUSIC_CONTENTS = [];
+const SHEETMUSIC_TITLES = [];
 
-function readPage(url, arr) {
+function readPage(url, arr, regex = undefined, otherarr = []) {
     var rawFile = new XMLHttpRequest();
     rawFile.open("GET", url, false);
     rawFile.onreadystatechange = () => {
-        if(rawFile.readyState === 4 && (rawFile.status === 200 || rawFile.status == 0)) arr.push(rawFile.responseText);
+        if (rawFile.readyState === 4 && (rawFile.status === 200 || rawFile.status == 0)) {
+            const text = rawFile.responseText;
+            if (regex) otherarr.push(text.match(regex)[1]);
+            arr.push(text);
+        }
     };
     rawFile.send(null);
 }
@@ -30,7 +35,7 @@ function readPage(url, arr) {
 readPage("/contents/information.html", CONTENTS);
 for (const page of PAGES) readPage(`/contents/${page}.html`, CONTENTS);
 for (let i = 0; i < 3; i++) readPage(`/contents/n0rthwestw1nd/info-${i}.html`, N0RTHWESTW1ND_CONTENTS);
-for (let i = 0; i < SHEETS; i++) readPage(`/contents/sheetmusic/info-${i}.html`, SHEETMUSIC_CONTENTS);
+for (let i = 0; i < SHEETS; i++) readPage(`/contents/sheetmusic/info-${i}.html`, SHEETMUSIC_CONTENTS, /\<h1\>(?<name>.+)\<\/h1\>/, SHEETMUSIC_TITLES);
 
 readPage("/contents/error/information.html", ERROR_CONTENTS);
 
