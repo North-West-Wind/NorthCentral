@@ -2,10 +2,12 @@
     "name": "northselevator",
     "version": "1.0.0",
     "description": "The coolest home page of NorthWestWind.",
-    "main": "index.js",
+    "main": "out/index.js",
+    "type": "module",
     "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1",
-        "start": "node --optimize_for_size --max_old_space_size=341 --gc_interval=50 index.js"
+        "test": "npm run postinstall && npm start",
+        "start": "node --optimize_for_size --max_old_space_size=341 --gc_interval=50 out/index.js",
+        "postinstall": "tsc"
     },
     "engines": {
         "node": "16.x"
@@ -13,17 +15,19 @@
     "author": "NorthWestWind",
     "license": "GPL-3.0-or-later",
     "dependencies": {
-        "body-parser": "^1.19.0",
+        "body-parser": "^1.20.0",
         "cookie-parser": "^1.4.6",
         "dotenv": "^16.0.1",
         "ejs": "^3.1.6",
-        "express": "^4.17.1",
-        "node-fetch": "^2.6.6",
-        "puppeteer": "^5.5.0",
-        "ws": "^8.5.0"
+        "express": "^4.18.1",
+        "mysql2": "^2.3.3",
+        "node-fetch": "^3.2.10"
     },
     "devDependencies": {
-        "@types/ws": "^8.5.3",
-        "three": "^0.138.3"
+        "@types/body-parser": "^1.19.2",
+        "@types/cookie-parser": "^1.4.3",
+        "@types/express": "^4.17.13",
+        "three": "^0.138.3",
+        "typescript": "^4.7.4"
     }
 }

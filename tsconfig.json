@@ -1,0 +1,18 @@
+{
+  "compilerOptions": {
+    "target": "es6",
+    "module": "esnext",
+    "allowJs": false,
+    "checkJs": false,
+    "outDir": "./out",
+    "strict": true,
+    "noImplicitAny": false,
+    "strictNullChecks": false,
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": false
+  },
+  "include": ["src"],
+  "exclude": ["node_modules", "**/*.js"]
+}
