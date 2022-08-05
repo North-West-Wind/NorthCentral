@@ -14,8 +14,12 @@ pointLight.castShadow = true;
 scene.add(pointLight);
 const obj = makeLift(scene);
 const { doorL, doorR, buttonU, buttonD, sign, display } = obj;
-makeCampfire(scene);
-makeNotice(scene);
+var spawned = false;
+function spawnOutside() {
+    spawned = true;
+    makeCampfire(scene);
+    makeNotice(scene);
+}
 
 function resize() {
     camera.aspect = window.innerWidth / window.innerHeight;
@@ -38,7 +42,7 @@ function resize() {
 
 function animate() {
     requestAnimationFrame(animate);
-
+    
     renderer.render(scene, camera);
 }
 

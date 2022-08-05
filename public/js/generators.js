@@ -175,6 +175,15 @@ async function makeOutside(scene) {
     return { floor, ocean, oakFloor, fishingRod, string, holder, corridor, platform, bootL, bootR, skyT, skyB, skyL, skyR, skyF, block, logs, leaves0, leaves1, leaves2, leaves3, paper0, paper1, paper2, floor0, sheets };
 }
 
+const floorGenerators = [
+    makeGroundFloor,
+    makeAutoFishFloor,
+    makeMoreBootsFloor,
+    makeSkyFarmFloor,
+    makeN0rthWestW1ndFloor,
+    makeSheetMusicFloor
+];
+
 /**
  * @param {THREE.Scene} scene
  * @param {number} amount
@@ -360,12 +369,10 @@ function makeAutoFishFloor(scene) {
  * @param {THREE.Scene} scene
  */
 function makeMoreBootsFloor(scene) {
-    GLTF_LOADER.load("/assets/models/armor_stand.gltf", (gltf) => {
-        const armorStand = gltf.scene;
-        armorStand.position.set(0, 1969.5, -156.5);
-        armorStand.scale.set(20, 20, 20);
-        scene.add(armorStand);
-    });
+    const armorStand = GLTF_LOADED.armor_stand;
+    armorStand.position.set(0, 1969.5, -156.5);
+    armorStand.scale.set(20, 20, 20);
+    scene.add(armorStand);
 
     const geometryC = new THREE.BoxGeometry(16, 16, 80);
     const material = new THREE.MeshBasicMaterial({ color: 0xa0a6a7 });
@@ -476,13 +483,11 @@ function makeSkyFarmFloor(scene) {
  * @param {THREE.Scene} scene
  */
 function makeN0rthWestW1ndFloor(scene) {
-    GLTF_LOADER.load("/assets/models/desk/scene.gltf", (gltf) => {
-        const monitor = gltf.scene;
-        monitor.position.set(-0.25, 3993.5, -150);
-        monitor.setRotationFromAxisAngle(new THREE.Vector3(0, 1, 0), -Math.PI / 2);
-        monitor.scale.set(2, 2, 2);
-        scene.add(monitor);
-    });
+    const desk = GLTF_LOADED.desk;
+    desk.position.set(-0.25, 3993.5, -150);
+    desk.setRotationFromAxisAngle(new THREE.Vector3(0, 1, 0), -Math.PI / 2);
+    desk.scale.set(2, 2, 2);
+    scene.add(desk);
 
     const geometry = new THREE.BoxGeometry(0.5, 0.1, 0.75);
     const material = new THREE.MeshStandardMaterial({ color: 0x777777 });
@@ -507,13 +512,11 @@ function makeN0rthWestW1ndFloor(scene) {
  * @param {THREE.Scene} scene
  */
 async function makeSheetMusicFloor(scene) {
-    GLTF_LOADER.load("/assets/models/piano/scene.gltf", (gltf) => {
-        const piano = gltf.scene;
-        piano.position.set(0, 4956, -215);
-        piano.setRotationFromAxisAngle(new THREE.Vector3(0, 1, 0), -Math.PI / 6 - Math.random() * Math.PI *2/3);
-        piano.scale.set(15, 15, 15);
-        scene.add(piano);
-    });
+    const piano = GLTF_LOADED.piano;
+    piano.position.set(0, 4956, -215);
+    piano.setRotationFromAxisAngle(new THREE.Vector3(0, 1, 0), -Math.PI / 6 - Math.random() * Math.PI *2/3);
+    piano.scale.set(15, 15, 15);
+    scene.add(piano);
 
     const geometry = new THREE.BoxGeometry(500, 2, 500);
     const material = new THREE.MeshStandardMaterial({ color: 0x733410 });

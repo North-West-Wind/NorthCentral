@@ -153,6 +153,7 @@ function update() {
         } else {
             doorL.translateX(-0.4);
             doorR.translateX(0.4);
+            if (!spawned) spawnOutside();
         }
     }
     if (scrollDisplacement) {

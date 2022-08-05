@@ -186,6 +186,7 @@ function update() {
             doorR.position.x = 12.5;
             moving = false;
             opened = false;
+            despawnOutside();
         } else if (opened) {
             doorL.translateX(0.4);
             doorR.translateX(-0.4);
@@ -197,6 +198,7 @@ function update() {
         } else {
             doorL.translateX(-0.4);
             doorR.translateX(0.4);
+            if (!spawned) spawnOutside();
         }
     }
     if (opened || moving) {
@@ -243,7 +245,7 @@ function update() {
             display.material.splice(4, 1, xm);
 
             Object.values(obj).forEach(mesh => mesh.position.y += 1000 * diff);
-            camera.position.y += 1000 * diff;
+            camera.position.y = 1000 * currentFloor;
             pointLight.position.y += 1000 * diff;
             moving = true;
             const audio = new Audio('/assets/lift.mp3');

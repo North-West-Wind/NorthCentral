@@ -68,11 +68,9 @@ app.get("/api/curseforge/mods/:id/files/:fileId", async (req, res) => {
 });
 
 app.get("/:page", (req, res, next) => {
-	if (req.params.page === "library") return res.render("communist-library/index");
 	const plain = parseInt(req.cookies.no_3d);
 	if (!plain) {
-		if (req.params.page === "newyear") res.render("newyear");
-		else if (PAGES.includes(req.params.page)) res.render("index", { page: req.params.page });
+		if (PAGES.includes(req.params.page)) res.render("index", { page: req.params.page });
 		else next();
 	}
 });

@@ -1,27 +1,23 @@
 /**
  * @param {THREE.Scene} scene
  */
-async function makeCampfire(scene) {
-    GLTF_LOADER.load("/assets/models/campfire/scene.gltf", (gltf) => {
-        const campfire = gltf.scene;
-        campfire.position.set(0, -50, -200);
-        campfire.scale.set(3, 3, 3);
-        scene.add(campfire);
-    });
-    GLTF_LOADER.load("/assets/models/stick/scene.gltf", (gltf) => {
-        const stick = gltf.scene;
-        stick.position.set(40, -50, -150);
-        stick.setRotationFromAxisAngle(new THREE.Vector3(1, 0, -1), -Math.PI / 6);
-        stick.scale.set(1.5, 1.5, 1.5);
-        scene.add(stick);
-    });
-    GLTF_LOADER.load("/assets/models/marshmallow/scene.gltf", (gltf) => {
-        const marshmallow = gltf.scene;
-        marshmallow.position.set(11.25, -7.25, -178);
-        marshmallow.setRotationFromAxisAngle(new THREE.Vector3(1, 0, 1), Math.PI / 4);
-        marshmallow.scale.set(10, 10, 10);
-        scene.add(marshmallow);
-    });
+function makeCampfire(scene) {
+    const campfire = GLTF_LOADED.campfire;
+    campfire.position.set(0, -50, -200);
+    campfire.scale.set(3, 3, 3);
+    scene.add(campfire);
+
+    const stick = GLTF_LOADED.stick;
+    stick.position.set(40, -50, -150);
+    stick.setRotationFromAxisAngle(new THREE.Vector3(1, 0, -1), -Math.PI / 6);
+    stick.scale.set(1.5, 1.5, 1.5);
+    scene.add(stick);
+
+    const marshmallow = GLTF_LOADED.marshmallow;
+    marshmallow.position.set(11.25, -7.25, -178);
+    marshmallow.setRotationFromAxisAngle(new THREE.Vector3(1, 0, 1), Math.PI / 4);
+    marshmallow.scale.set(10, 10, 10);
+    scene.add(marshmallow);
 
     const pointLight = new THREE.PointLight(0xffda82, 1.5, 300, 2);
     pointLight.position.set(0, -40, -200)
@@ -32,7 +28,7 @@ async function makeCampfire(scene) {
 /**
  * @param {THREE.Scene} scene
  */
-async function makeNotice(scene) {
+function makeNotice(scene) {
     const geometry = new THREE.BoxGeometry(75, 5, 2);
     const material = new THREE.MeshBasicMaterial({ color: 0 });
 

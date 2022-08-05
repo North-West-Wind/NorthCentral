@@ -14,15 +14,25 @@ pointLight.castShadow = true;
 scene.add(pointLight);
 const obj = makeLift(scene);
 const { doorL, doorR, buttonU, buttonD, sign, display } = obj;
-var ocean, paper0, paper1, paper2, sheets;
-(async() => {
-    const outside = await makeOutside(scene);
+var outside, ocean, paper0, paper1, paper2, sheets;
+var spawned = false;
+async function spawnOutside() {
+    spawned = true;
+    outside = await floorGenerators[currentFloor](scene);
     ocean = outside.ocean;
     paper0 = outside.paper0;
     paper1 = outside.paper1;
     paper2 = outside.paper2;
     sheets = outside.sheets;
-})();
+}
+function despawnOutside() {
+    spawned = false;
+    for (const ob of Object.values(outside)) {
+        if (Array.isArray(ob)) scene.remove(...ob);
+        else scene.remove(ob);
+    }
+    ocean = paper0 = paper1 = paper2 = sheets = undefined;
+}
 
 function resize() {
     camera.aspect = window.innerWidth / window.innerHeight;
