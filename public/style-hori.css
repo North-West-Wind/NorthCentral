@@ -141,3 +141,40 @@ a:hover {
 	margin-top: 1vw;
 	border-radius: 5%;
 }
+
+.cookie-info {
+    bottom: 2vw;
+    background-color: black;
+    padding: 1vw;
+    color: white;
+    font-size: 2vw;
+    opacity: 50%;
+    border-radius: 2vw;
+    margin-top: 2vh;
+    margin-left: auto;
+    margin-right: auto;
+    border: 0;
+}
+
+.cookie-button {
+	border: none;
+	color: white;
+	padding: 0.5vw;
+	text-align: center;
+	text-decoration: none;
+	display: inline-block;
+	font-size: 1vw;
+	margin-top: 1vw;
+	border-radius: 2vw;
+    opacity: 1;
+    width: 8vw;
+    margin-top: 0;
+}
+
+.accept {
+	background-color: #48e65d;
+}
+
+.deny {
+    background: #fd4f4f;
+}

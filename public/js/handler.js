@@ -320,12 +320,12 @@ function hideOrUnhideInfo(cb = () => { }) {
 function openOrCloseInfo(index = 0) {
     hideOrUnhideInfo(hidden => {
         if (hidden) {
-            div.innerHTML = "";
+            setInnerHTML(div, "");
             bottomed = topped = false;
         } else {
             topped = !div.scrollTop;
             bottomed = div.scrollTop === (div.scrollHeight - div.offsetHeight);
-            div.innerHTML = CONTENTS[index];
+            setInnerHTML(div, CONTENTS[index]);
         }
         scrollStopped = Date.now();
     });
@@ -333,15 +333,15 @@ function openOrCloseInfo(index = 0) {
 
 function openOrCloseNWWInfo(index = 0) {
     hideOrUnhideInfo(hidden => {
-        if (hidden) div.innerHTML = "";
-        else div.innerHTML = N0RTHWESTW1ND_CONTENTS[index];
+        if (hidden) setInnerHTML(div, "");
+        else setInnerHTML(div, N0RTHWESTW1ND_CONTENTS[index]);
     });
 }
 
 function openOrCloseSheetInfo(index = 0) {
     hideOrUnhideInfo(hidden => {
-        if (hidden) div.innerHTML = "";
-        else div.innerHTML = SHEETMUSIC_CONTENTS[index];
+        if (hidden) setInnerHTML(div, "");
+        else setInnerHTML(div, SHEETMUSIC_CONTENTS[index]);
     });
 }
 

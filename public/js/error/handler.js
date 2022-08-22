@@ -215,12 +215,12 @@ function hideOrUnhideInfo(cb = () => { }) {
 function openOrCloseInfo() {
     hideOrUnhideInfo(hidden => {
         if (hidden) {
-            div.innerHTML = "";
+            setInnerHTML(div, "");
             bottomed = topped = false;
         } else {
             topped = !div.scrollTop;
             bottomed = div.scrollTop === (div.scrollHeight - div.offsetHeight);
-            div.innerHTML = ERROR_CONTENTS[0];
+            setInnerHTML(div, ERROR_CONTENTS[0]);
         }
         scrollStopped = Date.now();
     });

@@ -19,6 +19,7 @@
     <script src="/js/helper.js"></script>
     <script src="/js/GLTFLoader.js"></script>
     <script src="/js/constants.js"></script>
+    <script src="/js/threeConst.js"></script>
 </head>
 
 <body>
@@ -29,8 +30,8 @@
     <canvas id="bg"></canvas>
     <div id="info" class="info hidescroll hidden visuallyhidden"></div>
     <script>
-        if (getCookie("no_music") === 0) document.getElementById("player").play();
-        else if (!getCookie("no_music")) toggleMusic();
+        if (getVar("no_music") === 0) document.getElementById("player").play();
+        else if (!getVar("no_music")) toggleMusic();
         const passedInFloor = 0;
     </script>
     <script src="/js/generators.js"></script>
