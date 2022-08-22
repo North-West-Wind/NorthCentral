@@ -111,39 +111,38 @@ canvas {
 }
 
 a {
-	text-decoration: none;
-	color: #fcba03;
+    text-decoration: none;
+    color: #fcba03;
 }
 
 a:hover {
-	text-decoration: underline;
+    text-decoration: underline;
 }
 
 .avatar {
-	border-radius: 50%;
-	display: block;
-	margin-left: auto;
-	margin-right: auto;
-	width: 15vw;
-	border: 0.75vw solid #fcba03;
-	margin-top: 1vw;
+    border-radius: 50%;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 15vw;
+    border: 0.75vw solid #fcba03;
+    margin-top: 1vw;
 }
 
 .button {
-	background-color: #7289DA;
-	border: none;
-	color: white;
-	padding: 1vw 2vw;
-	text-align: center;
-	text-decoration: none;
-	display: inline-block;
-	font-size: 2.5vw;
-	margin-top: 1vw;
-	border-radius: 5%;
+    background-color: #7289DA;
+    border: none;
+    color: white;
+    padding: 1vw 2vw;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 2.5vw;
+    margin-top: 1vw;
+    border-radius: 5%;
 }
 
 .cookie-info {
-    bottom: 2vw;
     background-color: black;
     padding: 1vw;
     color: white;
@@ -157,24 +156,31 @@ a:hover {
 }
 
 .cookie-button {
-	border: none;
-	color: white;
-	padding: 0.5vw;
-	text-align: center;
-	text-decoration: none;
-	display: inline-block;
-	font-size: 1vw;
-	margin-top: 1vw;
-	border-radius: 2vw;
+    border: none;
+    color: white;
+    padding: 0.5vw;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 1vw;
+    margin-top: 1vw;
+    border-radius: 2vw;
     opacity: 1;
     width: 8vw;
     margin-top: 0;
 }
 
 .accept {
-	background-color: #48e65d;
+    background-color: #48e65d;
 }
 
 .deny {
     background: #fd4f4f;
+}
+
+.bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
 }

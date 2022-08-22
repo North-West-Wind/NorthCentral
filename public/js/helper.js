@@ -1,11 +1,13 @@
+function useCookies() {
+    return window.sessionStorage.getItem("use_cookies") || getVar("use_cookies", true);
+}
+
 /**
  * @param {string} cname 
  * @param {any} cvalue 
  */
 function setVar(cname, cvalue) {
-    console.log("setVar cookie check: ", window.sessionStorage.getItem("use_cookies"));
-    console.trace();
-    if (window.sessionStorage.getItem("use_cookies") || getVar("use_cookies", true)) document.cookie = cname + "=" + cvalue + ";SameSite=Strict;expires=Tue, 19 Jan 2038 04:14:07 GMT;path=/";
+    if (useCookies()) document.cookie = cname + "=" + cvalue + ";SameSite=Strict;expires=Tue, 19 Jan 2038 04:14:07 GMT;path=/";
     else window.sessionStorage.setItem(cname, cvalue);
 }
 
@@ -15,7 +17,7 @@ function setVar(cname, cvalue) {
  * @returns {string}
  */
 function getVar(cname, forceCookie = false) {
-    if (forceCookie || window.sessionStorage.getItem("use_cookies") || getVar("use_cookies", true)) {
+    if (forceCookie || useCookies()) {
         let name = cname + "=";
         let decodedCookie = decodeURIComponent(document.cookie);
         let ca = decodedCookie.split(';');

@@ -1,3 +1,6 @@
+const PARTICLE_DISTANCE = 200;
+const SHRINK_PARTICLE_DISTANCE = 20;
+
 const MODELS = [
 	"armor_stand",
 	"desk",

@@ -26,8 +26,8 @@ app.set('views', 'views');
 app.set('view engine', 'ejs');
 
 app.get("/", (req, res) => {
-	const plain = parseInt(req.cookies.no_3d);
-	if (!plain) res.render("index", { page: 0 });
+	if (!parseInt(req.cookies.no_3d) && !req.query.no_3d) res.render("index", { page: 0 });
+	else res.render("plain", { page: 0 });
 });
 app.get("/n0rthwestw1nd/manual", (req, res) => res.sendFile(__dirname + "/public/assets/safe_manual.pdf"));
 app.get("/n0rthwestw1nd/manual/:ver", (req, res) => {
@@ -68,10 +68,10 @@ app.get("/api/curseforge/mods/:id/files/:fileId", async (req, res) => {
 });
 
 app.get("/:page", (req, res, next) => {
-	const plain = parseInt(req.cookies.no_3d);
-	if (!plain) {
-		if (PAGES.includes(req.params.page)) res.render("index", { page: req.params.page });
-		else next();
+	if (!PAGES.includes(req.params.page)) next();
+	else {
+		if (!parseInt(req.cookies.no_3d) && !req.query.no_3d) res.render("index", { page: req.params.page });
+		else res.render("plain", { page: req.params.page });
 	}
 });
 

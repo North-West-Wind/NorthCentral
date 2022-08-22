@@ -1,6 +1,3 @@
-const PARTICLE_DISTANCE = 200;
-const SHRINK_PARTICLE_DISTANCE = 20;
-
 const MAX_FLOOR = 5;
 const SHEETS = 7;
 

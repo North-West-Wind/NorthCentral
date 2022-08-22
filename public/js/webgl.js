@@ -4,7 +4,9 @@ window.addEventListener("load", function () {
     if (!(gl instanceof WebGLRenderingContext)) {
         this.alert("It seems your browser doesn't support WebGL!\nI'm sorry you may not be able view this website. A non-WebGL version is in development.");
 
-        setVar("no_3d", 1);
-        this.location.reload(true);
+        if (useCookies()) {
+            setVar("no_3d", 1);
+            this.location.reload(true);
+        } else this.window.location.search += "&no_3d=1";
     }
 }, false);
