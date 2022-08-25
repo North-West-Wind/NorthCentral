@@ -39,32 +39,48 @@ app.get("/api/ping", (_req, res) => {
 	res.sendStatus(200);
 });
 app.get("/api/curseforge/mods/search", async (req, res) => {
-	var url = `https://api.curseforge.com/v1/mods/search`;
-	const queries = [];
-	for (const query in req.query) queries.push(`${query}=${req.query[query]}`);
-	if (queries.length) url += `?${queries.join("&")}`;
-	const response = await fetch(url, { headers: { "x-api-key": process.env.CF_API } });
-	if (!response.ok) res.sendStatus(response.status);
-	res.json((<any>await response.json()).data);
+	try {
+		var url = `https://api.curseforge.com/v1/mods/search`;
+		const queries = [];
+		for (const query in req.query) queries.push(`${query}=${req.query[query]}`);
+		if (queries.length) url += `?${queries.join("&")}`;
+		const response = await fetch(url, { headers: { "x-api-key": process.env.CF_API } });
+		if (!response.ok) res.sendStatus(response.status);
+		res.json((<any>await response.json()).data);
+	} catch (err) {
+		res.sendStatus(500);
+	}
 });
 app.get("/api/curseforge/mods/:id", async (req, res) => {
-	const response = await fetch(`https://api.curseforge.com/v1/mods/${req.params.id}`, { headers: { "x-api-key": process.env.CF_API } });
-	if (!response.ok) res.sendStatus(response.status);
-	res.json((<any>await response.json()).data);
+	try {
+		const response = await fetch(`https://api.curseforge.com/v1/mods/${req.params.id}`, { headers: { "x-api-key": process.env.CF_API } });
+		if (!response.ok) res.sendStatus(response.status);
+		res.json((<any>await response.json()).data);
+	} catch (err) {
+		res.sendStatus(500);
+	}
 });
 app.get("/api/curseforge/mods/:id/files", async (req, res) => {
-	var url = `https://api.curseforge.com/v1/mods/${req.params.id}/files`;
-	const queries = [];
-	for (const query in req.query) queries.push(`${query}=${req.query[query]}`);
-	if (queries.length) url += `?${queries.join("&")}`;
-	const response = await fetch(url, { headers: { "x-api-key": process.env.CF_API } });
-	if (!response.ok) res.sendStatus(response.status);
-	res.json((<any>await response.json()).data);
+	try {
+		var url = `https://api.curseforge.com/v1/mods/${req.params.id}/files`;
+		const queries = [];
+		for (const query in req.query) queries.push(`${query}=${req.query[query]}`);
+		if (queries.length) url += `?${queries.join("&")}`;
+		const response = await fetch(url, { headers: { "x-api-key": process.env.CF_API } });
+		if (!response.ok) res.sendStatus(response.status);
+		res.json((<any>await response.json()).data);
+	} catch (err) {
+		res.sendStatus(500);
+	}
 });
 app.get("/api/curseforge/mods/:id/files/:fileId", async (req, res) => {
-	const response = await fetch(`https://api.curseforge.com/v1/mods/${req.params.id}/files/${req.params.fileId}`, { headers: { "x-api-key": process.env.CF_API } });
-	if (!response.ok) res.sendStatus(response.status);
-	res.json((<any>await response.json()).data);
+	try {
+		const response = await fetch(`https://api.curseforge.com/v1/mods/${req.params.id}/files/${req.params.fileId}`, { headers: { "x-api-key": process.env.CF_API } });
+		if (!response.ok) res.sendStatus(response.status);
+		res.json((<any>await response.json()).data);
+	} catch (err) {
+		res.sendStatus(500);
+	}
 });
 
 app.get("/:page", (req, res, next) => {
