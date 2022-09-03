@@ -4,7 +4,7 @@
     "module": "esnext",
     "allowJs": false,
     "checkJs": false,
-    "outDir": "./",
+    "outDir": "./api",
     "strict": true,
     "noImplicitAny": false,
     "strictNullChecks": false,
@@ -13,6 +13,6 @@
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": false
   },
-  "include": ["src"],
-  "exclude": ["node_modules", "**/*.js"]
+  "include": ["src", "**/*.ts"],
+  "exclude": ["node_modules", "**/*.js", "public/**/*.ts"]
 }

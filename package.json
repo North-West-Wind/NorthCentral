@@ -5,9 +5,10 @@
     "main": "index.js",
     "type": "module",
     "scripts": {
-        "test": "npm run postinstall && npm start",
-        "start": "node --optimize_for_size --max_old_space_size=341 --gc_interval=50 index.js",
-        "postinstall": "tsc"
+        "test": "npm run build && npm start",
+        "start": "vercel dev",
+        "build": "tsc",
+        "deploy": "vercel deploy --prod"
     },
     "engines": {
         "node": "16.x"
