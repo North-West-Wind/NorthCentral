@@ -18,17 +18,18 @@ const PAGES = [
 app.use(express.static("public"));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
+app.set('views', process.env.OUTDIR + "views")
 app.set('view engine', 'ejs');
 
 app.get("/", (req, res) => {
 	if (!parseInt(req.cookies.no_3d) && !req.query.no_3d) res.render("index", { page: 0 });
 	else res.render("plain", { page: 0 });
 });
-app.get("/n0rthwestw1nd/manual", (req, res) => res.sendFile("public/assets/safe_manual.pdf", { root: "." }));
+app.get("/n0rthwestw1nd/manual", (req, res) => res.sendFile("public/assets/safe_manual.pdf", { root: process.env.OUTDIR }));
 app.get("/n0rthwestw1nd/manual/:ver", (req, res) => {
-	if (req.params.ver === "unsafe") res.sendFile("public/assets/unsafe_manual.pdf", { root: "." });
-	else if (req.params.ver === "tradew1nd") res.sendFile("public/assets/tradew1nd_manual.pdf", { root: "." });
-	else res.sendFile("public/assets/safe_manual.pdf", { root: "." });
+	if (req.params.ver === "unsafe") res.sendFile("public/assets/unsafe_manual.pdf", { root: process.env.OUTDIR });
+	else if (req.params.ver === "tradew1nd") res.sendFile("public/assets/tradew1nd_manual.pdf", { root: process.env.OUTDIR });
+	else res.sendFile("public/assets/safe_manual.pdf", { root: process.env.OUTDIR });
 });
 app.get("/api/ping", (_req, res) => {
 	res.sendStatus(200);
