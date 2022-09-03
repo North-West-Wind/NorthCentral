@@ -1,7 +1,8 @@
 {
 	"functions": {
 		"api/index.ts": {
-			"memory": 256
+			"memory": 256,
+			"includeFiles": "../**/*"
 		}
 	},
 	"rewrites": [
