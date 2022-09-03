@@ -536,7 +536,7 @@ async function makeSheetMusicFloor(scene) {
     }
     scene.add(...sheets);
 
-    const spotLight = new THREE.SpotLight(0xffffff, 2, 300, Math.PI / 4, 1, 2);
+    const spotLight = new THREE.SpotLight(0xffffff, 2, 300, Math.PI / 2, 1, 2);
     spotLight.position.set(0, 5006, -215);
     scene.add(spotLight);
     return { floor0, sheets };
