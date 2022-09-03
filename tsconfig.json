@@ -4,7 +4,7 @@
     "module": "esnext",
     "allowJs": false,
     "checkJs": false,
-    "outDir": "./out",
+    "outDir": "./",
     "strict": true,
     "noImplicitAny": false,
     "strictNullChecks": false,

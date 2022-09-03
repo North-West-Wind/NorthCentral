@@ -2,11 +2,11 @@
     "name": "northselevator",
     "version": "1.0.0",
     "description": "The coolest home page of NorthWestWind.",
-    "main": "out/index.js",
+    "main": "index.js",
     "type": "module",
     "scripts": {
         "test": "npm run postinstall && npm start",
-        "start": "node --optimize_for_size --max_old_space_size=341 --gc_interval=50 out/index.js",
+        "start": "node --optimize_for_size --max_old_space_size=341 --gc_interval=50 index.js",
         "postinstall": "tsc"
     },
     "engines": {
