@@ -1,5 +1,5 @@
 const MAX_FLOOR = 5;
-const SHEETS = 7;
+const SHEETS = 8;
 
 const PAGES = [
     "auto-fish",

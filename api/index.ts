@@ -79,7 +79,11 @@ app.get("/api/curseforge/mods/:id/files/:fileId", async (req, res) => {
 	}
 });
 
-app.get("/bot/tradew1nd/invite", async(req, res) => {
+app.get("/tradew1nd/download/:guild", async(req, res) => {
+	res.render("downloads", { guild: req.params.guild });
+});
+
+app.get("/tradew1nd/invite", async(req, res) => {
 	try {
 		const response = await fetch(`http://pi-api.ddns.net:3000/`);
 		if (!response.ok) res.sendStatus(response.status);
