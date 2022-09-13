@@ -86,9 +86,7 @@ app.get("/api/download/:guild", async(req, res) => {
 });
 
 app.get("/api/download/file/:guild", async(req, res) => {
-	const response = await fetch("http://pi-api.ddns.net:3000/download/file/" + req.params.guild);
-	if (!response.ok) res.sendStatus(response.status);
-	else response.body.pipe(res);
+	res.redirect(303, "http://pi-api.ddns.net:3000/download/file/" + req.params.guild);
  });
 
 app.get("/tradew1nd/download/:guild", async(req, res) => {
