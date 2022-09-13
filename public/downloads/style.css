@@ -1,0 +1,128 @@
+body {
+	background-color: white;
+	background-image: url("/assets/background/factory.svg");
+}
+
+@keyframes pulse {
+	0% {
+		scale: 1;
+		transform-origin: 0% 0%;
+	}
+
+	99% {
+		scale: 1.2;
+		transform-origin: 0% 0%;
+	}
+
+	100% {
+		scale: 1;
+		transform-origin: 0% 0%;
+	}
+}
+
+#main_cloud {
+	animation: pulse 5s linear infinite;
+	width: max(20vw, 20vh);
+	height: max(20vw, 20vh);
+	position: fixed;
+	top: max(10vw, 10vh);
+	left: 50%;
+	transform: translate(-50%, -50%);
+}
+
+@keyframes shortpulse {
+	5% {
+		scale: 1;
+		transform-origin: 0% 0%;
+	}
+
+	7.5% {
+		scale: 1.2;
+		transform-origin: 0% 0%;
+	}
+
+	10% {
+		scale: 1;
+		transform-origin: 0% 0%;
+	}
+}
+
+#box {
+	animation: shortpulse 5s linear 5s infinite;
+	width: max(10vw, 10vh);
+	height: max(10vw, 10vh);
+	position: fixed;
+	bottom: min(2vw, 2vh);
+	left: 50%;
+	transform: translate(-50%, -50%);
+}
+
+@keyframes transfer {
+	0% {
+		opacity: 0;
+	}
+
+	2.5% {
+		opacity: 1;
+	}
+
+	7.5% {
+		opacity: 1;
+		transform: translate(-50%, calc(100vh - min(2vw, 2vh) - max(10vw, 10vh) * 2 - 50%));
+		transform-origin: 0% 0%;
+	}
+
+	12.5% {
+		opacity: 0;
+		transform: translate(-50%, calc(100vh - min(2vw, 2vh) - max(10vw, 10vh) * 2 - 50%));
+		transform-origin: 0% 0%;
+	}
+
+	20% {
+		transform: translate(-50%, -50%);
+		transform-origin: 0% 0%;
+	}
+}
+
+#packet {
+	animation: transfer 5s ease-in 5s infinite;
+	opacity: 0;
+	width: max(7vw, 7vh);
+	height: max(7vw, 7vh);
+	position: fixed;
+	top: max(10vw, 10vh);
+	left: 50%;
+	transform: translate(-50%, -50%);
+	z-index: -1;
+}
+
+#cylinder {
+	position: fixed;
+	height: 70vh;
+	width: calc(70vh / 5);
+	top: 50%;
+	left: 12%;
+	transform: translate(-50%, -50%);
+}
+
+#water {
+	position: fixed;
+	height: 0;
+	transition: 1s ease;
+	width: calc(70vh / 10);
+	bottom: 15vh;
+	left: 12%;
+	transform: translate(-50%, 0);
+	z-index: -1;
+	object-fit: cover;
+}
+
+#text {
+	position: fixed;
+	color: white;
+	top: calc(50% - 40vh);
+	left: 12%;
+	transform: translate(-50%, -100%);
+	font-size: max(2vw, 2vh);
+	font-family: 'Courier New', Courier, monospace;
+}

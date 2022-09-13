@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta property="og:title" content="TradeW1nd Download All" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://northwestwind.ml/tradew1nd/download/<%= guild %>" />
+    <meta property="og:image" content="/favicon.png" />
+    <meta property="og:description" content="Downloading for guild <%= guild %>"/>
+    <meta name="theme-color" content="#FCBA03">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <title>North's Elevator</title>
+    <link id="favicon" rel="icon" href="/favicon.png" type="image/x-icon" />
+    <link rel="stylesheet" href="/downloads/style.css">
+    <script src="https://raw.githubusercontent.com/rndme/download/master/download.min.js"></script>
+</head>
+
+<body>
+	<img src="/assets/images/cloud.svg" id="main_cloud" />
+	<img src="/assets/images/box.svg" id="box" />
+	<img src="/assets/images/packet.svg" id="packet" />
+	<img src="/assets/images/cylinder.svg" id="cylinder" />
+	<img src="/assets/images/packet.svg" id="water" />
+  <p id="text">0%</p>
+    <script>
+		  const guild = "<%= guild %>";
+      console.log("Guild is ", guild);
+      var percentage = 0;
+      const interval = setInterval(async() => {
+        const res = await fetch("http://pi-api.ddns.net:3000/download/" + guild);
+        if (res.status == 201) {
+          clearInterval(interval);
+          percentage = 1;
+          download(await res.blob());
+        } else {
+          const data = await res.json();
+          if (data.downloading) {
+            percentage = data.percentage;
+            document.getElementById("text").textContent = `${Math.round((percentage * 100 + Number.EPSILON) * 100) / 100}%`;
+            document.getElementById("water").style.height = `calc(70vh * ${percentage})`;
+          }
+        }
+      }, 2000);
+    </script>
+</body>
+
+</html>
