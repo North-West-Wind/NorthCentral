@@ -28,14 +28,14 @@
     var percentage = 0;
     const interval = setInterval(async () => {
       const res = await fetch("http://pi-api.ddns.net:3000/download/" + guild);
-      const data = await res.json();
-      if (data.finished) {
+      const data = await res?.json();
+      if (data?.finished) {
         clearInterval(interval);
         for (const element of document.getElementsByClassName("animated")) element.classList.add("paused");
         percentage = 1;
         const file = await fetch("http://pi-api.ddns.net:3000/download/file/" + guild).then(res => res.blob());
         download(file);
-      } else if (data.downloading) {
+      } else if (data?.downloading) {
         for (const element of document.getElementsByClassName("paused")) element.classList.remove("paused");
         percentage = data.percentage;
         document.getElementById("text").textContent = `${Math.round((percentage * 100 + Number.EPSILON) * 100) / 100}%`;
