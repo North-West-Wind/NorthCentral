@@ -126,3 +126,14 @@ body {
 	font-size: max(2vw, 2vh);
 	font-family: 'Courier New', Courier, monospace;
 }
+
+.animated {
+	--variable: "lol";
+}
+
+.paused {
+	-webkit-animation-play-state: paused !important;
+	-moz-animation-play-state: paused !important;
+	-o-animation-play-state: paused !important;
+	animation-play-state: paused !important;
+}
