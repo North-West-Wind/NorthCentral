@@ -23,6 +23,7 @@
   <img src="/assets/images/cylinder.svg" id="cylinder" />
   <img src="/assets/images/packet.svg" id="water" class="animated" />
   <p id="text">0%</p>
+  <a id="complete" class="hidden" href="#" target="_blank" rel="noopener noreferrer">Download Completed!<br>Click to download the file.</a>
   <script>
     const guild = "<%= guild %>";
     var percentage = 0;
@@ -33,17 +34,18 @@
         clearInterval(interval);
         for (const element of document.getElementsByClassName("animated")) element.classList.add("paused");
         percentage = 1;
-        const file = await fetch("/api/download/file/" + guild).then(res => res.blob());
-        download(file, `${guild}.zip`, "application/zip");
+        document.getElementById("complete").classList.remove("hidden");
+        document.getElementById("complete").classList.add("flex");
+        document.getElementById("complete").href = "http://pi-api.ddns.net:3000/download/file/" + guild;
       } else if (data?.downloading) {
         for (const element of document.getElementsByClassName("paused")) element.classList.remove("paused");
         percentage = data.percentage;
-        document.getElementById("text").textContent = `${Math.round((percentage * 100 + Number.EPSILON) * 100) / 100}%`;
-        document.getElementById("water").style.height = `calc(70vh * ${percentage})`;
       } else {
         for (const element of document.getElementsByClassName("animated")) element.classList.add("paused");
         percentage = 0;
       }
+      document.getElementById("text").textContent = `${Math.round((percentage * 100 + Number.EPSILON) * 100) / 100}%`;
+      document.getElementById("water").style.height = `calc(69vh * ${percentage})`;
     }, 2000);
   </script>
 </body>

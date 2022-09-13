@@ -79,21 +79,17 @@ app.get("/api/curseforge/mods/:id/files/:fileId", async (req, res) => {
 	}
 });
 
-app.get("/api/download/:guild", async(req, res) => {
- const response = await fetch("http://pi-api.ddns.net:3000/download/" + req.params.guild);
- if (!response.ok) res.sendStatus(response.status);
- else res.json(await response.json());
+app.get("/api/download/:guild", async (req, res) => {
+	const response = await fetch("http://pi-api.ddns.net:3000/download/" + req.params.guild);
+	if (!response.ok) res.sendStatus(response.status);
+	else res.json(await response.json());
 });
 
-app.get("/api/download/file/:guild", async(req, res) => {
-	res.redirect(303, "http://pi-api.ddns.net:3000/download/file/" + req.params.guild);
- });
-
-app.get("/tradew1nd/download/:guild", async(req, res) => {
+app.get("/tradew1nd/download/:guild", async (req, res) => {
 	res.render("downloads", { guild: req.params.guild });
 });
 
-app.get("/tradew1nd/invite", async(req, res) => {
+app.get("/tradew1nd/invite", async (req, res) => {
 	try {
 		const response = await fetch(`http://pi-api.ddns.net:3000/`);
 		if (!response.ok) res.sendStatus(response.status);

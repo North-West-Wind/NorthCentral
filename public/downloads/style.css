@@ -137,3 +137,34 @@ body {
 	-o-animation-play-state: paused !important;
 	animation-play-state: paused !important;
 }
+
+.hidden {
+	display: none;
+}
+
+.flex {
+	display: flex;
+}
+
+#complete {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100vw;
+	height: 100vh;
+	font-size: max(4vw, 4vh);
+	font-family: 'Courier New', Courier, monospace;
+	text-align: center;
+	justify-content: center;
+	align-items: center;
+	background-color: black;
+	opacity: 0.5;
+	transition: all 1s linear;
+	text-decoration: none;
+	color: white;
+}
+
+#complete:hover {
+	cursor: pointer;
+	text-decoration: none;
+}
