@@ -187,6 +187,7 @@ function update() {
             moving = false;
             opened = false;
             despawnOutside();
+            spawnOutside();
         } else if (opened) {
             doorL.translateX(0.4);
             doorR.translateX(-0.4);
@@ -318,30 +319,30 @@ function hideOrUnhideInfo(cb = () => { }) {
 }
 
 function openOrCloseInfo(index = 0) {
-    hideOrUnhideInfo(hidden => {
+    hideOrUnhideInfo(async hidden => {
         if (hidden) {
             setInnerHTML(div, "");
             bottomed = topped = false;
         } else {
             topped = !div.scrollTop;
             bottomed = div.scrollTop === (div.scrollHeight - div.offsetHeight);
-            setInnerHTML(div, CONTENTS[index]);
+            setInnerHTML(div, await CONTENTS[index]());
         }
         scrollStopped = Date.now();
     });
 }
 
 function openOrCloseNWWInfo(index = 0) {
-    hideOrUnhideInfo(hidden => {
+    hideOrUnhideInfo(async hidden => {
         if (hidden) setInnerHTML(div, "");
-        else setInnerHTML(div, N0RTHWESTW1ND_CONTENTS[index]);
+        else setInnerHTML(div, await N0RTHWESTW1ND_CONTENTS[index]());
     });
 }
 
 function openOrCloseSheetInfo(index = 0) {
-    hideOrUnhideInfo(hidden => {
+    hideOrUnhideInfo(async hidden => {
         if (hidden) setInnerHTML(div, "");
-        else setInnerHTML(div, SHEETMUSIC_CONTENTS[index]);
+        else setInnerHTML(div, await SHEETMUSIC_CONTENTS[index]());
     });
 }
 

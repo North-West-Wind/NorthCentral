@@ -57,6 +57,7 @@
             const xm = new THREE.MeshStandardMaterial({ map: displayTexture(passedInFloor), transparent: true });
             xm.map.needsUpdate = true;
             display.material.splice(4, 1, xm);
+            spawnOutside();
         }
     </script>
 </body>

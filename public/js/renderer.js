@@ -18,7 +18,7 @@ var outside, ocean, paper0, paper1, paper2, sheets;
 var spawned = false;
 async function spawnOutside() {
     spawned = true;
-    outside = await floorGenerators[currentFloor](scene);
+    outside = await floorGenerators[gotoFloor](scene);
     ocean = outside.ocean;
     paper0 = outside.paper0;
     paper1 = outside.paper1;
