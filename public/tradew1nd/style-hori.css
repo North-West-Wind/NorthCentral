@@ -7,6 +7,7 @@ body {
     font-family: 'OdinRounded', Helvetica, sans-serif;
     color: white;
     background-color: #23272a;
+    padding: 0;
 }
 
 a {
@@ -15,7 +16,7 @@ a {
 }
 
 #home-image {
-    max-height: 2vw;
+    max-height: 3vw;
 }
 
 #top-placeholder {
@@ -70,6 +71,15 @@ a {
 .card h1 {
     animation: slide-up 1s ease;
     font-size: 4vw;
+    margin-left: 5vw;
+    margin-right: 5vw;
+}
+
+.card h2 {
+    animation: slide-up 1s ease;
+    font-size: 2vw;
+    margin-left: 5vw;
+    margin-right: 5vw;
 }
 
 .big-image {
