@@ -86,7 +86,7 @@ app.get("/api/download/:guild", async (req, res) => {
 });
 
 app.get("/tradew1nd/download/:guild", async (req, res) => {
-	res.render("downloads", { guild: req.params.guild });
+	res.render("tradew1nd/downloads", { guild: req.params.guild });
 });
 
 app.get("/tradew1nd/invite", async (req, res) => {
@@ -103,6 +103,10 @@ app.get("/tradew1nd/invite", async (req, res) => {
 	} catch (err) {
 		if (!res.headersSent) res.sendStatus(500);
 	}
+});
+
+app.get("/tradew1nd", async (req, res) => {
+	res.render("tradew1nd/index");
 });
 
 app.get("/:page", (req, res, next) => {

@@ -1,0 +1,106 @@
+@font-face {
+    font-family: 'OdinRounded';
+    src: url('/assets/odin-rounded.regular.otf') format("opentype");
+}
+
+body {
+    font-family: 'OdinRounded', Helvetica, sans-serif;
+    color: white;
+    background-color: #23272a;
+}
+
+a {
+    text-decoration: none;
+    color: white;
+}
+
+#home-image {
+    max-height: 2vw;
+}
+
+#top-placeholder {
+    position: inherit;
+}
+
+.topbar {
+    position: fixed;
+    display: flex;
+    align-items: center;
+    width: 100vw;
+    left: 0;
+    top: 0;
+    font-size: 2vw;
+    color: white;
+    background-color: cornflowerblue;
+}
+
+.topbar a {
+    display: block;
+    padding: 2vw;
+    transition: all ease 0.5s;
+    text-align: center;
+}
+
+.topbar a:hover {
+    background-color: deepskyblue;
+    cursor: pointer;
+    transition: all ease 0.5s;
+}
+
+.forty-percent {
+    width: 40%;
+    height: 100%;
+    float: left;
+}
+
+.sixty-percent {
+    width: 60%;
+    height: 100%;
+    float: left;
+}
+
+.card {
+    display: table;
+    background-color: #2c2f33;
+    width: 100vw;
+    top: 0;
+    left: 0;
+}
+
+.card h1 {
+    animation: slide-up 1s ease;
+    font-size: 4vw;
+}
+
+.big-image {
+    width: 100%;
+    padding: 5vw;
+}
+
+.left-image {
+    animation: slide-right 1s ease;
+}
+
+@keyframes slide-up {
+    0% {
+        transform: translateY(20%);
+        opacity: 0;
+    }
+
+    100% {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+@keyframes slide-right {
+    0% {
+        transform: translateX(-20%);
+        opacity: 0;
+    }
+
+    100% {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}

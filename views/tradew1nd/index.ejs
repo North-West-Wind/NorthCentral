@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta property="og:title" content="Invite the TradeW1nd Army Today!" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://northwestwind.ml/tradew1nd/invite" />
+    <meta property="og:image" content="/favicon.png" />
+    <meta property="og:description" content="TradeW1nd is the ultimate open source Discord music bot.
+    It supports YouTube, SoundCloud, Musescore, attachments and more!
+    Click the title to invite it today!"/>
+    <meta name="theme-color" content="#FCBA03">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <title>North's Elevator</title>
+    <link id="favicon" rel="icon" href="/assets/images/tradew1nd.png" type="image/x-icon" />
+    <link rel="stylesheet" href="/tradew1nd/style-hori.css" id="horizontal">
+    <link rel="stylesheet" href="/tradew1nd/style-vert.css" id="vertical">
+    <script>
+        function enableStylesheet(node) { node.disabled = false; }
+        function disableStylesheet(node) { node.disabled = true; }
+        var ratio = window.innerWidth / window.innerHeight;
+        if (ratio < 1) disableStylesheet(document.getElementById("horizontal"));
+        else disableStylesheet(document.getElementById("vertical"));
+    </script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="/js/helper.js"></script>
+</head>
+
+<body>
+    <div class="topbar" id="topbar">
+        <a href="/tradew1nd"><img src="/assets/images/tradew1nd.png" id="home-image" /></a>
+        <a href="/tradew1nd/invite">Invite</a>
+    </div>
+    <div class="card">
+        <div id="top-placeholder"></div>
+        <div class="forty-percent">
+            <img src="/assets/images/tradew1nd.png" class="left-image big-image" />
+        </div>
+        <div class="sixty-percent">
+            <h1>TradeW1nd Army</h1>
+
+        </div>
+    </div>
+
+    <script>
+        document.getElementById("top-placeholder").style.height = document.getElementById("topbar").style.height;
+    </script>
+</body>
+
+</html>
