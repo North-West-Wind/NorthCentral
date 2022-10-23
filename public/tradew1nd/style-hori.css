@@ -8,6 +8,7 @@ body {
     color: white;
     background-color: #23272a;
     padding: 0;
+    margin: 0;
 }
 
 a {
@@ -37,9 +38,10 @@ a {
 
 .topbar a {
     display: block;
-    padding: 2vw;
+    padding: 1vw;
     transition: all ease 0.5s;
     text-align: center;
+    height: 100%;
 }
 
 .topbar a:hover {
@@ -62,15 +64,16 @@ a {
 
 .card {
     display: table;
-    background-color: #2c2f33;
+    background-color: #3c3f43;
     width: 100vw;
-    top: 0;
-    left: 0;
+    box-shadow: 0 2vh 1vh #3c3f43;
 }
 
 .card h1 {
     animation: slide-up 1s ease;
     font-size: 4vw;
+    margin-top: 3vw;
+    margin-bottom: 3vw;
     margin-left: 5vw;
     margin-right: 5vw;
 }
@@ -78,21 +81,46 @@ a {
 .card h2 {
     animation: slide-up 1s ease;
     font-size: 2vw;
+    margin-top: 2vw;
+    margin-bottom: 2vw;
     margin-left: 5vw;
     margin-right: 5vw;
 }
 
 .big-image {
-    width: 100%;
+    width: 80%;
     padding: 5vw;
+}
+
+.mid-image {
+    height: 50%;
 }
 
 .left-image {
     animation: slide-right 1s ease;
 }
 
+.bottom-image {
+    animation: slide-up 1.5s ease;
+}
+
+.rounded {
+    border-radius: 10px;
+}
+
+.middle {
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
 @keyframes slide-up {
     0% {
+        transform: translateY(20%);
+        opacity: 0;
+    }
+
+    33% {
         transform: translateY(20%);
         opacity: 0;
     }

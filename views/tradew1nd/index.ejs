@@ -30,23 +30,24 @@
 <body>
     <div class="topbar" id="topbar">
         <a href="/tradew1nd"><img src="/assets/images/tradew1nd.png" id="home-image" /></a>
-        <a href="/tradew1nd/invite">Invite</a>
+        <a href="/tradew1nd/invite" target="invite">Invite</a>
     </div>
     <div class="card">
         <div id="top-placeholder"></div>
-        <div class="sixty-percent">
+        <div class="forty-percent">
             <img src="/assets/images/tradew1nd.png" class="left-image big-image" />
         </div>
-        <div class="forty-percent">
+        <div class="sixty-percent">
             <h1>TradeW1nd Army</h1>
             <h2>
                 The ultimate open source Discord music bot(s) that will never get a tick in order to serve you.
             </h2>
+            <img src="/assets/images/no_tick.png" class="mid-image bottom-image middle rounded" />
         </div>
     </div>
 
     <script>
-        document.getElementById("top-placeholder").style.height = document.getElementById("topbar").style.height + "px";
+        document.getElementById("top-placeholder").style.height = document.getElementById("topbar").clientHeight + "px";
     </script>
 </body>
 
