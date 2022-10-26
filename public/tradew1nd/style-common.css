@@ -1,0 +1,117 @@
+@font-face {
+    font-family: 'OdinRounded';
+    src: url('/assets/odin-rounded.regular.otf') format("opentype");
+}
+
+body {
+    font-family: 'OdinRounded', Helvetica, sans-serif;
+    color: white;
+    background-color: #23272a;
+    margin: 0;
+    padding: 0;
+}
+
+a {
+    text-decoration: none;
+    color: white;
+}
+
+.topbar {
+    position: fixed;
+    display: flex;
+    align-items: center;
+    width: 100vw;
+    left: 0;
+    top: 0;
+    color: white;
+    background-color: cornflowerblue;
+    z-index: 999;
+    padding: 0;
+}
+
+.topbar a {
+    transition: all ease 0.5s;
+    text-align: center;
+    height: 100%;
+}
+
+.topbar a:hover {
+    background-color: whitesmoke;
+    color: cornflowerblue;
+    cursor: pointer;
+    transition: all ease 0.5s;
+}
+
+.forty-percent {
+    width: 40%;
+    height: 100%;
+    float: left;
+}
+
+.sixty-percent {
+    width: 60%;
+    height: 100%;
+    float: left;
+}
+
+.top-card {
+    background-color: #3c3f43;
+}
+
+.card {
+    display: table;
+    width: 100vw;
+}
+
+.card h1, .card h2 {
+    animation: slide-up 1s ease;
+}
+
+.left-image {
+    animation: slide-right 1s ease;
+}
+
+#drake-meme {
+    animation: fade-in-drake 1.5s ease;
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+@keyframes slide-up {
+    0% {
+        transform: translateY(20%);
+        opacity: 0;
+    }
+
+    100% {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+@keyframes fade-in-drake {
+    0% {
+        opacity: 0;
+    }
+
+    33% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
+@keyframes slide-right {
+    0% {
+        transform: translateX(-20%);
+        opacity: 0;
+    }
+
+    100% {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}

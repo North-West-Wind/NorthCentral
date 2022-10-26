@@ -1,76 +1,31 @@
-@font-face {
-    font-family: 'OdinRounded';
-    src: url('/assets/odin-rounded.regular.otf') format("opentype");
-}
-
-body {
-    font-family: 'OdinRounded', Helvetica, sans-serif;
-    color: white;
-    background-color: #23272a;
-    padding: 0;
-    margin: 0;
-}
-
-a {
-    text-decoration: none;
-    color: white;
-}
-
 #home-image {
     max-height: 3vw;
 }
 
 #top-placeholder {
     position: inherit;
+    margin-bottom: 2vw;
 }
 
 .topbar {
-    position: fixed;
-    display: flex;
-    align-items: center;
-    width: 100vw;
-    left: 0;
-    top: 0;
     font-size: 2vw;
-    color: white;
-    background-color: cornflowerblue;
 }
 
 .topbar a {
-    display: block;
     padding: 1vw;
-    transition: all ease 0.5s;
-    text-align: center;
-    height: 100%;
+    border-radius: 1vw;
 }
 
-.topbar a:hover {
-    background-color: deepskyblue;
-    cursor: pointer;
-    transition: all ease 0.5s;
-}
-
-.forty-percent {
-    width: 40%;
-    height: 100%;
-    float: left;
-}
-
-.sixty-percent {
-    width: 60%;
-    height: 100%;
-    float: left;
+.top-card {
+    box-shadow: 0 1vh .5vh .5vh #3c3f43;
 }
 
 .card {
-    display: table;
-    background-color: #3c3f43;
-    width: 100vw;
-    box-shadow: 0 2vh 1vh #3c3f43;
+    padding-top: 5vh;
+    padding-bottom: 10vh;
 }
 
 .card h1 {
-    animation: slide-up 1s ease;
     font-size: 4vw;
     margin-top: 3vw;
     margin-bottom: 3vw;
@@ -79,12 +34,17 @@ a {
 }
 
 .card h2 {
-    animation: slide-up 1s ease;
     font-size: 2vw;
     margin-top: 2vw;
     margin-bottom: 2vw;
     margin-left: 5vw;
     margin-right: 5vw;
+}
+
+.card ul {
+    font-size: 2vw;
+    margin-left: 4vw;
+    margin-right: 4vw;
 }
 
 .big-image {
@@ -96,49 +56,6 @@ a {
     height: 50%;
 }
 
-.left-image {
-    animation: slide-right 1s ease;
-}
-
-.bottom-image {
-    animation: slide-up 1.5s ease;
-}
-
-.rounded {
-    border-radius: 10px;
-}
-
-.middle {
-    position: relative;
-    left: 50%;
-    transform: translateX(-50%);
-}
-
-@keyframes slide-up {
-    0% {
-        transform: translateY(20%);
-        opacity: 0;
-    }
-
-    33% {
-        transform: translateY(20%);
-        opacity: 0;
-    }
-
-    100% {
-        transform: translateY(0);
-        opacity: 1;
-    }
-}
-
-@keyframes slide-right {
-    0% {
-        transform: translateX(-20%);
-        opacity: 0;
-    }
-
-    100% {
-        transform: translateX(0);
-        opacity: 1;
-    }
+#drake-meme {
+    border-radius: 1vw;
 }
