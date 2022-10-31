@@ -1,8 +1,10 @@
 #home-image {
     max-height: 5vh;
+    margin: 3vh 3vh 3vh 3vh;
 }
 
 #side-menu {
+    display: initial;
     transition: all .5s ease;
     width: 0;
     height: 100vh;
@@ -17,6 +19,18 @@
     transition: all ease 0.5s;
     color: #ccc;
     background-color: transparent;
+}
+
+.forty-percent {
+    width: 100%;
+    height: 100%;
+    float: none;
+}
+
+.sixty-percent {
+    width: 100%;
+    height: 100%;
+    float: none;
 }
 
 #top-placeholder {
@@ -39,6 +53,7 @@
     margin-bottom: 3vh;
     margin-left: 5vh;
     margin-right: 5vh;
+    text-align: center;
 }
 
 .card h2 {
@@ -60,10 +75,12 @@
     padding: 5vh;
 }
 
-.mid-image {
-    height: 50%;
-}
-
 #drake-meme {
     border-radius: 1vh;
+    width: 80%;
+}
+
+.inline-code {
+    padding: .1vh;
+    border-radius: .5vh;
 }

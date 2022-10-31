@@ -32,7 +32,6 @@ a {
 .topbar a {
     transition: all ease 0.5s;
     text-align: center;
-    height: 100%;
 }
 
 .topbar a:hover {
@@ -63,7 +62,11 @@ a {
     width: 100vw;
 }
 
-.card h1, .card h2 {
+.card h1, .card h2, .card ul {
+    animation: slide-up 1s ease;
+}
+
+.slide-up-class {
     animation: slide-up 1s ease;
 }
 
@@ -71,11 +74,23 @@ a {
     animation: slide-right 1s ease;
 }
 
+.mid-image {
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
 #drake-meme {
     animation: fade-in-drake 1.5s ease;
     position: relative;
     left: 50%;
     transform: translateX(-50%);
+}
+
+.inline-code {
+    background-color: white;
+    color: #fcba03;
+    white-space: nowrap;
 }
 
 @keyframes slide-up {

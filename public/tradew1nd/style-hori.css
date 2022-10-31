@@ -1,5 +1,10 @@
 #home-image {
     max-height: 3vw;
+    margin: 2vh 2vh 2vh 2vh;
+}
+
+#side-menu {
+    display: none;
 }
 
 #top-placeholder {
@@ -9,10 +14,11 @@
 
 .topbar {
     font-size: 2vw;
+    height: 10vh;
 }
 
 .topbar a {
-    margin: 1vw;
+    padding: 1vw;
     border-radius: 1vw;
 }
 
@@ -52,10 +58,11 @@
     padding: 5vw;
 }
 
-.mid-image {
-    height: 50%;
-}
-
 #drake-meme {
     border-radius: 1vw;
+}
+
+.inline-code {
+    padding: .1vw;
+    border-radius: .5vw;
 }

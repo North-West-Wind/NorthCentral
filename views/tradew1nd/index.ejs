@@ -20,9 +20,6 @@
     <script>
         function enableStylesheet(node) { node.disabled = false; }
         function disableStylesheet(node) { node.disabled = true; }
-        var ratio = window.innerWidth / window.innerHeight;
-        if (ratio < 1) disableStylesheet(document.getElementById("horizontal"));
-        else disableStylesheet(document.getElementById("vertical"));
     </script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="/js/helper.js"></script>
@@ -30,7 +27,9 @@
 
 <body>
     <div class="topbar" id="topbar">
-        <a href="/tradew1nd"><img src="/assets/images/tradew1nd.png" id="home-image" /></a>
+        <a id="home-link"><img src="/assets/images/tradew1nd.png" id="home-image" /></a>
+    </div>
+    <div id="side-menu">
         <a href="/tradew1nd/invite" target="invite">Invite</a>
     </div>
     <div class="card top-card">
@@ -50,7 +49,7 @@
         <div class="sixty-percent">
             <h1>Supporting Multiple Platforms!</h1>
             <h2>TradeW1nd supports a lot of media source!</h2>
-            <ul>
+            <ul class="slide-up-class">
                 <li>YouTube</li>
                 <li>Spotify</li>
                 <li>Soundcloud</li>
@@ -63,6 +62,30 @@
         </div>
         <div class="forty-percent">
 
+        </div>
+    </div>
+    <div class="card">
+        <h1 style="text-align: center;">Save your queues and bring them across servers!</h1>
+        <img src="/assets/images/queue_cmd.png" class="big-image mid-image slide-up-class" />
+        <h2>
+            Every user can save up to 10 different queues. 
+            Run <span class="inline-code">/queue save</span> to save your queues and <span class="inline-code">/queue load</span> to load your queues again. 
+            You can share the queue of your server with another server by using <span class="inline-code">/queue sync</span>!
+        </h2>
+    </div>
+    <div class="card">
+        <div class="forty-percent">
+
+        </div>
+        <div class="sixty-percent">
+            <h1>Absolutely free!</h1>
+            <h2>
+                TradeW1nd (Army) is completely free to use. Not only that, it is also open source!<br>
+                Not a single feature is locked behind a payment wall. You can do all the cool things with TradeW1nd for free!
+            </h2>
+            <h2>
+                But! If you want to support the TradeW1nd Army project, donations are welcomed. Click the following button if you want to fund this project.
+            </h2>
         </div>
     </div>
     <script src="/js/tradew1nd/listener.js"></script>
