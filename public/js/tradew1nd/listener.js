@@ -19,3 +19,11 @@ window.onresize = () => {
 }
 
 window.onresize();
+
+for (const element of document.getElementsByClassName("inline-code"))
+    element.onclick = () => {
+        navigator.clipboard.writeText(element.textContent);
+        element.style.color = "#00aa00";
+        setTimeout(() => element.style.color = "", 1500);
+    }
+

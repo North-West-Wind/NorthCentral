@@ -16,6 +16,11 @@ a {
     color: white;
 }
 
+hr {
+    width: 80%;
+    height: 1px;
+}
+
 .topbar {
     position: fixed;
     display: flex;
@@ -70,6 +75,10 @@ a {
     animation: slide-up 1s ease;
 }
 
+.fade-in-class {
+    animation: fade-in 1s ease .5s backwards;
+}
+
 .left-image {
     animation: slide-right 1s ease;
 }
@@ -81,7 +90,7 @@ a {
 }
 
 #drake-meme {
-    animation: fade-in-drake 1.5s ease;
+    animation: fade-in 1s ease .5s backwards;
     position: relative;
     left: 50%;
     transform: translateX(-50%);
@@ -91,6 +100,11 @@ a {
     background-color: white;
     color: #fcba03;
     white-space: nowrap;
+    transition: all .5s ease;
+}
+
+.inline-code:hover {
+    text-decoration: underline;
 }
 
 @keyframes slide-up {
@@ -105,12 +119,8 @@ a {
     }
 }
 
-@keyframes fade-in-drake {
+@keyframes fade-in {
     0% {
-        opacity: 0;
-    }
-
-    33% {
         opacity: 0;
     }
 
