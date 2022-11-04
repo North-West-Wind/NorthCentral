@@ -21,6 +21,11 @@ hr {
     height: 1px;
 }
 
+#top-placeholder, #side-placeholder {
+    position: initial;
+    width: 100%;
+}
+
 .topbar {
     position: fixed;
     display: flex;

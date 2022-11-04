@@ -9,7 +9,7 @@
     <meta property="og:image" content="/assets/images/tradew1nd.png" />
     <meta property="og:description" content="TradeW1nd is the ultimate open source Discord music bot.
     It supports YouTube, SoundCloud, Musescore, attachments and more!
-    Click the title to invite it today!"/>
+    Click the title to invite it today!" />
     <meta name="theme-color" content="#FCBA03">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
     <title>TradeW1nd (Army)</title>
@@ -30,6 +30,7 @@
         <a id="home-link"><img src="/assets/images/tradew1nd.png" id="home-image" /></a>
     </div>
     <div id="side-menu">
+        <div id="side-placeholder"></div>
         <a href="/tradew1nd/invite" target="invite">Invite</a>
     </div>
     <div class="card top-card">
@@ -69,9 +70,11 @@
         <h1 style="text-align: center;">Save your queues and bring them across servers!</h1>
         <img src="/assets/images/queue_cmd.png" class="big-image mid-image fade-in-class" />
         <h2>
-            Every user can save up to 10 different queues. 
-            Run <span class="inline-code" title="Click to copy">/queue save</span> to save your queues and <span class="inline-code" title="Click to copy">/queue load</span> to load your queues again. 
-            You can share the queue of your server with another server by using <span class="inline-code" title="Click to copy">/queue sync</span>!
+            Every user can save up to 10 different queues.
+            Run <span class="inline-code" title="Click to copy">/queue save</span> to save your queues and <span
+                class="inline-code" title="Click to copy">/queue load</span> to load your queues again.
+            You can share the queue of your server with another server by using <span class="inline-code"
+                title="Click to copy">/queue sync</span>!
         </h2>
     </div>
     <hr>
@@ -83,17 +86,22 @@
             <h1>Absolutely free!</h1>
             <h2>
                 TradeW1nd (Army) is completely free to use. Not only that, it is also open source!<br>
-                Not a single feature is locked behind a payment wall. You can do all the cool things with TradeW1nd for free!
+                Not a single feature is locked behind a payment wall. You can do all the cool things with TradeW1nd for
+                free!
             </h2>
             <h2>
-                But! If you want to support the TradeW1nd Army project, donations are welcomed. Click the following button if you want to fund this project.
+                But! If you want to support the TradeW1nd Army project, donations are welcomed. Click the following
+                button if you want to fund this project.
             </h2>
         </div>
     </div>
     <script src="/js/tradew1nd/listener.js"></script>
     <script src="/js/tradew1nd/vertical.js"></script>
     <script>
-        document.getElementById("top-placeholder").style.height = document.getElementById("topbar").clientHeight + "px";
+        new ResizeObserver(() => {
+            document.getElementById("top-placeholder").style.height = document.getElementById("topbar").clientHeight + "px";
+            document.getElementById("side-placeholder").style.height = document.getElementById("topbar").clientHeight + "px";
+        }).observe(document.getElementById("topbar"));
     </script>
 </body>
 

@@ -4,6 +4,7 @@
 }
 
 #side-menu {
+    position: fixed;
     display: initial;
     transition: all .5s ease;
     width: 0;
@@ -13,12 +14,15 @@
     text-align: center;
     font-size: 5vh;
     background-color: #111;
+    opacity: 0.8;
+    z-index: 998;
 }
 
 #side-menu a {
     transition: all ease 0.5s;
     color: #ccc;
     background-color: transparent;
+    display: block;
 }
 
 .forty-percent {
@@ -33,8 +37,7 @@
     float: none;
 }
 
-#top-placeholder {
-    position: inherit;
+#top-placeholder, #side-placeholder {
     margin-bottom: 1vh;
 }
 
@@ -65,7 +68,7 @@
 }
 
 .card ul {
-    font-size: 2vh;
+    font-size: 3vh;
     margin-left: 4vh;
     margin-right: 4vh;
 }
