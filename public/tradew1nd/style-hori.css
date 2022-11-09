@@ -13,11 +13,10 @@
 
 .topbar {
     font-size: 2vw;
-    height: 10vh;
+    padding: 1vw;
 }
 
 .topbar a {
-    padding: 1vw;
     border-radius: 1vw;
 }
 

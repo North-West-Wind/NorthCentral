@@ -15,7 +15,7 @@
     font-size: 5vh;
     background-color: #111;
     opacity: 0.8;
-    overflow: hidden;
+    overflow-x: hidden;
     z-index: 998;
 }
 

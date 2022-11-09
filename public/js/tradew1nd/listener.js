@@ -19,7 +19,7 @@ window.onresize = () => {
         topbar.append(invite);
     } else {
         document.getElementById("home-link").href = "#";
-        document.querySelectorAll("a[top-component=1]").forEach(e => e.remove());
+        document.querySelectorAll("[top-component]").forEach(e => e.remove());
     }
 }
 
