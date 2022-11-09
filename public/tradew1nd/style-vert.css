@@ -92,3 +92,8 @@
     padding: 0 1vh;
     border-radius: .5vh;
 }
+
+a.button {
+    padding: 1vh;
+    border-radius: .5vh;
+}

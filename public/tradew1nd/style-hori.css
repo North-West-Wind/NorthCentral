@@ -81,3 +81,8 @@
     padding: 0 1vw;
     border-radius: .5vw;
 }
+
+a.button {
+    padding: 1vw;
+    border-radius: .5vw;
+}

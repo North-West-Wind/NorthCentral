@@ -65,7 +65,7 @@ hr {
     width: 100vw;
 }
 
-.card h1, .card h2, .card ul {
+.card h1, .card h2, .card ul, .card p {
     animation: slide-up 1s ease;
 }
 
