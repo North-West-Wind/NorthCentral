@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta property="og:title" content="Invite the TradeW1nd Army Today!" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://northwestwind.ml/tradew1nd/invite" />
+    <meta property="og:image" content="/assets/images/tradew1nd.png" />
+    <meta property="og:description" content="TradeW1nd is the ultimate open source Discord music bot.
+    It supports YouTube, SoundCloud, Musescore, attachments and more!
+    Click the title to invite it today!" />
+    <meta name="theme-color" content="#FCBA03">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <title>TradeW1nd (Army)</title>
+    <link id="favicon" rel="icon" href="/assets/images/tradew1nd.png" type="image/x-icon" />
+    <link rel="stylesheet" href="/tradew1nd/style-common.css">
+    <link rel="stylesheet" href="/tradew1nd/style-hori.css" id="horizontal">
+    <link rel="stylesheet" href="/tradew1nd/style-vert.css" id="vertical">
+    <script>
+        function enableStylesheet(node) { node.disabled = false; }
+        function disableStylesheet(node) { node.disabled = true; }
+    </script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="/js/helper.js"></script>
+</head>
+
+<body>
+    <div class="topbar" id="topbar">
+        <a id="home-link"><img src="/assets/images/tradew1nd.png" id="home-image" /></a>
+    </div>
+    <div id="side-menu">
+        <div id="side-placeholder"></div>
+        <a href="/tradew1nd/invite" target="invite">Invite</a>
+    </div>
+    <div class="card top-card">
+        <div id="top-placeholder"></div>
+        <div class="forty-percent">
+            <img src="/assets/images/tradew1nd.png" class="left-image big-image" />
+        </div>
+        <div class="sixty-percent">
+            <h1>TradeW1nd Army</h1>
+            <h2>
+                The ultimate open source Discord music bot(s) that will never get a tick in order to serve you.
+            </h2>
+            <img src="/assets/images/no_tick.png" id="drake-meme" />
+        </div>
+    </div>
+    <div class="card">
+        <div class="sixty-percent">
+            <h1>Supporting Multiple Platforms!</h1>
+            <h2>TradeW1nd supports a lot of media source!</h2>
+            <ul class="slide-up-class">
+                <li>YouTube</li>
+                <li>Spotify</li>
+                <li>Soundcloud</li>
+                <li>Musescore</li>
+                <li>Google Drive</li>
+                <li>Direct URLs</li>
+                <li>Attachments</li>
+            </ul>
+            <h2>That makes it possible to play anything in your server with TradeW1nd!</h2>
+        </div>
+        <div class="forty-percent">
+
+        </div>
+    </div>
+    <hr>
+    <div class="card">
+        <h1 style="text-align: center;">Save your queues and bring them across servers!</h1>
+        <img src="/assets/images/queue_cmd.png" class="big-image mid-image fade-in-class" />
+        <h2>
+            Every user can save up to 10 different queues.
+            Run <span class="inline-code" title="Click to copy">/queue save</span> to save your queues and <span
+                class="inline-code" title="Click to copy">/queue load</span> to load your queues again.
+            You can share the queue of your server with another server by using <span class="inline-code"
+                title="Click to copy">/queue sync</span>!
+        </h2>
+    </div>
+    <hr>
+    <div class="card">
+        <div class="forty-percent">
+
+        </div>
+        <div class="sixty-percent">
+            <h1>Absolutely free!</h1>
+            <h2>
+                TradeW1nd (Army) is completely free to use. Not only that, it is also open source!<br>
+                Not a single feature is locked behind a payment wall. You can do all the cool things with TradeW1nd for
+                free!
+            </h2>
+            <h2>
+                But! If you want to support the TradeW1nd Army project, donations are welcomed. Click the following
+                button if you want to fund this project.
+            </h2>
+        </div>
+    </div>
+    <script src="/js/tradew1nd/listener.js"></script>
+    <script src="/js/tradew1nd/vertical.js"></script>
+    <script>
+        new ResizeObserver(() => {
+            document.getElementById("top-placeholder").style.height = document.getElementById("topbar").clientHeight + "px";
+            document.getElementById("side-placeholder").style.height = document.getElementById("topbar").clientHeight + "px";
+        }).observe(document.getElementById("topbar"));
+    </script>
+</body>
+
+</html>

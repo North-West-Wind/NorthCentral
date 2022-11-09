@@ -1,0 +1,67 @@
+#home-image {
+    max-height: 3vw;
+    margin: 2vh 2vh 2vh 2vh;
+}
+
+#side-menu {
+    display: none;
+}
+
+#top-placeholder {
+    margin-bottom: 2vw;
+}
+
+.topbar {
+    font-size: 2vw;
+    height: 10vh;
+}
+
+.topbar a {
+    padding: 1vw;
+    border-radius: 1vw;
+}
+
+.top-card {
+    box-shadow: 0 1vh .5vh .5vh #3c3f43;
+}
+
+.card {
+    padding-top: 5vh;
+    padding-bottom: 10vh;
+}
+
+.card h1 {
+    font-size: 4vw;
+    margin-top: 3vw;
+    margin-bottom: 3vw;
+    margin-left: 5vw;
+    margin-right: 5vw;
+}
+
+.card h2 {
+    font-size: 2vw;
+    margin-top: 2vw;
+    margin-bottom: 2vw;
+    margin-left: 5vw;
+    margin-right: 5vw;
+}
+
+.card ul {
+    font-size: 2vw;
+    margin-left: 4vw;
+    margin-right: 4vw;
+}
+
+.big-image {
+    width: 80%;
+    padding: 5vw;
+}
+
+#drake-meme {
+    border-radius: 1vw;
+}
+
+.inline-code {
+    padding: 0 1vw;
+    border-radius: .5vw;
+}
