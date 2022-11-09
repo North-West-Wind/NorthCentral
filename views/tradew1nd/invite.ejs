@@ -41,27 +41,10 @@
 			TradeW1nd (Army).
 			Please review the <a href="/tradew1nd/privacy">privacy policy</a>. If you accept, press the "Continue" button below to proceed.
 		</h2><br>
-		<a href="#" class="button" onclick="redirectInvite();">Continue</a>
+		<a href="/tradew1nd/invite/real" class="button">Continue</a>
 	</div>
 	<script src="/js/tradew1nd/listener.js"></script>
 	<script src="/js/tradew1nd/vertical.js"></script>
-	<script>
-		async function redirectInvite() {
-			try {
-				const response = await fetch(`http://pi-api.ddns.net:3000/`);
-				if (!response.ok) return alert("Received not OK status: " + response.status);
-				else {
-					const data = await response.json();
-					for (const bot of data) {
-						if (bot.size < 100) return window.location.assign(`https://discord.com/api/oauth2/authorize?client_id=${bot.id}&permissions=2150755392&scope=bot%20applications.commands`);
-					}
-					alert("All TradeW1nd derivatives are full!");
-				}
-			} catch (err) {
-				alert("Internal Server Error");
-			}
-		}
-	</script>
 </body>
 
 </html>
