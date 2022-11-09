@@ -1,3 +1,8 @@
+new ResizeObserver(() => {
+    document.getElementById("top-placeholder").style.height = document.getElementById("topbar").clientHeight + "px";
+    document.getElementById("side-placeholder").style.height = document.getElementById("topbar").clientHeight + "px";
+}).observe(document.getElementById("topbar"));
+
 const invite = document.createElement("a");
 invite.href = "/tradew1nd/invite";
 invite.target = "invite";

@@ -105,6 +105,22 @@ hr {
     text-decoration: underline;
 }
 
+a.button {
+    background-color: cornflowerblue;
+    color: white;
+    transition: all .5s ease;
+}
+
+a.button:hover {
+    background-color: white;
+    color: cornflowerblue;
+    transition: all .5s ease;
+}
+
+.align-center {
+    text-align: center;
+}
+
 @keyframes slide-up {
     0% {
         transform: translateY(20%);
