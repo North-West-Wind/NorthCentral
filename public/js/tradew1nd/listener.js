@@ -27,6 +27,7 @@ window.onresize = () => {
         document.getElementById("home-link").href = "/tradew1nd";
         const topbar = document.getElementById("topbar");
         topbar.append(invite);
+        topbar.append(privacy);
     } else {
         document.getElementById("home-link").href = "#";
         document.querySelectorAll("[top-component]").forEach(e => e.remove());
