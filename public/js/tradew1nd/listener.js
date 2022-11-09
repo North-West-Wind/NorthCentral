@@ -6,8 +6,13 @@ invite.text = "Invite";
 
 window.onresize = () => {
     var ratio = window.innerWidth / window.innerHeight;
-    if (ratio < 1) disableStylesheet(document.getElementById("horizontal"));
-    else disableStylesheet(document.getElementById("vertical"));
+    if (ratio < 1) {
+        disableStylesheet(document.getElementById("horizontal"));
+        enableStylesheet(document.getElementById("vertical"));
+    } else {
+        disableStylesheet(document.getElementById("vertical"));
+        enableStylesheet(document.getElementById("horizontal"));
+    }
     if (document.getElementById("vertical").disabled) {
         document.getElementById("home-link").href = "/tradew1nd";
         const topbar = document.getElementById("topbar");

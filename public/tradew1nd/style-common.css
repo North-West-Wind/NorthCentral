@@ -44,13 +44,6 @@ hr {
     text-align: center;
 }
 
-.topbar a:hover {
-    background-color: whitesmoke;
-    color: cornflowerblue;
-    cursor: pointer;
-    transition: all ease 0.5s;
-}
-
 .forty-percent {
     width: 40%;
     height: 100%;
