@@ -9,6 +9,11 @@ invite.target = "invite";
 invite.setAttribute("top-component", 1);
 invite.text = "Invite";
 
+const privacy = document.createElement("a");
+privacy.href = "/tradew1nd/privacy";
+privacy.setAttribute("top-component", 1);
+privacy.text = "Privacy";
+
 window.onresize = () => {
     var ratio = window.innerWidth / window.innerHeight;
     if (ratio < 1) {
