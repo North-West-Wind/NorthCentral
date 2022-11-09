@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta property="og:title" content="Invite the TradeW1nd Army Today!" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://northwestwind.ml/tradew1nd/invite" />
+    <meta property="og:image" content="/assets/images/tradew1nd.png" />
+    <meta property="og:description" content="TradeW1nd is the ultimate open source Discord music bot.
+    It supports YouTube, SoundCloud, Musescore, attachments and more!
+    Click the title to invite it today!" />
+    <meta name="theme-color" content="#FCBA03">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <title>TradeW1nd (Army)</title>
+    <link id="favicon" rel="icon" href="/assets/images/tradew1nd.png" type="image/x-icon" />
+    <link rel="stylesheet" href="/tradew1nd/style-common.css">
+    <link rel="stylesheet" href="/tradew1nd/style-hori.css" id="horizontal">
+    <link rel="stylesheet" href="/tradew1nd/style-vert.css" id="vertical">
+    <script>
+        function enableStylesheet(node) { node.disabled = false; }
+        function disableStylesheet(node) { node.disabled = true; }
+    </script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="/js/helper.js"></script>
+</head>
+
+<body>
+    <div class="topbar" id="topbar">
+        <a id="home-link"><img src="/assets/images/tradew1nd.png" id="home-image" /></a>
+    </div>
+    <div id="side-menu">
+        <div id="side-placeholder"></div>
+        <a href="/tradew1nd/invite" target="invite">Invite</a>
+        <a href="/tradew1nd/privacy">Privacy</a>
+    </div>
+    <div id="top-placeholder"></div>
+    <div class="card">
+        <h1>TradeW1nd Privacy Policy</h1>
+        <p>
+            TradeW1nd shares the same database with N0rthWestW1nd. Stored data will not be visible to anyone other than TradeW1nd, N0rthWestW1nd and the author NorthWestWind. 
+            All data are stored on a self-hosted server by NorthWestWind.
+        </p>
+        <h2>What will be stored</h2>
+        <ul>
+            <li>User IDs for identification and data mapping</li>
+            <li>Guild IDs for identification and data mapping</li>
+            <li>Server queues</li>
+            <li>User queues</li>
+        </ul>
+        <p>
+            Queues contain soundtracks, which include title, URL, duration, thumbnail if applicable and configurations.
+        </p>
+    </div>
+    <script src="/js/tradew1nd/listener.js"></script>
+    <script src="/js/tradew1nd/vertical.js"></script>
+</body>
+
+</html>

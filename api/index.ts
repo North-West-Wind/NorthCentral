@@ -90,6 +90,10 @@ app.get("/tradew1nd/download/:guild", async (req, res) => {
 });
 
 app.get("/tradew1nd/invite", async (req, res) => {
+	res.render("tradew1nd/invite");
+});
+
+app.get("/tradew1nd/invite/real", async (req, res) => {
 	try {
 		const response = await fetch(`http://pi-api.ddns.net:3000/`);
 		if (!response.ok) res.sendStatus(response.status);
@@ -103,6 +107,10 @@ app.get("/tradew1nd/invite", async (req, res) => {
 	} catch (err) {
 		if (!res.headersSent) res.sendStatus(500);
 	}
+});
+
+app.get("/tradew1nd/privacy", async (req, res) => {
+	res.render("tradew1nd/privacy");
 });
 
 app.get("/tradew1nd", async (req, res) => {

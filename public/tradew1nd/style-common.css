@@ -44,13 +44,6 @@ hr {
     text-align: center;
 }
 
-.topbar a:hover {
-    background-color: whitesmoke;
-    color: cornflowerblue;
-    cursor: pointer;
-    transition: all ease 0.5s;
-}
-
 .forty-percent {
     width: 40%;
     height: 100%;
@@ -72,7 +65,7 @@ hr {
     width: 100vw;
 }
 
-.card h1, .card h2, .card ul {
+.card h1, .card h2, .card ul, .card p {
     animation: slide-up 1s ease;
 }
 
@@ -110,6 +103,22 @@ hr {
 
 .inline-code:hover {
     text-decoration: underline;
+}
+
+a.button {
+    background-color: cornflowerblue;
+    color: white;
+    transition: all .5s ease;
+}
+
+a.button:hover {
+    background-color: white;
+    color: cornflowerblue;
+    transition: all .5s ease;
+}
+
+.align-center {
+    text-align: center;
 }
 
 @keyframes slide-up {

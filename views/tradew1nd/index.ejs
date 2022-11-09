@@ -32,6 +32,7 @@
     <div id="side-menu">
         <div id="side-placeholder"></div>
         <a href="/tradew1nd/invite" target="invite">Invite</a>
+        <a href="/tradew1nd/privacy">Privacy</a>
     </div>
     <div class="card top-card">
         <div id="top-placeholder"></div>
@@ -97,12 +98,6 @@
     </div>
     <script src="/js/tradew1nd/listener.js"></script>
     <script src="/js/tradew1nd/vertical.js"></script>
-    <script>
-        new ResizeObserver(() => {
-            document.getElementById("top-placeholder").style.height = document.getElementById("topbar").clientHeight + "px";
-            document.getElementById("side-placeholder").style.height = document.getElementById("topbar").clientHeight + "px";
-        }).observe(document.getElementById("topbar"));
-    </script>
 </body>
 
 </html>
