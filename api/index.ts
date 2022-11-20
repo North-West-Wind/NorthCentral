@@ -88,7 +88,7 @@ app.get("/api/download/:guild", async (req, res) => {
 // GitHub API wrapper for my university project (ENGG1003)
 app.get("/api/github/repos/:owner/:repo/commits", async (req, res) => {
 	if (req.query.pass != process.env.GIT_PW) return res.sendStatus(403);
-	var url = `https://api.github.com/repos/${req.params.owner}/${req.params.repo}/commits?per_page=100&page=11370`;
+	var url = `https://api.github.com/repos/${req.params.owner}/${req.params.repo}/commits`;
 	const options = [];
 	if (req.query.per_page) options.push(`per_page=${req.query.per_page}`);
 	if (req.query.page) options.push(`page=${req.query.page}`);
