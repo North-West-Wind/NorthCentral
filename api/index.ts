@@ -92,6 +92,8 @@ app.get("/api/github/repos/:owner/:repo/commits", async (req, res) => {
 	const options = [];
 	if (req.query.per_page) options.push(`per_page=${req.query.per_page}`);
 	if (req.query.page) options.push(`page=${req.query.page}`);
+	if (req.query.since) options.push(`since=${req.query.since}`);
+	if (req.query.until) options.push(`until=${req.query.until}`);
 	if (options.length) url += "?" + options.join("&");
 	const response = await fetch(url, { headers: { Accept: "application/vnd.github+json", Authorization: `Bearer ${process.env.GIT_API}` } });
 	if (!response.ok) res.sendStatus(response.status);
