@@ -121,6 +121,11 @@ a.button:hover {
     text-align: center;
 }
 
+#sources, #no-pay {
+    position: relative;
+    width: 100%;
+}
+
 @keyframes slide-up {
     0% {
         transform: translateY(20%);
