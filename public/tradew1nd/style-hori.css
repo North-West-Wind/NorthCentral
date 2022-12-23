@@ -87,3 +87,8 @@ a.button {
     border-radius: .5vw;
     font-size: 4vw;
 }
+
+.footer {
+    padding-top: 5vh;
+    padding-bottom: 5vh;
+}

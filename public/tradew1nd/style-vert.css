@@ -98,3 +98,8 @@ a.button {
     border-radius: .5vh;
     font-size: 4vh;
 }
+
+.footer {
+    padding-top: 2vh;
+    padding-bottom: 2vh;
+}
