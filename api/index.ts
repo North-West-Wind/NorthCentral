@@ -115,7 +115,7 @@ app.get("/tradew1nd/invite/real", async (req, res) => {
 		else {
 			const data = <any>await response.json();
 			for (const bot of data) {
-				if (bot.size < 100) return res.redirect(301, `https://discord.com/api/oauth2/authorize?client_id=${bot.id}&permissions=2150755392&scope=bot%20applications.commands`);
+				if (bot.size < 75) return res.redirect(301, `https://discord.com/api/oauth2/authorize?client_id=${bot.id}&permissions=2150755392&scope=bot%20applications.commands`);
 			}
 			res.send("All TradeW1nd derivatives are full!");
 		}

@@ -121,6 +121,29 @@ a.button:hover {
     text-align: center;
 }
 
+#sources, #no-pay {
+    position: relative;
+    width: 100%;
+}
+
+.footer {
+    background-color: #000;
+    color: #fff;
+    width: 100vw;
+    text-align: center;
+    margin: 0;
+    bottom: 0;
+}
+
+a.misc-link {
+    color: #fcba03;
+    text-decoration: none;
+}
+
+a.misc-link:hover {
+    text-decoration: underline;
+}
+
 @keyframes slide-up {
     0% {
         transform: translateY(20%);

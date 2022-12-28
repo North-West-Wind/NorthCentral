@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="20"
+   height="20"
+   viewBox="0 0 5.2916666 5.2916666"
+   version="1.1"
+   id="svg5"
+   inkscape:version="1.2.2 (b0a8486541, 2022-12-01)"
+   sodipodi:docname="no_pay.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview7"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:document-units="px"
+     showgrid="false"
+     inkscape:zoom="16.589788"
+     inkscape:cx="-7.8964238"
+     inkscape:cy="7.8060067"
+     inkscape:window-width="1920"
+     inkscape:window-height="1004"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1" />
+  <defs
+     id="defs2">
+    <filter
+       style="color-interpolation-filters:sRGB"
+       inkscape:label="Drop Shadow"
+       id="filter637"
+       x="0"
+       y="0"
+       width="1.1184804"
+       height="1">
+      <feFlood
+         flood-opacity="1"
+         flood-color="rgb(0,0,0)"
+         result="flood"
+         id="feFlood627" />
+      <feComposite
+         in="SourceGraphic"
+         in2="flood"
+         operator="in"
+         result="composite1"
+         id="feComposite629" />
+      <feGaussianBlur
+         in="composite1"
+         stdDeviation="0"
+         result="blur"
+         id="feGaussianBlur631" />
+      <feOffset
+         dx="0.501567"
+         dy="0"
+         result="offset"
+         id="feOffset633" />
+      <feComposite
+         in="SourceGraphic"
+         in2="offset"
+         operator="over"
+         result="composite2"
+         id="feComposite635" />
+    </filter>
+  </defs>
+  <g
+     inkscape:label="圖層 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <g
+       id="g457"
+       transform="matrix(0.87500004,0,0,1,0.57431433,0.52916674)"
+       style="filter:url(#filter637)">
+      <circle
+         style="fill:#ffcc00;stroke-width:1.8172;stroke-linejoin:round;stroke-miterlimit:1.4"
+         id="path234"
+         cx="2.1166666"
+         cy="2.1166666"
+         r="2.1166666" />
+      <circle
+         style="fill:#ffdd55;stroke-width:1.59005;stroke-linejoin:round;stroke-miterlimit:1.4"
+         id="circle450"
+         cx="2.1166666"
+         cy="2.1166666"
+         r="1.8520833" />
+      <text
+         xml:space="preserve"
+         style="font-style:normal;font-weight:normal;font-size:3.175px;line-height:1.25;font-family:sans-serif;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.264583"
+         x="1.1035501"
+         y="3.0894754"
+         id="text344"><tspan
+           sodipodi:role="line"
+           id="tspan342"
+           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:3.175px;font-family:'Bitstream Vera Serif';-inkscape-font-specification:'Bitstream Vera Serif';fill:#ffffff;stroke-width:0.264583"
+           x="1.1035501"
+           y="3.0894754">$</tspan></text>
+    </g>
+    <path
+       id="rect703"
+       style="fill:#ff0000;stroke-width:2.29928;stroke-linejoin:round;stroke-miterlimit:1.4"
+       d="M 0.96203535,0.58785801 4.7038085,4.3296313 C 4.8285343,4.4543571 4.454357,4.8285344 4.3296312,4.7038086 L 0.58785805,0.96203531 C 0.46313225,0.83730952 0.83730955,0.4631322 0.96203535,0.58785801 Z"
+       sodipodi:nodetypes="sssss" />
+    <path
+       id="path1408"
+       style="fill:#ff0000;stroke-width:2.29928;stroke-linejoin:round;stroke-miterlimit:1.4"
+       d="M 0.58785795,4.3296312 4.3296312,0.58785804 C 4.454357,0.46313225 4.8285344,0.83730961 4.7038086,0.9620354 L 0.96203531,4.7038086 C 0.83730952,4.8285343 0.46313214,4.454357 0.58785795,4.3296312 Z"
+       sodipodi:nodetypes="sssss" />
+  </g>
+</svg>
