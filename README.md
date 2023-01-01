@@ -17,7 +17,7 @@ Keep scrolling/zooming in until you reach the limit and text pops up.
 ## Other Sites
 This website also routes to some other things besides the elevator.
 
-https://northwestwind.ml/tradew1nd - The homepage of my Discord music bot.
+https://northwestwind.ml/tradew1nd - The homepage of my Discord music bot.  
 https://northwestwind.ml/n0rthwestw1nd/manual - User manual for my general purpose Discord bot.
 
 # License
