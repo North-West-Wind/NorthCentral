@@ -23,3 +23,12 @@ function loadGltf(path) {
 for (const model of MODELS) {
 	loadGltf(model);
 }
+
+async function holdModelLoads() {
+	return new Promise(async resolve => {
+		while (Object.keys(GLTF_LOADED).length != MODELS.length) {
+			await new Promise(res => setTimeout(res, 50));
+		}
+		resolve();
+	});
+}

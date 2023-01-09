@@ -3,6 +3,7 @@
     "version": "1.0.0",
     "description": "The coolest home page of NorthWestWind.",
     "main": "api/index.ts",
+    "type": "module",
     "scripts": {
         "test": "vercel",
         "start": "vercel dev",

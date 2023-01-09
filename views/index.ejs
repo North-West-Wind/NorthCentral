@@ -52,13 +52,16 @@
     <script src="/js/renderer.js"></script>
     <script src="/js/handler.js"></script>
     <script>
-        if (passedInFloor > 0) {
-            actualFloor = currentFloor = gotoFloor = passedInFloor;
-            const xm = new THREE.MeshStandardMaterial({ map: displayTexture(passedInFloor), transparent: true });
-            xm.map.needsUpdate = true;
-            display.material.splice(4, 1, xm);
-            spawnOutside();
-        }
+        (async () => {
+            if (passedInFloor > 0) {
+                actualFloor = currentFloor = gotoFloor = passedInFloor;
+                const xm = new THREE.MeshStandardMaterial({ map: displayTexture(passedInFloor), transparent: true });
+                xm.map.needsUpdate = true;
+                display.material.splice(4, 1, xm);
+                await holdModelLoads();
+                spawnOutside();
+            }
+        })();
     </script>
 </body>
 
