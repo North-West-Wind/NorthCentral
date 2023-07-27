@@ -4,10 +4,7 @@ import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 const MODELS = [
 	"armor_stand",
 	"desk",
-	"piano",
-	"campfire",
-	"stick",
-	"marshmallow"
+	"piano"
 ];
 
 export const LOADER = new TextureLoader();

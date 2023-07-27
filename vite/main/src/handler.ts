@@ -1,17 +1,15 @@
 import * as THREE from "three";
-import { resize, despawnOutside, spawnOutside, scene, buttonD, buttonU, display, doorL, doorR, midX, midY, sign, paper0, paper1, paper2, sheets, pointLight, obj } from ".";
-import { setInnerHTML } from "./helper";
-import { CONTENTS, MAX_FLOOR, N0RTHWESTW1ND_CONTENTS, PAGES, SHEETMUSIC_CONTENTS, SHRINK_PARTICLE_DISTANCE } from "./constants";
-import { displayTexture, createParticle, createRain } from "./generators";
-import { getActualFloor, getCamera, getCurrentFloor, getGotoFloor, getRatio, getSpawned, setActualFloor, setCurrentFloor, setGotoFloor } from "./states";
+import { resize, despawnOutside, spawnOutside, scene, buttonD, buttonU, display, doorL, doorR, midX, midY, sign, pointLight, obj } from ".";
+import { openOrCloseInfo } from "./helpers/html";
+import { FLOORS } from "./constants";
+import { displayTexture } from "./generators";
+import { getCamera, getCurrentFloor, getFloor, getGotoFloor, getRatio, getRotatedX, getRotatedY, getSpawned, getStarted, getTouched, setActualFloor, setCurrentFloor, setGotoFloor, setStarted, setTouched } from "./states";
 
 window.addEventListener("resize", () => {
 	resize();
 }, true);
 
-var rotatedX = 0;
-var rotatedY = 0;
-var touched = false, moved = false;
+var moved = false;
 const offsets = { x: 0, y: 0 };
 const touchPos = { ix: 0, iy: 0, x: 0, y: 0 };
 var separation = 0;
@@ -27,7 +25,7 @@ window.addEventListener("touchstart", (e) => {
 	}
 	touchPos.ix = touchPos.x = x;
 	touchPos.iy = touchPos.y = y;
-	touched = true;
+	setTouched(true);
 });
 
 window.addEventListener("touchmove", (e) => {
@@ -80,32 +78,30 @@ window.addEventListener("touchend", (e) => {
 });
 
 window.addEventListener("mousedown", e => {
-	if (touched) return;
+	if (getTouched()) return;
 	clickEventsCommon(e);
 });
 
 window.addEventListener("mousemove", (e) => {
-	if (touched) return;
+	if (getTouched()) return;
 	offsets.x = -((e.clientX - midX) / midX) / 2;
 	offsets.y = -((e.clientY - midY) / midY) / 2;
 	const mouse2D = new THREE.Vector2((e.clientX / window.innerWidth) * 2 - 1, -(e.clientY / window.innerHeight) * 2 + 1);
 	const raycaster = new THREE.Raycaster();
 	raycaster.setFromCamera(mouse2D, getCamera());
 	const check: THREE.Mesh[] = [buttonU, buttonD, display, sign];
-	if (paper0 && paper1 && paper2) check.push(paper0, paper1, paper2);
-	if (sheets) check.push(...sheets);
+	if (getFloor().listenMove) check.push(...getFloor().moveCheck());
 	const intersect = raycaster.intersectObjects(check);
 	if (intersect.length > 0) document.body.style.cursor = "pointer";
 	else document.body.style.cursor = "default";
 });
 
 window.addEventListener("mouseup", () => {
-	if (touched) return touched = false;
+	if (getTouched()) return setTouched(false);
 	if (buttonU.material.color.getHex() != 0xbbbbbb) { buttonU.material.color.setHex(0xbbbbbb); buttonU.position.z = -48.25 }
 	if (buttonD.material.color.getHex() != 0xbbbbbb) { buttonD.material.color.setHex(0xbbbbbb); buttonD.position.z = -48.25 }
 });
 
-var zoomLimitReached = false;
 function clickEventsCommon(e: { clientX: number, clientY: number }) {
 	const mouse2D = new THREE.Vector2((e.clientX / window.innerWidth) * 2 - 1, -(e.clientY / window.innerHeight) * 2 + 1);
 	const raycaster = new THREE.Raycaster();
@@ -114,30 +110,16 @@ function clickEventsCommon(e: { clientX: number, clientY: number }) {
 	const oldGotoFloor = gotoFloor;
 	const currentFloor = getCurrentFloor();
 	var button, start = false;
-	if (raycaster.intersectObject(buttonU).length > 0) { button = buttonU; if (currentFloor != -1 && gotoFloor < MAX_FLOOR) gotoFloor = setGotoFloor(gotoFloor + 1); }
+	if (raycaster.intersectObject(buttonU).length > 0) { button = buttonU; if (currentFloor != -1 && gotoFloor < FLOORS.size - 1) gotoFloor = setGotoFloor(gotoFloor + 1); }
 	else if (raycaster.intersectObject(buttonD).length > 0) { button = buttonD; if (currentFloor != -1 && gotoFloor > 0) gotoFloor = setGotoFloor(gotoFloor - 1); }
 	else if (raycaster.intersectObject(display).length > 0 && currentFloor != gotoFloor && currentFloor != -1 && !moving) displayPressed = true;
 	else if (raycaster.intersectObject(sign).length > 0) {
 		openOrCloseInfo(0);
 		start = true;
-	} else if (currentFloor == 4 && phase && paper0 && paper1 && paper2) {
-		if (raycaster.intersectObject(paper1).length > 0) openOrCloseNWWInfo(0);
-		else if (raycaster.intersectObject(paper0).length > 0) openOrCloseNWWInfo(1);
-		else if (raycaster.intersectObject(paper2).length > 0) openOrCloseNWWInfo(2);
-	} else if (currentFloor == 5 && sheets && started) {
-		for (let i = 0; i < sheets.length; i++)
-			if (raycaster.intersectObject(sheets[i]).length > 0) {
-				openOrCloseSheetInfo(i);
-				break;
-			}
+	} else if (getFloor().listenClick) {
+		getFloor().clickRaycast(raycaster);
+		start = true;
 	} else start = true;
-	if (zoomLimitReached) {
-		if ([1, 2, 3].includes(currentFloor)) openOrCloseInfo(currentFloor);
-		else if (currentFloor == 4) {
-			openOrCloseInfo(currentFloor);
-			if (div.classList.contains("visuallyhidden") && !phase) phase = 1;
-		}
-	}
 	if (button) {
 		button.material.color.setHex(0xf7eb93);
 		button.position.z = -48.5;
@@ -147,8 +129,8 @@ function clickEventsCommon(e: { clientX: number, clientY: number }) {
 		xm.map!.needsUpdate = true;
 		display.material.splice(4, 1, xm);
 	}
-	if (!started) {
-		started = true;
+	if (!getStarted()) {
+		setStarted(true);
 		if (start && !pendingMove) starting = true;
 	}
 }
@@ -158,13 +140,15 @@ window.addEventListener("wheel", e => {
 });
 
 window.addEventListener("keydown", e => {
-	if (e.key == "Escape" && !div.classList.contains("hidden")) openOrCloseInfo();
+	if (e.key == "Escape" && !div.classList.contains("hidden")) {
+		openOrCloseInfo();
+		const floor = getFloor();
+		if (!floor.phase) floor.phase = 1;
+	}
 });
 
-var displayPressed = false, opened = false, moving = false, started = false, starting = false, pendingMove = false, poppedState = false;
+var displayPressed = false, opened = false, moving = false, starting = false, pendingMove = false, poppedState = false;
 var diff = 0, scrollDisplacement = 0, scrollVelocity = 0;
-var allRains: THREE.Mesh[] = [];
-var allParticles: { particle: THREE.Mesh, angle: number, distance: number }[] = [];
 function update() {
 	if (displayPressed) {
 		poppedState = false;
@@ -180,9 +164,9 @@ function update() {
 		xm.map!.needsUpdate = true;
 		display.material.splice(4, 1, xm);
 		pendingMove = true;
-		started = true;
+		setStarted(true);
 	}
-	if (started && starting) {
+	if (getStarted() && starting) {
 		starting = false;
 		if (!displayPressed) {
 			moving = true;
@@ -212,45 +196,13 @@ function update() {
 			if (!getSpawned()) spawnOutside();
 		}
 	}
-	if (opened || moving) {
-		switch (getActualFloor()) {
-			case 0:
-				const newRains = [];
-				for (let i = 0; i < allRains.length; i++) {
-					const r = allRains[i];
-					r.translateY(-Math.random() - 3);
-					if (r.position.y <= -50) scene.remove(r);
-					else newRains.push(r);
-				}
-				newRains.push(...createRain(scene, 10));
-				allRains = newRains;
-				break;
-			case 4:
-				const newParticles: { particle: THREE.Mesh, angle: number, distance: number }[] = [];
-				for (let i = 0; i < allParticles.length; i++) {
-					const p = allParticles[i];
-					const particle = p.particle;
-					const angle = p.angle;
-					p.distance -= Math.random() + 0.5;
-					particle.position.set(Math.sin(angle) * p.distance, getCurrentFloor() * 1000 + Math.cos(angle) * p.distance, -151);
-					if (p.distance < SHRINK_PARTICLE_DISTANCE) {
-						const scale = p.distance / SHRINK_PARTICLE_DISTANCE;
-						particle.scale.set(scale, scale, scale);
-					}
-					if (p.distance <= 0) scene.remove(particle);
-					else newParticles.push(p);
-				}
-				newParticles.push(...createParticle(scene, 1));
-				allParticles = newParticles;
-				break;
-		}
-	}
+	if ((opened || moving) && getFloor().listenUpdate) getFloor().update(scene);
 	const camera = getCamera();
-	if (pendingMove && !moving && started) {
+	if (pendingMove && !moving && getStarted()) {
 		pendingMove = false;
 		setTimeout(() => {
 			const gotoFloor = getGotoFloor();
-			if (!poppedState) history.pushState({ floor: gotoFloor }, "", "/" + (gotoFloor == 0 ? "" : PAGES[gotoFloor - 1]));
+			if (!poppedState) history.pushState({ floor: gotoFloor }, "", "/" + (gotoFloor == 0 ? "" : Array.from(FLOORS.keys())[gotoFloor]));
 			setActualFloor(setCurrentFloor(gotoFloor));
 			const xm = new THREE.MeshStandardMaterial({ map: displayTexture(getCurrentFloor()), transparent: true });
 			xm.map!.needsUpdate = true;
@@ -280,9 +232,8 @@ function update() {
 		}
 	}
 	if (scrollVelocity) handleWheel(scrollVelocity);
-	const point = new THREE.Vector3(camera.position.x - (offsets.x + rotatedX) * 10, camera.position.y + (offsets.y + rotatedY) * 10, camera.position.z - 20);
+	const point = new THREE.Vector3(camera.position.x - (offsets.x + getRotatedX()) * 10, camera.position.y + (offsets.y + getRotatedY()) * 10, camera.position.z - 20);
 	camera.lookAt(point);
-	//console.log("looking at", point);
 }
 
 var ticking = false;
@@ -300,184 +251,13 @@ window.onpopstate = () => {
 	poppedState = true;
 };
 
-var scrollStopped = 0, topped = false, bottomed = false, phase = 0;
 const div = document.getElementById("info")!;
-div.addEventListener("scroll", () => {
-	topped = !div.scrollTop;
-	div.scrollTop === (div.scrollHeight - div.offsetHeight);
-	scrollStopped = Date.now();
-});
 div.addEventListener("wheel", (e) => {
-	if (Date.now() - scrollStopped >= 500 && topped && e.deltaY < 0 && [1, 2, 3, 4].includes(getCurrentFloor()) && !phase) {
-		openOrCloseInfo();
-		phase = 1;
-	} else scrollStopped = Date.now();
 	scrollDisplacement = scrollVelocity = 0;
 });
 
-function hideOrUnhideInfo(cb = (_bool: boolean) => { }) {
-	if (div.classList.contains('hidden')) {
-		div.classList.remove('hidden');
-		setTimeout(function () {
-			div.classList.remove('visuallyhidden');
-		}, 20);
-		cb(false);
-	} else {
-		div.classList.add('visuallyhidden');
-		div.addEventListener('transitionend', function () {
-			div.classList.add('hidden');
-			cb(true);
-		}, { capture: false, once: true, passive: false });
-	}
-}
-
-function openOrCloseInfo(index = 0) {
-	hideOrUnhideInfo(async hidden => {
-		if (hidden) {
-			setInnerHTML(div, "");
-			bottomed = topped = false;
-		} else {
-			topped = !div.scrollTop;
-			bottomed = div.scrollTop === (div.scrollHeight - div.offsetHeight);
-			setInnerHTML(div, await CONTENTS[index]());
-		}
-		scrollStopped = Date.now();
-	});
-}
-
-function openOrCloseNWWInfo(index = 0) {
-	hideOrUnhideInfo(async hidden => {
-		if (hidden) setInnerHTML(div, "");
-		else setInnerHTML(div, await N0RTHWESTW1ND_CONTENTS[index]());
-	});
-}
-
-function openOrCloseSheetInfo(index = 0) {
-	hideOrUnhideInfo(async hidden => {
-		if (hidden) setInnerHTML(div, "");
-		else setInnerHTML(div, await SHEETMUSIC_CONTENTS[index]());
-	});
-}
-
 function handleWheel(scroll: number) {
 	scroll = scroll / 10;
-	const camera = getCamera();
 	if (!div.classList.contains('hidden')) return;
-	const currentFloor = getCurrentFloor();
-	if (currentFloor <= 0) {
-		if (camera.position.y != 0) camera.position.y = 0;
-		const absoluted = Math.abs(scroll);
-		if (camera.position.x != 0) {
-			camera.translateX(camera.position.x > 0 ? -absoluted : absoluted);
-			if (Math.abs(camera.position.x) <= absoluted) camera.position.x = 0;
-		}
-		if (camera.position.z != 0) {
-			camera.translateZ(camera.position.z > 0 ? -absoluted : absoluted);
-			if (Math.abs(camera.position.z) <= absoluted) camera.position.z = 0;
-		}
-	} else if (!opened) { } else if (currentFloor == 1) {
-		if (camera.position.y != currentFloor * 1000) camera.position.y = currentFloor * 1000;
-		const rotateAngle = -1 / 2;
-		const maxDist = 70;
-		if (camera.position.z == -maxDist && scroll > 0 && !touched) {
-			if (div.classList.contains('hidden')) openOrCloseInfo(currentFloor);
-		} else if (!(camera.position.z == 0 && scroll < 0)) {
-			camera.translateZ(-scroll);
-			if (camera.position.z > 0) camera.position.z = 0;
-			else if (camera.position.z < -maxDist) {
-				camera.position.z = -maxDist;
-				if (touched) zoomLimitReached = true;
-			} else if (touched) zoomLimitReached = false;
-		}
-
-		if (camera.position.x != 0) camera.position.x = 0;
-		rotatedX = rotateAngle * Math.abs(camera.position.z) / maxDist;
-	} else if (currentFloor == 2) {
-		if (camera.position.y != currentFloor * 1000) camera.position.y = currentFloor * 1000;
-		const rotateAngle = -1.2;
-		const maxDist = 100;
-		if (camera.position.z == -maxDist && scroll > 0 && !touched) {
-			if (div.classList.contains('hidden')) openOrCloseInfo(currentFloor);
-		} else if (!(camera.position.z == 0 && scroll < 0)) {
-			camera.translateZ(-scroll);
-			if (camera.position.z > 0) camera.position.z = 0;
-			else if (camera.position.z < -maxDist) {
-				camera.position.z = -maxDist;
-				if (touched) zoomLimitReached = true;
-			} else if (touched) zoomLimitReached = false;
-		}
-		if (camera.position.x != 0) camera.position.x = 0;
-		rotatedY = rotateAngle * Math.abs(camera.position.z) / maxDist;
-	} else if (currentFloor == 3) {
-		const rotateAngle = -1;
-		const maxDist0 = 100;
-		const maxDist1 = 162;
-		const maxDist2 = 8;
-		const maxDist3 = 17.5;
-		if (camera.position.z <= -maxDist0) {
-			if (camera.position.z > -maxDist1 || scroll < 0) {
-				camera.translateZ(-scroll);
-				if (camera.position.z < -maxDist1) {
-					camera.position.z = -maxDist1;
-					if (touched) zoomLimitReached = true;
-				} else if (touched) zoomLimitReached = false;
-				camera.position.x = -(Math.abs(camera.position.z) - maxDist0) * maxDist2 / (maxDist1 - maxDist0);
-				camera.position.y = -(Math.abs(camera.position.z) - maxDist0) * maxDist3 / (maxDist1 - maxDist0) + currentFloor * 1000;
-				rotatedX = rotateAngle * (Math.abs(camera.position.z) - maxDist0) / (maxDist1 - maxDist0);
-			} else if (scroll > 0 && !touched) {
-				if (div.classList.contains('hidden')) openOrCloseInfo(currentFloor);
-			}
-		} else {
-			camera.translateZ(-scroll);
-			if (camera.position.z > 0) camera.position.z = 0;
-			if (camera.position.x != 0) camera.position.x = 0;
-			if (camera.position.y != currentFloor * 1000) camera.position.y = currentFloor * 1000;
-			if (rotatedX != 0) rotatedX = 0;
-		}
-	} else if (currentFloor == 4) {
-		const rotateAngle = -3;
-		const maxDist0 = 140;
-		const maxDist1 = 148;
-		const maxDist2 = 3;
-		if (camera.position.z <= -maxDist0) {
-			if (div.classList.contains('hidden')) {
-				if (scroll > 0 && !phase) {
-					if (!touched) openOrCloseInfo(currentFloor);
-					else zoomLimitReached = true;
-				} else if (phase) {
-					zoomLimitReached = false;
-					camera.translateZ(-scroll);
-					if (camera.position.z < -maxDist1) camera.position.z = -maxDist1;
-					camera.position.x = (Math.abs(camera.position.z) - maxDist0) * maxDist2 / (maxDist1 - maxDist0);
-					rotatedY = rotateAngle * (Math.abs(camera.position.z) - maxDist0) / (maxDist1 - maxDist0);
-					if (camera.position.z > -maxDist0) {
-						camera.position.x = 0;
-						rotatedY = 0;
-						phase = 0;
-					}
-				} else camera.translateZ(-scroll);
-			}
-		} else if (!(camera.position.z == 0 && scroll < 0)) {
-			camera.translateZ(-scroll);
-			if (camera.position.z > 0) camera.position.z = 0;
-			else if (camera.position.z < -maxDist0) camera.position.z = -maxDist0;
-			if (camera.position.z > -maxDist0) phase = 0;
-			if (camera.position.x != 0) camera.position.x = 0;
-		}
-		if (camera.position.y != currentFloor * 1000) camera.position.y = currentFloor * 1000;
-	} else if (currentFloor == 5) {
-		const rotateAngle = -1.2;
-		const maxDist = 175;
-		if (!(camera.position.z == 0 && scroll < 0)) {
-			camera.translateZ(-scroll);
-			if (camera.position.z > 0) camera.position.z = 0;
-			else if (camera.position.z < -maxDist) {
-				camera.position.z = -maxDist;
-				if (touched) zoomLimitReached = true;
-			} else if (touched) zoomLimitReached = false;
-		}
-		if (camera.position.x != 0) camera.position.x = 0;
-		camera.position.y = currentFloor * 1000 + camera.position.z / 10;
-		rotatedY = rotateAngle * Math.abs(camera.position.z) / maxDist;
-	}
+	Array.from(FLOORS.values())[getCurrentFloor()].handleWheel(scroll);
 }

@@ -1,4 +1,5 @@
 import { Camera, WebGLRenderer } from "three";
+import Floor from "./types/floor";
 
 var ratio: number;
 export function getRatio() { return ratio; }
@@ -31,3 +32,23 @@ export function setRenderer(r: WebGLRenderer) { return renderer = r; }
 var camera: Camera;
 export function getCamera() { return camera; }
 export function setCamera(c: Camera) { return camera = c; }
+
+var touched = false;
+export function getTouched() { return touched; }
+export function setTouched(t: boolean) { return touched = t; }
+
+var rotatedX = 0;
+export function getRotatedX() { return rotatedX; }
+export function setRotatedX(r: number) { return rotatedX = r; }
+
+var rotatedY = 0;
+export function getRotatedY() { return rotatedY; }
+export function setRotatedY(r: number) { return rotatedY = r; }
+
+var floor: Floor;
+export function getFloor() { return floor; }
+export function setFloor(f: Floor) { return floor = f; }
+
+var started = false;
+export function getStarted() { return started; }
+export function setStarted(s: boolean) { return started = s; }
