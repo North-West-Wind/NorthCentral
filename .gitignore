@@ -3,3 +3,8 @@ tmp
 .env
 .vercel
 .well-known
+dist
+out
+public/js/index-*.js
+public/index.html
+public/404.html
