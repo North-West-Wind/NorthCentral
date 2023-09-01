@@ -119,6 +119,10 @@ app.get("/tradew1nd", async (req, res) => {
 	res.render("tradew1nd/index");
 });
 
+app.get("/matrix", async (_req, res) => {
+	res.redirect(301, "https://matrix.to/#/#northwestwind:matrix.northwestw.in");
+});
+
 app.get("/:page", (req, res, next) => {
 	if (!PAGES.includes(req.params.page)) next();
 	else {
