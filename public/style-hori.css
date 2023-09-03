@@ -117,6 +117,7 @@ a {
 
 a:hover {
     text-decoration: underline;
+    cursor: pointer;
 }
 
 .avatar {
@@ -139,7 +140,7 @@ a:hover {
     display: inline-block;
     font-size: 2.5vw;
     margin-top: 1vw;
-    border-radius: 5%;
+    border-radius: 1vw;
 }
 
 .cookie-info {

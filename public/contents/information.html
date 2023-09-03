@@ -1,31 +1,14 @@
 <table id="cookies" class="cookie-info">
-    <tr><td rowspan="2">We use cookies :) To store configurations<br>Deny to use session storage instead</td><td><a class="cookie-button accept" onclick="accept()">Accept</a></td></tr>
-    <tr><td><a class="cookie-button deny" onclick="deny()">Deny</a></td></tr>
+    <tr><td rowspan="2">We use cookies :) To store configurations<br>Deny to use session storage instead</td><td><a class="cookie-button accept">Accept</a></td></tr>
+    <tr><td><a class="cookie-button deny">Deny</a></td></tr>
 </table>
-<script>
-    if (getVar("answered")) {
-        const cookieInfo = document.getElementById("cookies");
-        cookieInfo.classList.add("hidden");
-    }
-    function accept() {
-        window.sessionStorage.setItem("use_cookies", 1);
-        setVar("use_cookies", 1);
-        for (const key of Object.keys(window.sessionStorage)) setVar(key, window.sessionStorage.getItem(key));
-        answer();
-    }
-    function answer() {
-        setVar("answered", 1);
-        const cookieInfo = document.getElementById("cookies");
-        cookieInfo.classList.add("hidden");
-    }
-</script>
 <h1>North's Elevator</h1>
 <h2>Usage</h2>
 <p>
     Use the arrow buttons to set the floor.<br>
     Click on the display to go to that floor.<br>
     Click on the sign again to close this.<br>
-    <a class="button" onclick="toggleMusic()">Toggle Music</a>
+    <a class="button" id="toggleMusic">Toggle Music</a>
 </p>
 <h2>Floors</h2>
 <table class="floors">

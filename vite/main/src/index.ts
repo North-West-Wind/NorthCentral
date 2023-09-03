@@ -10,15 +10,15 @@ import "./handler";
 const passedInFloor = setPassedInFloor(Array.from(FLOORS.keys()).indexOf(window.location.pathname.split("/")[1]));
 
 if (getVar("use_cookies")) {
-		setVar("use_cookies", 1);
-		setVar("answered", 1);
-		for (const key of Object.keys(window.sessionStorage)) setVar(key, window.sessionStorage.getItem(key));
+  setVar("use_cookies", 1);
+  setVar("answered", 1);
+  for (const key of Object.keys(window.sessionStorage)) setVar(key, window.sessionStorage.getItem(key));
 }
 if (getVar("no_music") == "0") (document.getElementById("player") as HTMLAudioElement).play();
 else if (!getVar("no_music")) toggleMusic();
 
 export const scene = new THREE.Scene();
-const camera = setCamera(new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 500)) as THREE.PerspectiveCamera;
+const camera = setCamera(new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000)) as THREE.PerspectiveCamera;
 const renderer = setRenderer(new THREE.WebGLRenderer({
   canvas: document.querySelector(`#bg`)!
 }));
@@ -33,57 +33,57 @@ pointLight.castShadow = true;
 scene.add(pointLight);
 export const obj = makeLift(scene);
 export const { doorL, doorR, buttonU, buttonD, sign, display } = obj;
-export var outside: any;
+var outside: any;
 export async function spawnOutside() {
-		setSpawned(true);
-    const floor = setFloor(Array.from(FLOORS.values())[getGotoFloor()]);
-    outside = await floor.generate(scene);
+  setSpawned(true);
+  const floor = setFloor(Array.from(FLOORS.values())[getGotoFloor()]);
+  outside = await floor.generate(scene);
 }
 export function despawnOutside() {
-		setSpawned(false);
-    for (const ob of Object.values(outside)) {
-      if (Array.isArray(ob)) scene.remove(...ob);
-      else scene.remove(ob as any);
-    }
-    outside = undefined;
+  setSpawned(false);
+  for (const ob of Object.values(outside)) {
+    if (Array.isArray(ob)) scene.remove(...ob);
+    else scene.remove(ob as any);
+  }
+  outside = undefined;
 }
 
 export function resize() {
   console.log("resizing")
-    camera.aspect = window.innerWidth / window.innerHeight;
-    camera.updateProjectionMatrix();
-    renderer.setPixelRatio(window.devicePixelRatio);
-    renderer.setSize(window.innerWidth, window.innerHeight);
+  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setPixelRatio(window.devicePixelRatio);
+  renderer.setSize(window.innerWidth, window.innerHeight);
 
-    renderer.render(scene, camera);
-    midX = window.innerWidth / 2;
-    midY = window.innerHeight / 2;
-		setRatio(window.innerWidth / window.innerHeight);
-    if (getRatio() < 1) {
-        enableStylesheet(document.getElementById("vertical"));
-        disableStylesheet(document.getElementById("horizontal"));
-    } else {
-        enableStylesheet(document.getElementById("horizontal"));
-        disableStylesheet(document.getElementById("vertical"));
-    }
+  renderer.render(scene, camera);
+  midX = window.innerWidth / 2;
+  midY = window.innerHeight / 2;
+  setRatio(window.innerWidth / window.innerHeight);
+  if (getRatio() < 1) {
+    enableStylesheet(document.getElementById("vertical"));
+    disableStylesheet(document.getElementById("horizontal"));
+  } else {
+    enableStylesheet(document.getElementById("horizontal"));
+    disableStylesheet(document.getElementById("vertical"));
+  }
 }
 
 function animate() {
-    requestAnimationFrame(animate);
+  requestAnimationFrame(animate);
 
-    renderer.render(scene, camera);
+  renderer.render(scene, camera);
 }
 
 resize();
 animate();
 
 (async () => {
-	if (passedInFloor > 0) {
-			setActualFloor(setCurrentFloor(setGotoFloor(passedInFloor)));
-			const xm = new THREE.MeshStandardMaterial({ map: displayTexture(passedInFloor), transparent: true });
-			xm.map!.needsUpdate = true;
-			display.material.splice(4, 1, xm);
-			await holdModelLoads();
-			spawnOutside();
-	}
+  if (passedInFloor > 0) {
+    setActualFloor(setCurrentFloor(setGotoFloor(passedInFloor)));
+    const xm = new THREE.MeshStandardMaterial({ map: displayTexture(passedInFloor), transparent: true });
+    xm.map!.needsUpdate = true;
+    display.material.splice(4, 1, xm);
+    await holdModelLoads();
+    spawnOutside();
+  }
 })();

@@ -12,7 +12,7 @@ const PAGES = [
 	"sky-farm",
 	"n0rthwestw1nd",
 	"sheet-music",
-	"other-projects"
+	"gallery"
 ];
 
 const root = path.resolve(__dirname, "../public");
