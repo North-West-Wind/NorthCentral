@@ -185,3 +185,7 @@ a:hover {
     left: 0;
     width: 100%;
 }
+
+.gallery-item {
+    width: 60vh;
+}

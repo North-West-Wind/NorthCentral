@@ -1,6 +1,7 @@
 export function readPageGenerator(url: string, arr: (() => Promise<string> | string)[], regex: RegExp | undefined = undefined, otherarr: string[] = []) {
 	const func = () => readPage(url, arr, arr.length, regex, otherarr);
 	arr.push(func);
+	return arr;
 }
 
 export function readPage(url: string, arr: (() => Promise<string> | string)[], index: number, regex: RegExp | undefined = undefined, otherarr: string[] = []) {

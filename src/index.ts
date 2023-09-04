@@ -4,6 +4,7 @@ import cookieParser from "cookie-parser";
 import bodyParser from "body-parser";
 const app = express();
 import fetch from "node-fetch";
+import * as fs from "fs";
 import * as path from "path";
 
 const PAGES = [
@@ -121,6 +122,12 @@ app.get("/tradew1nd", async (req, res) => {
 
 app.get("/matrix", async (_req, res) => {
 	res.redirect(301, "https://matrix.to/#/#northwestwind:matrix.northwestw.in");
+});
+
+app.get("/files/:path", (req, res) => {
+	const p = decodeURIComponent(req.params.path);
+	if (p.includes("..")) return res.status(403);
+	res.json(fs.readdirSync(path.join(".", p)));
 });
 
 app.get("/:page", (req, res, next) => {

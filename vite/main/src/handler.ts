@@ -78,7 +78,7 @@ window.addEventListener("touchend", (e) => {
 });
 
 window.addEventListener("mousedown", e => {
-	if (getTouched()) return;
+	if (getTouched() || e.button !== 0) return;
 	clickEventsCommon(e);
 });
 
@@ -214,7 +214,7 @@ function update() {
 			moving = true;
 			const audio = new Audio('/assets/lift.mp3');
 			audio.play();
-		}, 1500 * Math.abs(diff));
+		}, 500 + 200 * Math.abs(diff));
 	}
 	if (scrollDisplacement) {
 		var tmpDisplacement = scrollDisplacement;
