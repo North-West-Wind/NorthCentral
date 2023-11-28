@@ -10,7 +10,7 @@ export const SHEETMUSIC_TITLES: string[] = [];
 
 const div = document.getElementById("info")!;
 export default class SheetMusicFloor extends Floor {
-	static readonly SHEETS = 8;
+	static readonly SHEETS = 12;
 	sheets?: THREE.Mesh[];
 
 	static {
