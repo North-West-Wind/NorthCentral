@@ -6,6 +6,7 @@ const app = express();
 import fetch from "node-fetch";
 import * as fs from "fs";
 import * as path from "path";
+import tinycolor from "tinycolor2";
 
 const PAGES = [
 	"auto-fish",
@@ -36,50 +37,6 @@ app.get("/n0rthwestw1nd/manual/:ver", (req, res) => {
 });
 app.get("/api/ping", (_req, res) => {
 	res.sendStatus(200);
-});
-app.get("/api/curseforge/mods/search", async (req, res) => {
-	try {
-		var url = `https://api.curseforge.com/v1/mods/search`;
-		const queries = [];
-		for (const query in req.query) queries.push(`${query}=${req.query[query]}`);
-		if (queries.length) url += `?${queries.join("&")}`;
-		const response = await fetch(url, { headers: <any>{ "x-api-key": process.env.CF_API } });
-		if (!response.ok) res.sendStatus(response.status);
-		else res.json((<any>await response.json()).data);
-	} catch (err) {
-		if (!res.headersSent) res.sendStatus(500);
-	}
-});
-app.get("/api/curseforge/mods/:id", async (req, res) => {
-	try {
-		const response = await fetch(`https://api.curseforge.com/v1/mods/${req.params.id}`, { headers: <any>{ "x-api-key": process.env.CF_API } });
-		if (!response.ok) res.sendStatus(response.status);
-		else res.json((<any>await response.json()).data);
-	} catch (err) {
-		if (!res.headersSent) res.sendStatus(500);
-	}
-});
-app.get("/api/curseforge/mods/:id/files", async (req, res) => {
-	try {
-		var url = `https://api.curseforge.com/v1/mods/${req.params.id}/files`;
-		const queries = [];
-		for (const query in req.query) queries.push(`${query}=${req.query[query]}`);
-		if (queries.length) url += `?${queries.join("&")}`;
-		const response = await fetch(url, { headers: <any>{ "x-api-key": process.env.CF_API } });
-		if (!response.ok) res.sendStatus(response.status);
-		else res.json((<any>await response.json()).data);
-	} catch (err) {
-		if (!res.headersSent) res.sendStatus(500);
-	}
-});
-app.get("/api/curseforge/mods/:id/files/:fileId", async (req, res) => {
-	try {
-		const response = await fetch(`https://api.curseforge.com/v1/mods/${req.params.id}/files/${req.params.fileId}`, { headers: <any>{ "x-api-key": process.env.CF_API } });
-		if (!response.ok) res.sendStatus(response.status);
-		else res.json((<any>await response.json()).data);
-	} catch (err) {
-		if (!res.headersSent) res.sendStatus(500);
-	}
 });
 
 app.get("/api/download/:guild", async (req, res) => {
