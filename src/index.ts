@@ -19,6 +19,8 @@ const PAGES = [
 ];
 
 const root = path.resolve(__dirname, "../public");
+const colorDir = path.join(root, "assets/images/colors");
+if (!fs.existsSync(colorDir)) fs.mkdirSync(colorDir);
 
 app.use(express.static("public"));
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -76,7 +78,7 @@ app.get("/portal", (_req, res) => res.render("portal"));
 app.get("/color/:color", async (req, res) => {
 	const c = tinycolor(req.params.color);
 	if (!c.isValid()) return res.sendStatus(400);
-	const imgPath = path.join(root, "assets/images/colors", c.toHex() + ".png");
+	const imgPath = path.join(colorDir, c.toHex() + ".png");
 	if (!fs.existsSync(imgPath)) {
 		const img = PImage.make(1, 1);
 		const ctx = img.getContext("2d");
