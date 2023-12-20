@@ -91,7 +91,7 @@ app.get("/color/:color", async (req, res) => {
 			return res.sendStatus(500);
 		}
 	}
-	res.render("color", { color: req.params.color });
+	res.render("color", { color: c.toHex() });
 });
 
 app.get("/files/:path", (req, res) => {
