@@ -6,6 +6,7 @@ const app = express();
 import fetch from "node-fetch";
 import * as fs from "fs";
 import * as path from "path";
+import * as PImage from "pureimage";
 import tinycolor from "tinycolor2";
 
 const PAGES = [
@@ -35,9 +36,7 @@ app.get("/n0rthwestw1nd/manual/:ver", (req, res) => {
 	else if (req.params.ver === "tradew1nd") res.sendFile("assets/tradew1nd_manual.pdf", { root });
 	else res.sendFile("assets/safe_manual.pdf", { root });
 });
-app.get("/api/ping", (_req, res) => {
-	res.sendStatus(200);
-});
+app.get("/api/ping", (_req, res) => res.sendStatus(200));
 
 app.get("/api/download/:guild", async (req, res) => {
 	const response = await fetch("http://localhost:3001/download/" + req.params.guild);
@@ -69,23 +68,27 @@ app.get("/tradew1nd/invite/real", async (req, res) => {
 	}
 });
 
-app.get("/tradew1nd/privacy", async (req, res) => {
-	res.render("tradew1nd/privacy");
-});
+app.get("/tradew1nd/privacy", (_req, res) => res.render("tradew1nd/privacy"));
+app.get("/tradew1nd", (_req, res) => res.render("tradew1nd/index"));
+app.get("/matrix", (_req, res) => res.redirect(301, "https://matrix.to/#/#northwestwind:matrix.northwestw.in"));
+app.get("/portal", (_req, res) => res.render("portal"));
 
-app.get("/tradew1nd", async (req, res) => {
-	res.render("tradew1nd/index");
-});
-
-app.get("/matrix", async (_req, res) => {
-	res.redirect(301, "https://matrix.to/#/#northwestwind:matrix.northwestw.in");
-});
-
-app.get("/portal", (_req, res) => {
-	res.render("portal");
-});
-
-app.get("/color/:color", (req, res) => {
+app.get("/color/:color", async (req, res) => {
+	const c = tinycolor(req.params.color);
+	if (!c.isValid()) return res.sendStatus(400);
+	const imgPath = path.join(root, "assets/images/colors", c.toHex() + ".png");
+	if (!fs.existsSync(imgPath)) {
+		const img = PImage.make(1, 1);
+		const ctx = img.getContext("2d");
+		ctx.fillStyle = c.toHexString();
+		ctx.fillRect(0, 0, 1, 1);
+		try {
+			await PImage.encodePNGToStream(img, fs.createWriteStream(imgPath));
+		} catch (err) {
+			console.error(err);
+			return res.sendStatus(500);
+		}
+	}
 	res.render("color", { color: req.params.color });
 });
 
