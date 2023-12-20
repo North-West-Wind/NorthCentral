@@ -128,6 +128,10 @@ app.get("/portal", (_req, res) => {
 	res.render("portal");
 });
 
+app.get("/color/:color", (req, res) => {
+	res.render("color", { color: req.params.color });
+});
+
 app.get("/files/:path", (req, res) => {
 	const p = decodeURIComponent(req.params.path);
 	if (p.includes("..")) return res.status(403);
