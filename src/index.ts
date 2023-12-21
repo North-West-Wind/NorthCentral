@@ -6,8 +6,6 @@ const app = express();
 import fetch from "node-fetch";
 import * as fs from "fs";
 import * as path from "path";
-import * as PImage from "pureimage";
-import tinycolor from "tinycolor2";
 
 const PAGES = [
 	"auto-fish",
@@ -74,25 +72,6 @@ app.get("/tradew1nd/privacy", (_req, res) => res.render("tradew1nd/privacy"));
 app.get("/tradew1nd", (_req, res) => res.render("tradew1nd/index"));
 app.get("/matrix", (_req, res) => res.redirect(301, "https://matrix.to/#/#northwestwind:matrix.northwestw.in"));
 app.get("/portal", (_req, res) => res.render("portal"));
-
-app.get("/color/:color", async (req, res) => {
-	const c = tinycolor(req.params.color);
-	if (!c.isValid()) return res.sendStatus(400);
-	const imgPath = path.join(colorDir, c.toHex() + ".png");
-	if (!fs.existsSync(imgPath)) {
-		const img = PImage.make(1, 1);
-		const ctx = img.getContext("2d");
-		ctx.fillStyle = c.toHexString();
-		ctx.fillRect(0, 0, 1, 1);
-		try {
-			await PImage.encodePNGToStream(img, fs.createWriteStream(imgPath));
-		} catch (err) {
-			console.error(err);
-			return res.sendStatus(500);
-		}
-	}
-	res.render("color", { color: c.toHex() });
-});
 
 app.get("/files/:path", (req, res) => {
 	const p = decodeURIComponent(req.params.path);
