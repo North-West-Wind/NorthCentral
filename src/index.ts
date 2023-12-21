@@ -17,8 +17,6 @@ const PAGES = [
 ];
 
 const root = path.resolve(__dirname, "../public");
-const colorDir = path.join(root, "assets/images/colors");
-if (!fs.existsSync(colorDir)) fs.mkdirSync(colorDir);
 
 app.use(express.static("public"));
 app.use(bodyParser.urlencoded({ extended: false }));
