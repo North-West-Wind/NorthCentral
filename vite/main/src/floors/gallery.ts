@@ -5,7 +5,7 @@ import { LOADER } from "../loaders";
 import { readPageGenerator } from "../helpers/reader";
 import { hideOrUnhideInfo, setInnerHTML } from "../helpers/html";
 
-const PAINTINGS = 17;
+const PAINTINGS = 18;
 const PAINTING_LENGTH = 50;
 const LENGTH_PER_PAINTING = PAINTING_LENGTH + 30;
 const FLOOR_LENGTH = Math.ceil((PAINTINGS - 1) * 0.5) * LENGTH_PER_PAINTING;
