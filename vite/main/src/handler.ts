@@ -11,7 +11,7 @@ window.addEventListener("resize", () => {
 
 var moved = false;
 const offsets = { x: 0, y: 0 };
-const touchPos = { ix: 0, iy: 0, x: 0, y: 0 };
+const touchPos = { originX: 0, originY: 0, ix: 0, iy: 0, x: 0, y: 0 };
 var separation = 0;
 window.addEventListener("touchstart", (e) => {
 	var x, y;
@@ -23,8 +23,8 @@ window.addEventListener("touchstart", (e) => {
 		x = e.touches[0].clientX;
 		y = e.touches[0].clientY;
 	}
-	touchPos.ix = touchPos.x = x;
-	touchPos.iy = touchPos.y = y;
+	touchPos.originX = touchPos.ix = touchPos.x = x;
+	touchPos.originY = touchPos.iy = touchPos.y = y;
 	setTouched(true);
 });
 
@@ -65,7 +65,7 @@ window.addEventListener("touchmove", (e) => {
 window.addEventListener("touchend", (e) => {
 	if (!moved) {
 		clickEventsCommon({ clientX: touchPos.x, clientY: touchPos.y });
-		if (!div.classList.contains("visuallyhidden") && touchPos.ix == touchPos.x && touchPos.iy == touchPos.y) openOrCloseInfo();
+		if (!div.classList.contains("visuallyhidden") && e.touches.length == 1 && touchPos.originX == touchPos.x && touchPos.originY == touchPos.y) openOrCloseInfo();
 	} else {
 		moved = false;
 		if (e.touches.length) {
