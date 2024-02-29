@@ -26,10 +26,12 @@ export function hideOrUnhideInfo(cb = (_bool: boolean) => { }) {
 		cb(false);
 	} else {
 		div.classList.add('visuallyhidden');
-		div.addEventListener('transitionend', function () {
+		function onTransitionEnd() {
 			div.classList.add('hidden');
 			cb(true);
-		}, { capture: false, once: true, passive: false });
+			div.removeEventListener("transitionend", onTransitionEnd);
+		}
+		div.addEventListener('transitionend', onTransitionEnd, { capture: false, once: true, passive: false });
 	}
 }
 
