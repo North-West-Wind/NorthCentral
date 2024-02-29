@@ -65,7 +65,7 @@ window.addEventListener("touchmove", (e) => {
 window.addEventListener("touchend", (e) => {
 	if (!moved) {
 		clickEventsCommon({ clientX: touchPos.x, clientY: touchPos.y });
-		if (!div.classList.contains("visuallyhidden") && e.touches.length == 1 && touchPos.originX == touchPos.x && touchPos.originY == touchPos.y) openOrCloseInfo();
+		if (!div.classList.contains("visuallyhidden") && e.touches.length == 0 && touchPos.originX == touchPos.x && touchPos.originY == touchPos.y) openOrCloseInfo();
 	} else {
 		moved = false;
 		if (e.touches.length) {
