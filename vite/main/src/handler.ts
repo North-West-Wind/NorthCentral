@@ -26,6 +26,11 @@ window.addEventListener("touchstart", (e) => {
 	touchPos.ix = touchPos.x = x;
 	touchPos.iy = touchPos.y = y;
 	setTouched(true);
+
+	if (!moved) {
+		clickEventsCommon({ clientX: touchPos.x, clientY: touchPos.y });
+		if (!div.classList.contains("visuallyhidden")) openOrCloseInfo();
+	}
 });
 
 window.addEventListener("touchmove", (e) => {
@@ -63,10 +68,7 @@ window.addEventListener("touchmove", (e) => {
 });
 
 window.addEventListener("touchend", (e) => {
-	if (!moved) {
-		clickEventsCommon({ clientX: touchPos.x, clientY: touchPos.y });
-		if (!div.classList.contains("visuallyhidden")) openOrCloseInfo();
-	} else {
+	if (moved) {
 		moved = false;
 		if (e.touches.length) {
 			touchPos.ix = touchPos.x = e.touches[0].clientX;
