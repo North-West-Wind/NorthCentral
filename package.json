@@ -4,10 +4,17 @@
     "description": "The coolest home page of NorthWestWind.",
     "main": "out/index.js",
     "scripts": {
-        "deep-install": "npm i && cd vite/main && npm i && cd ../404 && npm i",
+        "deep-install": "npm i && npm-run-all install:*",
         "start": "node out/index.js",
-        "build": "tsc && cd vite/main && npm run build && cd ../404 && npm run build",
-        "test": "npm run build && npm start"
+        "build": "tsc && npm-run-all build:* postbuild:*",
+        "test": "npm run build && npm start",
+        "install:elevator": "cd vite/main && npm i",
+        "build:elevator": "cd vite/main && npm run build",
+        "install:404": "cd vite/404 && npm i",
+        "build:404": "cd vite/404 && npm run build",
+        "install:uop-editor": "cd uop-editor && npm i",
+        "build:uop-editor": "cd uop-editor && npm run build",
+        "postbuild:uop-editor": "cp -r uop-editor/dist/uop-editor-assets public/uop-editor-assets && cp uop-editor/dist/index.html public/uop-editor.html"
     },
     "engines": {
         "node": "16.x"
@@ -27,6 +34,7 @@
         "@types/cookie-parser": "^1.4.3",
         "@types/express": "^4.17.14",
         "@types/node-fetch": "^2.6.2",
+        "npm-run-all": "^4.1.5",
         "three": "^0.138.3",
         "ts-node": "^10.9.1",
         "typescript": "^4.8.4"

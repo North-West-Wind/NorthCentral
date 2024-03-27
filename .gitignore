@@ -13,3 +13,6 @@ vite/**/public
 
 # generated at runtime
 public/assets/images/colors
+
+# uop-editor submodule stuff
+public/uop-editor*

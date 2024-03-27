@@ -1,0 +1,4 @@
+[submodule "ceng3420-lab3-helper"]
+	path = uop-editor
+	url = https://github.com/North-West-Wind/ceng3420-lab3-helper
+	branch = web

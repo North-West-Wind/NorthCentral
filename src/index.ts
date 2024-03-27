@@ -28,14 +28,17 @@ app.get("/", (req, res) => {
 	if (!parseInt(req.cookies.no_3d) && !req.query.no_3d) res.sendFile("index.html", { root });
 	else res.render("plain", { page: 0 });
 });
+app.get("/api/ping", (_req, res) => res.sendStatus(200));
+
+// discord bot stuff
 app.get("/n0rthwestw1nd/manual", (req, res) => res.sendFile("assets/safe_manual.pdf", { root }));
 app.get("/n0rthwestw1nd/manual/:ver", (req, res) => {
 	if (req.params.ver === "unsafe") res.sendFile("assets/unsafe_manual.pdf", { root });
 	else if (req.params.ver === "tradew1nd") res.sendFile("assets/tradew1nd_manual.pdf", { root });
 	else res.sendFile("assets/safe_manual.pdf", { root });
 });
-app.get("/api/ping", (_req, res) => res.sendStatus(200));
 
+// tradew1nd bot stuff
 app.get("/api/download/:guild", async (req, res) => {
 	const response = await fetch("http://localhost:3001/download/" + req.params.guild);
 	if (!response.ok) res.sendStatus(response.status);
@@ -68,6 +71,7 @@ app.get("/tradew1nd/invite/real", async (req, res) => {
 
 app.get("/tradew1nd/privacy", (_req, res) => res.render("tradew1nd/privacy"));
 app.get("/tradew1nd", (_req, res) => res.render("tradew1nd/index"));
+// redirectors
 app.get("/matrix", (_req, res) => res.redirect(301, "https://matrix.to/#/#northwestwind:matrix.northwestw.in"));
 app.get("/portal", (_req, res) => res.render("portal"));
 
@@ -77,6 +81,12 @@ app.get("/files/:path", (req, res) => {
 	res.json(fs.readdirSync(path.join(".", p)));
 });
 
+// uop editor
+app.get("/uop-editor", (req, res) => {
+	res.sendFile("uop-editor.html", { root });
+});
+
+// elevator
 app.get("/:page", (req, res, next) => {
 	if (!PAGES.includes(req.params.page)) next();
 	else {
