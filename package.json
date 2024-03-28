@@ -14,7 +14,7 @@
         "build:404": "cd vite/404 && npm run build",
         "install:uop-editor": "cd uop-editor && npm i",
         "build:uop-editor": "cd uop-editor && npm run build",
-        "postbuild:uop-editor": "cp -r uop-editor/dist/uop-editor-assets public/uop-editor-assets && cp uop-editor/dist/index.html public/uop-editor.html"
+        "postbuild:uop-editor": "cp -rT uop-editor/dist/uop-editor-assets public/uop-editor-assets && cp uop-editor/dist/index.html public/uop-editor.html"
     },
     "engines": {
         "node": "16.x"
