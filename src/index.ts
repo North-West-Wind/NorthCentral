@@ -91,7 +91,7 @@ app.get("/uop-editor", (req, res) => {
 app.get("/translate", async (req, res) => {
 	const input = <string> req.query.in;
 	const result = await translate(input, { to: "en" });
-	res.send(result.text);
+	res.json({ lang: result.from.language.iso, out: result.text });
 });
 
 // elevator
