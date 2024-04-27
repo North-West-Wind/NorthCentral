@@ -16,9 +16,6 @@
         "build:uop-editor": "cd uop-editor && npm run build",
         "postbuild:uop-editor": "cp -rT uop-editor/dist/uop-editor-assets public/uop-editor-assets && cp uop-editor/dist/index.html public/uop-editor.html"
     },
-    "engines": {
-        "node": "16.x"
-    },
     "author": "NorthWestWind",
     "license": "GPL-3.0-or-later",
     "dependencies": {
@@ -28,6 +25,7 @@
         "ejs": "^3.1.6",
         "express": "^4.18.2",
         "google-translate-api-x": "^10.6.8",
+        "is-english": "^1.3.0",
         "node-fetch": "^2.6.7"
     },
     "devDependencies": {

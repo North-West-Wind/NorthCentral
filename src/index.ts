@@ -2,11 +2,11 @@ import "dotenv/config";
 import express from "express";
 import cookieParser from "cookie-parser";
 import bodyParser from "body-parser";
-const app = express();
 import fetch from "node-fetch";
 import * as fs from "fs";
-import * as path from "path";
 import translate from "google-translate-api-x";
+import * as path from "path";
+const isEnglish = require("is-english");
 
 const PAGES = [
 	"auto-fish",
@@ -18,6 +18,7 @@ const PAGES = [
 ];
 
 const root = path.resolve(__dirname, "../public");
+const app = express();
 
 app.use(express.static("public"));
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -90,6 +91,7 @@ app.get("/uop-editor", (req, res) => {
 // translator
 app.get("/translate", async (req, res) => {
 	const input = <string> req.query.in;
+	if (isEnglish(input)) return res.json({ lang: "en", out: input });
 	const result = await translate(input, { to: "en" });
 	res.json({ lang: result.from.language.iso, out: result.text });
 });
