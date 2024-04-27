@@ -6,6 +6,7 @@ const app = express();
 import fetch from "node-fetch";
 import * as fs from "fs";
 import * as path from "path";
+import translate from "google-translate-api-x";
 
 const PAGES = [
 	"auto-fish",
@@ -84,6 +85,13 @@ app.get("/files/:path", (req, res) => {
 // uop editor
 app.get("/uop-editor", (req, res) => {
 	res.sendFile("uop-editor.html", { root });
+});
+
+// translator
+app.get("/translate", async (req, res) => {
+	const input = <string> req.query.in;
+	const result = await translate(input, { to: "en" });
+	res.send(result.text);
 });
 
 // elevator
