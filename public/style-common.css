@@ -1,0 +1,181 @@
+@font-face {
+	font-family: 'OdinRounded';
+	src: url('/assets/odin-rounded.regular.otf') format("opentype");
+}
+
+body {
+	font-family: 'OdinRounded', Helvetica, sans-serif;
+	color: white;
+	background-color: black;
+	touch-action: manipulation;
+	overscroll-behavior-y: contain;
+}
+
+canvas {
+	position: fixed;
+	top: 0;
+	left: 0;
+	padding: 0;
+}
+
+.info {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	text-align: center;
+	z-index: 100;
+	background-color: rgba(51, 51, 51, 0.8);
+	transition: all .25s linear;
+	display: block;
+	overflow: auto;
+}
+
+.hidden {
+	display: none;
+}
+
+.visuallyhidden {
+	opacity: 0;
+}
+
+.info h1 {
+	font-size: 5vmax;
+}
+
+.info h2 {
+	font-size: 3vmax;
+	margin-bottom: 0;
+}
+
+.info p {
+	margin-top: 1vh;
+}
+
+.hint {
+	font-size: 1.25vmax;
+	opacity: 0.5;
+}
+
+.credits {
+	font-size: 0.75vmax;
+}
+
+.floors {
+	margin: auto;
+}
+
+.floors th {
+	text-align: right;
+}
+
+.info iframe {
+	width: 48vw;
+	height: 27vw;
+}
+
+.info iframe.manual {
+	width: 80vw;
+	height: 70vh;
+}
+
+.list {
+	margin-left: 10vmax;
+	margin-right: 10vmax;
+	text-align: left;
+}
+
+.list li {
+	font-size: 2vmax;
+	color: #ffdbdb;
+}
+
+.list p {
+	padding-left: 0;
+	padding-right: 0;
+}
+
+.hidescroll::-webkit-scrollbar {
+	display: none;
+}
+
+.hidescroll {
+	-ms-overflow-style: none;
+	scrollbar-width: none;
+}
+
+a {
+	text-decoration: none;
+	color: #fcba03;
+}
+
+a:hover {
+	text-decoration: underline;
+	cursor: pointer;
+}
+
+.avatar {
+	border-radius: 50%;
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+	width: 15vw;
+	border: 0.75vmax solid #fcba03;
+	margin-top: 1vmax;
+}
+
+.button {
+	background-color: #7289DA;
+	border: none;
+	color: white;
+	padding: 1vmax 2vmax;
+	text-align: center;
+	text-decoration: none;
+	display: inline-block;
+	font-size: 2.5vmax;
+	margin-top: 1vmax;
+	border-radius: 1vmax;
+}
+
+.cookie-info {
+	background-color: rgba(0, 0, 0, 0.5);
+	padding: 1vmax;
+	color: white;
+	font-size: 2vmax;
+	border-radius: 2vmax;
+	margin-top: 2vh;
+	margin-left: auto;
+	margin-right: auto;
+	border: 0;
+}
+
+.cookie-button {
+	border: none;
+	color: white;
+	padding: 0.5vmax;
+	text-align: center;
+	text-decoration: none;
+	display: inline-block;
+	font-size: 1vmax;
+	margin-top: 1vmax;
+	border-radius: 2vmax;
+	opacity: 1;
+	width: 8vw;
+	margin-top: 0;
+}
+
+.accept {
+	background-color: #48e65d;
+}
+
+.deny {
+	background: #fd4f4f;
+}
+
+.bg {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+}
