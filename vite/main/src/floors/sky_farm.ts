@@ -12,7 +12,7 @@ export default class SkyFarmFloor extends Floor {
 
 	generate(scene: THREE.Scene) {
 		const geometryS = new THREE.BoxGeometry(250, 2, 250);
-		const material = new THREE.MeshBasicMaterial({ color: 0x8da0ff });
+		const material = new THREE.MeshBasicMaterial({ color: 0x46c7ec });
 		const skyT = new THREE.Mesh(geometryS, material);
 		const skyB = new THREE.Mesh(geometryS, material);
 		skyT.position.set(0, 3125, -175);

@@ -41,3 +41,18 @@
   cursor: pointer;
   filter: brightness(80%);
 }
+
+#elevator {
+  z-index: 2;
+}
+
+.rain {
+  background-color: rgba(183, 255, 250, .5);
+  transition: transform .25s linear;
+  position: fixed;
+  left: -.5vmin;
+  top: -2vmin;
+  width: 1vmin;
+  height: 1vmin;
+  z-index: 1;
+}

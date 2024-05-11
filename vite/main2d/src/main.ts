@@ -2,7 +2,7 @@ import { FLOORS } from './constants';
 import { wait } from './helpers/control';
 import { getVar, setVar, toggleMusic } from './helpers/cookies';
 import { disableStylesheet, enableStylesheet } from './helpers/css';
-import { floor, started } from './states';
+import { floor } from './states';
 import './style.css';
 
 let currentFloor = Array.from(FLOORS.keys()).indexOf(window.location.pathname.split("/")[1] || "ground"), targetFloor = currentFloor;
@@ -40,7 +40,7 @@ async function loadFloor() {
 }
 
 // initial load
-loadFloor();
+loadFloor().then(updateDisplay);
 
 // toggle the closing button for content
 async function toggleCloser() {
@@ -86,11 +86,11 @@ async function anyToThree() {
   if (state == 0) {
     const audio = new Audio('/assets/lift.mp3');
     audio.play();
+    state = 1;
+    leftDoor.style.transform = "translateX(-25%)";
+    rightDoor.style.transform = "translateX(25%)";
+    await wait(1500);
   }
-  state = 1;
-  leftDoor.style.transform = "translateX(-25%)";
-  rightDoor.style.transform = "translateX(25%)";
-  await wait(1500);
   state = 2;
   const rect = leftDoor.getBoundingClientRect();
   const scale = Math.max(window.innerWidth / (rect.width * 2), window.innerHeight / rect.height);
@@ -104,7 +104,7 @@ async function anyToThree() {
 
 // transition from state 3 to 4
 async function threeToFour() {
-  await wait(1500);
+  await wait(500);
   state = 4;
   elevator.style.transform = "";
   background.style.transform = "";
@@ -174,10 +174,7 @@ floorButton.onmouseup = async () => {
 window.onclick = () => {
   if (clickOnButton) clickOnButton = false;
   else {
-    if (!started()) {
-      started(true);
-      anyToThree();
-    } else if (state == 4) anyToThree();
+    if (state == 0 || state == 4) anyToThree();
   }
 }
 
