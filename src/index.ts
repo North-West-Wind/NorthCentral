@@ -95,13 +95,16 @@ app.get("/translate", async (req, res) => {
 	try {
 		const result = await translate(input, { to: "en" });
 		const useDeepL = !!req.query.deepl;
+		const send = { lang: result.from.language.iso, out: "" };
 		if (useDeepL) {
 			const resp = await fetch("https://deeplx.vercel.app/translate", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ text: input, source_lang: "auto", target_lang: "EN" }) });
 			if (!resp.ok) return res.sendStatus(resp.status);
 			const json = await resp.json();
 			if (Math.floor(json.code / 100) != 2) return res.sendStatus(json.code);
-			res.json({ lang: result.from.language.iso, out: json.data });
-		} else res.json({ lang: result.from.language.iso, out: result.text });
+			if (isEnglish(json.data)) send.out = result.text;
+			else send.out = json.data;
+		} else send.out = result.text;
+		res.json(send);
 	} catch (err) {
 		console.error(err);
 		res.sendStatus(500);
