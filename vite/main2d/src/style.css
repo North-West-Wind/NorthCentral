@@ -30,11 +30,11 @@
 
 #closer {
   top: 1vmin;
-  right: 1vmin;
+  right: 5vmin;
   position: fixed;
 	transition: all .25s linear;
   z-index: 1001;
-  font-size: 5vmax;
+  font-size: 10vmin;
 }
 
 #closer:hover {
@@ -55,4 +55,14 @@
   width: 1vmin;
   height: 1vmin;
   z-index: 1;
+}
+
+.sheet-back {
+	text-decoration: none;
+	color: #fcba03;
+}
+
+.sheet-back:hover {
+	text-decoration: underline;
+	cursor: pointer;
 }

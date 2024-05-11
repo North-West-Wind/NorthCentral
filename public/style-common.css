@@ -105,12 +105,12 @@ canvas {
 	scrollbar-width: none;
 }
 
-a {
+a, .sheet-list li {
 	text-decoration: none;
 	color: #fcba03;
 }
 
-a:hover {
+a:hover,  .sheet-list li:hover {
 	text-decoration: underline;
 	cursor: pointer;
 }
@@ -178,4 +178,11 @@ a:hover {
 	top: 0;
 	left: 0;
 	width: 100%;
+}
+
+.sheet-list {
+	width: fit-content;
+	text-align: left;
+	margin: auto;
+	font-size: 2vmax;
 }
