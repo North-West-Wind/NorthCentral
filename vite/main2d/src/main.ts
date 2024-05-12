@@ -264,7 +264,7 @@ function resize() {
   const canTouchDiff = newCanTouch != canTouch;
   canTouch = newCanTouch;
 
-  maxTrans = window.innerWidth * 9 * 100 / (window.innerHeight * 32);
+  maxTrans = (8 / (window.innerWidth * 9 / window.innerHeight) - 0.5) * 100;
 
   if (state == 3) {
     if (resizeTimeout) clearTimeout(resizeTimeout);
