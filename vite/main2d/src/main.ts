@@ -2,11 +2,12 @@ import { FLOORS } from './constants';
 import { wait } from './helpers/control';
 import { getVar, setVar, toggleMusic } from './helpers/cookies';
 import { disableStylesheet, enableStylesheet } from './helpers/css';
+import { clamp } from './helpers/math';
 import { floor } from './states';
 
 let currentFloor = Array.from(FLOORS.keys()).indexOf(window.location.pathname.split("/").pop() || "ground"), targetFloor = currentFloor;
 let moving = 0; // 1 means up, -1 means down, 0 means not moving
-let state = 0; // 0 inside, 1 opening, 2 zooming, 3 htmling, 4 backing, 5 closing
+let state = 0; // 0 inside, 1 opening, 2 zooming, 3 htmling, 4 backing, 5 stay, 6 closing
 let elevatorScale = 1; // scale for resizing
 
 // setup element references
@@ -70,7 +71,7 @@ async function toggleContent() {
     toggleCloser();
     floor().unloadContent(info);
     info.innerHTML = "";
-    threeToFour();
+    threeToFive();
 		function onTransitionEnd() {
 			info.classList.add('hidden');
 			info.removeEventListener("transitionend", onTransitionEnd);
@@ -91,6 +92,11 @@ async function anyToThree() {
     await wait(1500);
   }
   state = 2;
+  // in case touch offset is happening
+  elevator.style.transitionDuration = "";
+  elevator.style.transitionTimingFunction = "";
+  background.style.transitionDuration = "";
+  background.style.transitionTimingFunction = "";
   const rect = leftDoor.getBoundingClientRect();
   const scale = Math.max(window.innerWidth / (rect.width * 2), window.innerHeight / rect.height);
   elevatorScale = scale;
@@ -102,17 +108,19 @@ async function anyToThree() {
 }
 
 // transition from state 3 to 4
-async function threeToFour() {
+async function threeToFive() {
   await wait(500);
   state = 4;
   elevator.style.transform = "";
   background.style.transform = "";
   elevatorScale = 1;
+  await wait(1500);
+  state = 5;
 }
 
 // transition from state 4 to 0
-async function fourToZero() {
-  state = 5;
+async function fiveToZero() {
+  state = 6;
   leftDoor.style.transform = "";
   rightDoor.style.transform = "";
   await wait(1500);
@@ -120,46 +128,41 @@ async function fourToZero() {
 }
 
 let clickOnButton = false;
-// up button handlers
-upButton.onmousedown = () => {
+const buttonPress = (button: SVGElement) => {
   clickOnButton = true;
-  upButton.style.fill = "#f7eb93";
-}
-upButton.onmouseup = () => {
-  upButton.style.fill = "#bbbbbb";
-  targetFloor = Math.min(FLOORS.size - 1, targetFloor + 1);
+  button.style.fill = "#f7eb93";
+};
+const buttonRelease = (button: SVGElement, deltaFloor: number) => {
+  button.style.fill = "#bbbbbb";
+  targetFloor = deltaFloor > 0 ? Math.min(FLOORS.size - 1, targetFloor + deltaFloor) : Math.max(0, targetFloor + deltaFloor);
   updateDisplay();
-}
-upButton.onmouseleave = () => {
+};
+const buttonCancel = (button: SVGElement) => {
   clickOnButton = false;
-  upButton.style.fill = "#bbbbbb";
-}
+  button.style.fill = "#bbbbbb";
+};
+// up button handlers
+upButton.onmousedown = () => buttonPress(upButton);
+upButton.ontouchstart = () => buttonPress(upButton);
+upButton.onclick = () => buttonRelease(upButton, 1);
+upButton.onmouseleave = () => buttonCancel(upButton);
 
 // down button handlers
-downButton.onmousedown = () => {
-  clickOnButton = true;
-  downButton.style.fill = "#f7eb93";
-}
-downButton.onmouseup = () => {
-  downButton.style.fill = "#bbbbbb";
-  targetFloor = Math.max(0, targetFloor - 1);
-  updateDisplay();
-}
-downButton.onmouseleave = () => {
-  clickOnButton = false;
-  downButton.style.fill = "#bbbbbb";
-}
+downButton.onmousedown = () => buttonPress(downButton);
+downButton.ontouchstart = () => buttonPress(downButton);
+downButton.onclick = () => buttonRelease(downButton, -1);
+downButton.onmouseleave = () => buttonCancel(downButton);
 
 // floor button handler
 floorButton.onmousedown = () => {
   clickOnButton = true;
 }
-floorButton.onmouseup = async () => {
+floorButton.onclick = async () => {
   if (moving) return;
   moving = targetFloor - currentFloor;
   updateDisplay();
   if (moving) {
-    await fourToZero();
+    await fiveToZero();
     await loadFloor();
     await wait(500 + 200 * Math.abs(moving));
     history.pushState({ floor: targetFloor }, "", "/" + (targetFloor == 0 ? "" : Array.from(FLOORS.keys())[targetFloor]));
@@ -169,11 +172,59 @@ floorButton.onmouseup = async () => {
   }
 }
 
+// touch handlers for mobile support
+let touch = { ix: 0, x: 0, offset: 0 };
+let canTouch = false;
+window.ontouchstart = (evt) => {
+  if (!canTouch) return;
+  if (state == 2 || state == 4) {
+    touch.offset = 0;
+    return;
+  }
+  touch.x = touch.ix = Array.from(evt.touches).map(t => t.clientX).reduce((a, b) => a + b) / evt.touches.length;
+  elevator.style.transitionDuration = "0s";
+  elevator.style.transitionTimingFunction = "linear";
+  background.style.transitionDuration = "0s";
+  background.style.transitionTimingFunction = "linear";
+}
+window.ontouchend = (evt) => {
+  if (!canTouch) return;
+  if (state == 2 || state == 4) {
+    touch.offset = 0;
+    return;
+  }
+  if (evt.touches.length) touch.ix = Array.from(evt.touches).map(t => t.clientX).reduce((a, b) => a + b) / evt.touches.length;
+  else {
+    touch.offset = clamp((touch.x - touch.ix) * 100 / window.innerWidth + touch.offset, -35, 35);
+    elevator.style.transitionDuration = "";
+    elevator.style.transitionTimingFunction = "";
+    background.style.transitionDuration = "";
+    background.style.transitionTimingFunction = "";
+  }
+}
+window.ontouchmove = (evt) => {
+  if (!canTouch) return;
+  if (state == 2 || state == 4) {
+    touch.offset = 0;
+    return;
+  }
+  touch.x = Array.from(evt.touches).map(t => t.clientX).reduce((a, b) => a + b) / evt.touches.length;
+  const offset = clamp((touch.x - touch.ix) * 100 / window.innerWidth + touch.offset, -35, 35);
+  if (state == 3) {
+    elevator.style.transform = `scale(${elevatorScale}, ${elevatorScale})`;
+    background.style.transform = `translateX(${offset}%) scale(1.2, 1.2)`;
+  }
+  else {
+    elevator.style.transform = `translateX(${offset}%)`;
+    background.style.transform = `translateX(${offset / 4}%)`;
+  }
+}
+
 // initial click-starter
 window.onclick = () => {
   if (clickOnButton) clickOnButton = false;
   else {
-    if (state == 0 || state == 4) anyToThree();
+    if (state == 0 || state == 5) anyToThree();
   }
 }
 
@@ -188,6 +239,10 @@ function resize() {
     disableStylesheet(document.getElementById("vertical"));
   }
 
+  const newCanTouch = window.innerWidth / window.innerHeight < 1.25;
+  const canTouchDiff = newCanTouch != canTouch;
+  canTouch = newCanTouch;
+
   if (state == 3) {
     if (resizeTimeout) clearTimeout(resizeTimeout);
     resizeTimeout = setTimeout(() => {
@@ -197,6 +252,11 @@ function resize() {
       elevator.style.transform = `scale(${scale}, ${scale})`;
       resizeTimeout = undefined;
     }, 100);
+
+    if (canTouchDiff && !canTouch) background.style.transform = "scale(1.2, 1.2)";
+  } else if (canTouchDiff && !canTouch) {
+    elevator.style.transform = "";
+    background.style.transform = "";
   }
 }
 
@@ -229,9 +289,9 @@ window.onpopstate = async () => {
   if (moving) {
     if (state == 3) {
       if (!info.classList.contains("hidden")) toggleContent();
-      await threeToFour();
+      await threeToFive();
     }
-    if (state == 4) await fourToZero();
+    if (state == 5) await fiveToZero();
     await loadFloor();
     await wait(500 + 200 * Math.abs(moving));
     moving = 0;
