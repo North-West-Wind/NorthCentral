@@ -3,11 +3,12 @@ import Floor from "../types/floor";
 import { GLTF_LOADED } from "../loaders";
 import { camera, rotatedY, touched } from "../states";
 import { hideOrUnhideInfo, openOrCloseInfo, setInnerHTML } from "../helpers/html";
-import { readPageGenerator } from "../helpers/reader";
+import { readPage } from "../helpers/reader";
+import { LazyLoader } from "../types/misc";
 
 const PARTICLE_DISTANCE = 200;
 const SHRINK_PARTICLE_DISTANCE = 20;
-const N0RTHWESTW1ND_CONTENTS: (() => Promise<string> | string)[] = [];
+const N0RTHWESTW1ND_CONTENTS: LazyLoader<string>[] = [];
 
 const div = document.getElementById("info")!;
 export default class N0rthWestW1ndFloor extends Floor {
@@ -24,7 +25,7 @@ export default class N0rthWestW1ndFloor extends Floor {
 	}
 
 	static {
-		for (let i = 0; i < 3; i++) readPageGenerator(`/contents/n0rthwestw1nd/info-${i}.html`, N0RTHWESTW1ND_CONTENTS);
+		for (let i = 0; i < 3; i++) N0RTHWESTW1ND_CONTENTS.push(new LazyLoader(() => readPage(`/contents/n0rthwestw1nd/info-${i}.html`)))
 	}
 
 	spawn(scene: THREE.Scene) {
@@ -106,7 +107,7 @@ export default class N0rthWestW1ndFloor extends Floor {
 	private openOrCloseNWWInfo(index = 0) {
 		hideOrUnhideInfo(async hidden => {
 			if (hidden) setInnerHTML(div, "");
-			else setInnerHTML(div, await N0RTHWESTW1ND_CONTENTS[index]());
+			else setInnerHTML(div, await N0RTHWESTW1ND_CONTENTS[index].get());
 		});
 	}
 

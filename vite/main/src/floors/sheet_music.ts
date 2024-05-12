@@ -3,19 +3,27 @@ import Floor from "../types/floor";
 import { GLTF_LOADED } from "../loaders";
 import { camera, rotatedY, started } from "../states";
 import { hideOrUnhideInfo, setInnerHTML } from "../helpers/html";
-import { readPageGenerator } from "../helpers/reader";
+import { readPage } from "../helpers/reader";
+import { LazyLoader } from "../types/misc";
 
-export const SHEETMUSIC_CONTENTS: (() => Promise<string> | string)[] = [];
+const SHEETS = 12;
+
+export const SHEETMUSIC_CONTENTS: LazyLoader<string>[] = [];
 export const SHEETMUSIC_TITLES: string[] = [];
+
+(async () => {
+	for (let i = 0; i < SHEETS; i++) {
+		const loader = new LazyLoader(() => readPage(`/contents/sheetmusic/info-${i}.html`));
+		SHEETMUSIC_CONTENTS.push(loader);
+		// be not lazy
+		const content = await loader.get();
+		SHEETMUSIC_TITLES.push(content.match(/\<h1\>(?<name>.+)\<\/h1\>/)![1]);
+	}
+})();
 
 const div = document.getElementById("info")!;
 export default class SheetMusicFloor extends Floor {
-	static readonly SHEETS = 12;
 	sheets?: THREE.Mesh[];
-
-	static {
-		for (let i = 0; i < SheetMusicFloor.SHEETS; i++) readPageGenerator(`/contents/sheetmusic/info-${i}.html`, SHEETMUSIC_CONTENTS, /\<h1\>(?<name>.+)\<\/h1\>/, SHEETMUSIC_TITLES);
-	}
 
 	constructor() {
 		super("sheet-music", 5);
@@ -60,7 +68,7 @@ export default class SheetMusicFloor extends Floor {
 		const geometryS = new THREE.BoxGeometry(5, 0.1, 5 * Math.SQRT2);
 		const materialS = new THREE.MeshStandardMaterial({ color: 0x777777 });
 		this.sheets = [];
-		for (let i = 0; i < SheetMusicFloor.SHEETS; i++) {
+		for (let i = 0; i < SHEETS; i++) {
 			const xm = new THREE.MeshStandardMaterial({ map: await this.sheetTexture(i), transparent: true });
 			const sheet = new THREE.Mesh(geometryS, [materialS, materialS, xm, materialS, materialS, materialS]);
 			sheet.position.set(THREE.MathUtils.randFloatSpread(40), 4965.9875 + THREE.MathUtils.randFloatSpread(0.001), THREE.MathUtils.randFloatSpread(20) - 195);
@@ -99,7 +107,7 @@ export default class SheetMusicFloor extends Floor {
 	private openOrCloseSheetInfo(index: number) {
 		hideOrUnhideInfo(async hidden => {
 			if (hidden) setInnerHTML(div, "");
-			else setInnerHTML(div, await SHEETMUSIC_CONTENTS[index]());
+			else setInnerHTML(div, await SHEETMUSIC_CONTENTS[index].get());
 		});
 	}
 

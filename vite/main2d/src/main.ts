@@ -165,7 +165,7 @@ floorButton.onclick = async () => {
     await fiveToZero();
     await loadFloor();
     await wait(500 + 200 * Math.abs(moving));
-    history.pushState({ floor: targetFloor }, "", "/" + (targetFloor == 0 ? "" : Array.from(FLOORS.keys())[targetFloor]));
+    history.pushState({ floor: targetFloor }, "", "/2d/" + (targetFloor == 0 ? "" : Array.from(FLOORS.keys())[targetFloor]));
     moving = 0;
     updateDisplay();
     anyToThree();

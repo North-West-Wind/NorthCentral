@@ -6,12 +6,11 @@ import N0rthWestW1ndFloor from "./floors/n0rthwestw1nd";
 import NotFoundFloor from "./floors/not_found";
 import SheetMusicFloor from "./floors/sheet_music";
 import SkyFarmFloor from "./floors/sky_farm";
-import { readPageGenerator } from "./helpers/reader";
+import { readPage } from "./helpers/reader";
 import Floor from "./types/floor";
+import { LazyLoader } from "./types/misc";
 
-export const CONTENTS: (() => Promise<string> | string)[] = [];
-
-readPageGenerator("/contents/information.html", CONTENTS);
+export const CONTENTS = new Map<number, LazyLoader<string>>();
 
 export const FLOORS = new Map<string, Floor>();
 export const STATUS_FLOORS = new Map<number, Floor>();
@@ -33,11 +32,8 @@ addFloor(new GalleryFloor());
 
 addStatusFloor(new NotFoundFloor());
 
-var skipFirst = true;
-for (const page of FLOORS.keys()) {
-	if (skipFirst) {
-		skipFirst = false;
-		continue;
-	}
-	readPageGenerator(`/contents/${page}.html`, CONTENTS);
-}
+for (const floor of FLOORS.values())
+	CONTENTS.set(floor.num, new LazyLoader(() => readPage(`/contents/${floor.id}.html`)));
+
+for (const floor of STATUS_FLOORS.values())
+	CONTENTS.set(floor.num, new LazyLoader(() => readPage(`/contents/${floor.id}.html`)));

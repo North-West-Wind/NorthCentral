@@ -9,6 +9,7 @@ export default abstract class Floor {
 	listenClick = false;
 	listenMove = false;
 	listenUpdate = false;
+	special = false;
 	private meshes?: Generated;
 
 	constructor(id: string, num: number) {

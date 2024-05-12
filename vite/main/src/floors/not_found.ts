@@ -6,6 +6,7 @@ import { GLTF_LOADED } from "../loaders";
 export default class NotFoundFloor extends Floor {
 	constructor() {
 		super("not-found", 404); // 404 is completely for aesthetics lol
+		this.special = true;
 	}
 
 	spawn(scene: THREE.Scene) {

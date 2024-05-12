@@ -1,7 +1,5 @@
 import { getVar, setVar, toggleMusic } from "../helpers/cookies";
-import { readPage } from "../helpers/reader";
 import Floor from "../types/floor";
-import { LazyLoader } from "../types/misc";
 
 const ID = "ground";
 
@@ -36,7 +34,7 @@ export default class GroundFloor extends Floor {
 	spawnTimer?: NodeJS.Timer;
 
 	constructor() {
-		super(ID, 0, { content: new LazyLoader(() => readPage("/contents/information.html")) });
+		super(ID, 0);
 	}
 
 	loadSvg() {

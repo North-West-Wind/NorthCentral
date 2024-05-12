@@ -5,7 +5,7 @@ export function gotoRoot() {
 	document.location.href = "/";
 }
 
-export function setInnerHTML(elm: HTMLElement, html: string) {
+export function setInnerHTML(elm: HTMLElement, html = "") {
 	elm.innerHTML = html;
 	Array.from(elm.querySelectorAll("script")).forEach(oldScript => {
 		const newScript = document.createElement("script");
@@ -48,7 +48,7 @@ export function openOrCloseInfo(index = 0) {
 	hideOrUnhideInfo(async hidden => {
 		if (hidden) setInnerHTML(div, "");
 		else {
-			setInnerHTML(div, await CONTENTS[index]());
+			setInnerHTML(div, await CONTENTS.get(index)?.get());
 			if (!index) {
 				// Add buttons functionality
 				if (getVar("answered")) {

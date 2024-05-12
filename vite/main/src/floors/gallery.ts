@@ -2,8 +2,11 @@ import * as THREE from "three";
 import Floor from "../types/floor";
 import { camera } from "../states";
 import { LOADER } from "../loaders";
-import { readPageGenerator } from "../helpers/reader";
+import { readPage } from "../helpers/reader";
 import { hideOrUnhideInfo, setInnerHTML } from "../helpers/html";
+import { LazyLoader } from "../types/misc";
+
+const TEMPLATE = new LazyLoader(() => readPage("/contents/gallery/template.html"));
 
 const PAINTINGS = 20;
 const PAINTING_LENGTH = 50;
@@ -12,7 +15,6 @@ const FLOOR_LENGTH = Math.ceil((PAINTINGS - 1) * 0.5) * LENGTH_PER_PAINTING;
 
 const div = document.getElementById("info")!;
 export default class GalleryFloor extends Floor {
-	private static templateGenerator: (() => Promise<string> | string);
 	private static fileNames: string[];
 	paintings: THREE.Mesh[] = [];
 
@@ -23,7 +25,6 @@ export default class GalleryFloor extends Floor {
 	}
 
 	static {
-		this.templateGenerator = readPageGenerator("/contents/gallery/template.html", [])[0];
 		fetch(`/files/${encodeURIComponent("public/assets/pfps")}`).then(async res => {
 			if (!res.ok) return;
 			const files = <string[]>await res.json();
@@ -139,7 +140,7 @@ export default class GalleryFloor extends Floor {
 			else {
 				const file = GalleryFloor.fileNames[index];
 				if (!file) return;
-				setInnerHTML(div, (await GalleryFloor.templateGenerator()).replace("{title}", file.split(" ").slice(1).join(" ").split(".").slice(0, -1).join(".")).replace("{src}", `assets/pfps/${file}`));
+				setInnerHTML(div, (await TEMPLATE.get()).replace("{title}", file.split(" ").slice(1).join(" ").split(".").slice(0, -1).join(".")).replace("{src}", `assets/pfps/${file}`));
 			}
 		});
 	}
