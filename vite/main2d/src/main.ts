@@ -176,6 +176,7 @@ floorButton.onclick = async () => {
 // touch handlers for mobile support
 let touch = { ix: 0, x: 0, offset: 0 };
 let canTouch = false, mouseDown = false;
+let maxTrans = 0;
 const touchCheck = () => {
   if (!canTouch) return false;
   if (state == 2 || state == 4) {
@@ -202,7 +203,7 @@ window.onmousedown = (evt) => {
   instantAnimate();
 }
 const resetAnimate = () => {
-  touch.offset = clamp((touch.x - touch.ix) * 100 / window.innerWidth + touch.offset, -35, 35);
+  touch.offset = clamp((touch.x - touch.ix) * 100 / window.innerWidth + touch.offset, -maxTrans, maxTrans);
   elevator.style.transitionDuration = "";
   elevator.style.transitionTimingFunction = "";
   background.style.transitionDuration = "";
@@ -223,7 +224,7 @@ window.onmouseup = () => {
   else if (touch.x == touch.ix && (state == 0 || state == 5)) anyToThree();
 }
 const translateBackground = () => {
-  const offset = clamp((touch.x - touch.ix) * 100 / window.innerWidth + touch.offset, -35, 35);
+  const offset = clamp((touch.x - touch.ix) * 100 / window.innerWidth + touch.offset, -maxTrans, maxTrans);
   if (state == 3) {
     elevator.style.transform = `scale(${elevatorScale}, ${elevatorScale})`;
     background.style.transform = `translateX(${offset}%) scale(1.2, 1.2)`;
@@ -258,6 +259,8 @@ function resize() {
   const newCanTouch = window.innerWidth / window.innerHeight < 1.25;
   const canTouchDiff = newCanTouch != canTouch;
   canTouch = newCanTouch;
+
+  maxTrans = window.innerWidth * 9 / (window.innerHeight * 32);
 
   if (state == 3) {
     if (resizeTimeout) clearTimeout(resizeTimeout);
