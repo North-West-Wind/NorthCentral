@@ -155,9 +155,8 @@ downButton.onclick = () => buttonRelease(downButton, -1);
 downButton.onmouseleave = () => buttonCancel(downButton);
 
 // floor button handler
-floorButton.onmousedown = () => {
-  clickOnButton = true;
-}
+floorButton.onmousedown = () => clickOnButton = true;
+floorButton.ontouchstart = () => clickOnButton = true;
 floorButton.onclick = async () => {
   if (moving) return;
   moving = targetFloor - currentFloor;
