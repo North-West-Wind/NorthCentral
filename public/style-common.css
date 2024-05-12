@@ -105,12 +105,12 @@ canvas {
 	scrollbar-width: none;
 }
 
-a, .sheet-list li {
+a, .link-like * {
 	text-decoration: none;
 	color: #fcba03;
 }
 
-a:hover,  .sheet-list li:hover {
+a:hover, .link-like *:hover {
 	text-decoration: underline;
 	cursor: pointer;
 }
@@ -180,9 +180,102 @@ a:hover,  .sheet-list li:hover {
 	width: 100%;
 }
 
+/* 2d specific */
+
+.background {
+  position: fixed;
+  margin: 0;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  transition: transform 1s ease;
+  transform-origin: center bottom;
+}
+
+.background svg {
+  width: auto;
+  height: auto;
+  min-height: 100%;
+  min-width: 100%;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  position: relative;
+}
+
+.elevator-button:hover {
+  cursor: pointer;
+}
+
+.elevator-door {
+  transition: all 1s linear;
+}
+
+#closer {
+  top: 1vmin;
+  right: 5vmin;
+  position: fixed;
+	transition: all .25s linear;
+  z-index: 1001;
+  font-size: 10vmin;
+}
+
+#closer:hover {
+  cursor: pointer;
+  filter: brightness(80%);
+}
+
+#elevator {
+  z-index: 2;
+}
+
+.rain {
+  background-color: rgba(183, 255, 250, .5);
+  transition: transform .25s linear;
+  position: fixed;
+  left: -.5vmin;
+  top: -2vmin;
+  width: 1vmin;
+  height: 1vmin;
+  z-index: 1;
+}
+
 .sheet-list {
 	width: fit-content;
 	text-align: left;
 	margin: auto;
 	font-size: 2vmax;
+}
+
+.sheet-back {
+	text-decoration: none;
+	color: #fcba03;
+}
+
+.sheet-back:hover {
+	text-decoration: underline;
+	cursor: pointer;
+}
+
+.flex {
+	display: flex;
+}
+
+.flex.vcenter {
+	align-items: center;
+}
+
+.flex.hcenter {
+	justify-content: center;
+}
+
+.gallery-entry {
+	width: 50%;
+}
+
+.gallery-entry img {
+	position: relative;
+	width: 50%;
+	border-radius: 2vmax;
 }

@@ -27,8 +27,8 @@ app.set('views', path.resolve(__dirname, "../views"));
 app.set('view engine', 'ejs');
 
 app.get("/", (req, res) => {
-	if (!parseInt(req.cookies.no_3d) && !req.query.no_3d) res.sendFile("index.html", { root });
-	else res.render("plain", { page: 0 });
+	if (!parseInt(req.cookies.no_3d) && !req.query.no_3d) res.sendFile("main.html", { root });
+	else res.sendFile("main2d.html", { root });
 });
 app.get("/api/ping", (_req, res) => res.sendStatus(200));
 
@@ -115,8 +115,8 @@ app.get("/translate", async (req, res) => {
 app.get("/:page", (req, res, next) => {
 	if (!PAGES.includes(req.params.page)) next();
 	else {
-		if (!parseInt(req.cookies.no_3d) && !req.query.no_3d) res.sendFile("index.html", { root });
-		else res.render("plain", { page: req.params.page });
+		if (!parseInt(req.cookies.no_3d) && !req.query.no_3d) res.sendFile("main.html", { root });
+		else res.sendFile("main2d.html", { root });
 	}
 });
 

@@ -3,9 +3,8 @@ import { wait } from './helpers/control';
 import { getVar, setVar, toggleMusic } from './helpers/cookies';
 import { disableStylesheet, enableStylesheet } from './helpers/css';
 import { floor } from './states';
-import './style.css';
 
-let currentFloor = Array.from(FLOORS.keys()).indexOf(window.location.pathname.split("/")[1] || "ground"), targetFloor = currentFloor;
+let currentFloor = Array.from(FLOORS.keys()).indexOf(window.location.pathname.split("/").pop() || "ground"), targetFloor = currentFloor;
 let moving = 0; // 1 means up, -1 means down, 0 means not moving
 let state = 0; // 0 inside, 1 opening, 2 zooming, 3 htmling, 4 backing, 5 closing
 let elevatorScale = 1; // scale for resizing

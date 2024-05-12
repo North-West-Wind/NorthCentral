@@ -1,4 +1,5 @@
 import AutoFishFloor from "./floors/auto_fish";
+import GalleryFloor from "./floors/gallery";
 import GroundFloor from "./floors/ground";
 import MoreBootsFloor from "./floors/more_boots";
 import N0rthWestW1ndFloor from "./floors/n0rthwestw1nd";
@@ -19,3 +20,4 @@ addFloor(new MoreBootsFloor());
 addFloor(new SkyFarmFloor());
 addFloor(new N0rthWestW1ndFloor());
 addFloor(new SheetMusicFloor());
+addFloor(new GalleryFloor());

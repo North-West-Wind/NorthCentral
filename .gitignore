@@ -6,8 +6,9 @@ tmp
 dist
 out
 public/js/index-*.js
-public/index.html
+public/main.html
 public/404.html
+public/main2d.html
 
 vite/**/public
 
