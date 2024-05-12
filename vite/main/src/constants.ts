@@ -32,8 +32,5 @@ addFloor(new GalleryFloor());
 
 addStatusFloor(new NotFoundFloor());
 
-for (const floor of FLOORS.values())
-	CONTENTS.set(floor.num, new LazyLoader(() => readPage(`/contents/${floor.id}.html`)));
-
-for (const floor of STATUS_FLOORS.values())
-	CONTENTS.set(floor.num, new LazyLoader(() => readPage(`/contents/${floor.id}.html`)));
+for (const floor of Array.from(FLOORS.values()).concat(Array.from(STATUS_FLOORS.values())))
+	CONTENTS.set(floor.num, new LazyLoader(() => readPage(`/contents/${floor.num}-${floor.id}.html`)));
