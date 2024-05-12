@@ -1,4 +1,5 @@
 import * as THREE from "three";
+import WebGL from "three/examples/jsm/capabilities/WebGL.js";
 import { displayTexture, makeLift } from "./generators";
 import { getGotoFloor, getRatio, setActualFloor, setCamera, setCurrentFloor, setFloor, setGotoFloor, setPassedInFloor, setRatio, setRenderer, setSpawned } from "./states";
 import { enableStylesheet, disableStylesheet } from "./helpers/css";
@@ -6,6 +7,13 @@ import { getVar, setVar, toggleMusic } from "./helpers/cookies";
 import { holdModelLoads } from "./loaders";
 import { FLOORS } from "./constants";
 import "./handler";
+
+if (!WebGL.isWebGLAvailable()) {
+  alert("WebGL is not supported! You have lost your privilege to the R³ space.");
+  const split = window.location.href.split("/");
+  split.splice(3, 0, "2d");
+  window.location.href = split.join("/");
+}
 
 const passedInFloor = setPassedInFloor(Array.from(FLOORS.keys()).indexOf(window.location.pathname.split("/")[1]));
 
@@ -49,7 +57,6 @@ export function despawnOutside() {
 }
 
 export function resize() {
-  console.log("resizing")
   camera.aspect = window.innerWidth / window.innerHeight;
   camera.updateProjectionMatrix();
   renderer.setPixelRatio(window.devicePixelRatio);

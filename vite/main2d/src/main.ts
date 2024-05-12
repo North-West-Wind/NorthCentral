@@ -5,7 +5,8 @@ import { disableStylesheet, enableStylesheet } from './helpers/css';
 import { clamp } from './helpers/math';
 import { floor } from './states';
 
-let currentFloor = Array.from(FLOORS.keys()).indexOf(window.location.pathname.split("/").pop() || "ground"), targetFloor = currentFloor;
+const page = window.location.pathname.split("/").pop();
+let currentFloor = Array.from(FLOORS.keys()).indexOf(page == "2d" || !page ? "ground" : page), targetFloor = currentFloor;
 let moving = 0; // 1 means up, -1 means down, 0 means not moving
 let state = 0; // 0 inside, 1 opening, 2 zooming, 3 htmling, 4 backing, 5 stay, 6 closing
 let elevatorScale = 1; // scale for resizing
@@ -174,41 +175,54 @@ floorButton.onclick = async () => {
 
 // touch handlers for mobile support
 let touch = { ix: 0, x: 0, offset: 0 };
-let canTouch = false;
-window.ontouchstart = (evt) => {
-  if (!canTouch) return;
+let canTouch = false, mouseDown = false;
+const touchCheck = () => {
+  if (!canTouch) return false;
   if (state == 2 || state == 4) {
     touch.offset = 0;
-    return;
+    return false;
   }
-  touch.x = touch.ix = Array.from(evt.touches).map(t => t.clientX).reduce((a, b) => a + b) / evt.touches.length;
+  return true;
+}
+const instantAnimate = () => {
   elevator.style.transitionDuration = "0s";
   elevator.style.transitionTimingFunction = "linear";
   background.style.transitionDuration = "0s";
   background.style.transitionTimingFunction = "linear";
 }
-window.ontouchend = (evt) => {
-  if (!canTouch) return;
-  if (state == 2 || state == 4) {
-    touch.offset = 0;
-    return;
-  }
-  if (evt.touches.length) touch.ix = Array.from(evt.touches).map(t => t.clientX).reduce((a, b) => a + b) / evt.touches.length;
-  else {
-    touch.offset = clamp((touch.x - touch.ix) * 100 / window.innerWidth + touch.offset, -35, 35);
-    elevator.style.transitionDuration = "";
-    elevator.style.transitionTimingFunction = "";
-    background.style.transitionDuration = "";
-    background.style.transitionTimingFunction = "";
-  }
+window.ontouchstart = (evt) => {
+  if (!touchCheck()) return;
+  touch.x = touch.ix = Array.from(evt.touches).map(t => t.clientX).reduce((a, b) => a + b) / evt.touches.length;
+  instantAnimate();
 }
-window.ontouchmove = (evt) => {
-  if (!canTouch) return;
-  if (state == 2 || state == 4) {
-    touch.offset = 0;
-    return;
+window.onmousedown = (evt) => {
+  if (!touchCheck()) return;
+  mouseDown = true;
+  touch.x = touch.ix = evt.clientX;
+  instantAnimate();
+}
+const resetAnimate = () => {
+  touch.offset = clamp((touch.x - touch.ix) * 100 / window.innerWidth + touch.offset, -35, 35);
+  elevator.style.transitionDuration = "";
+  elevator.style.transitionTimingFunction = "";
+  background.style.transitionDuration = "";
+  background.style.transitionTimingFunction = "";
+}
+window.ontouchend = (evt) => {
+  if (!touchCheck()) return;
+  if (evt.touches.length) touch.ix = Array.from(evt.touches).map(t => t.clientX).reduce((a, b) => a + b) / evt.touches.length;
+  else resetAnimate();
+}
+window.onmouseup = () => {
+  if (touchCheck()) {
+    mouseDown = false;
+    resetAnimate();
   }
-  touch.x = Array.from(evt.touches).map(t => t.clientX).reduce((a, b) => a + b) / evt.touches.length;
+  // click-starter
+  if (clickOnButton) clickOnButton = false;
+  else if (touch.x == touch.ix && (state == 0 || state == 5)) anyToThree();
+}
+const translateBackground = () => {
   const offset = clamp((touch.x - touch.ix) * 100 / window.innerWidth + touch.offset, -35, 35);
   if (state == 3) {
     elevator.style.transform = `scale(${elevatorScale}, ${elevatorScale})`;
@@ -219,13 +233,15 @@ window.ontouchmove = (evt) => {
     background.style.transform = `translateX(${offset / 4}%)`;
   }
 }
-
-// initial click-starter
-window.onclick = () => {
-  if (clickOnButton) clickOnButton = false;
-  else {
-    if (state == 0 || state == 5) anyToThree();
-  }
+window.ontouchmove = (evt) => {
+  if (!touchCheck()) return;
+  touch.x = Array.from(evt.touches).map(t => t.clientX).reduce((a, b) => a + b) / evt.touches.length;
+  translateBackground();
+}
+window.onmousemove = (evt) => {
+  if (!touchCheck() || !mouseDown) return;
+  touch.x = evt.clientX;
+  translateBackground();
 }
 
 // resize handler

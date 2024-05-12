@@ -18,7 +18,7 @@ export default class GalleryFloor extends Floor {
 
 	async loadPicture(info: HTMLDivElement, index: number) {
 		const file = FILES[index];
-		info.innerHTML = (await TEMPLATE.get()).replace("{title}", file.split(" ").slice(1).join(" ").split(".").slice(0, -1).join(".")).replace("{src}", `assets/pfps/${file}`);
+		info.innerHTML = (await TEMPLATE.get()).replace("{title}", file.split(" ").slice(1).join(" ").split(".").slice(0, -1).join(".")).replace("{src}", `/assets/pfps/${file}`);
 
 		const h1 = info.querySelector<HTMLHeadingElement>("h1")!;
 		h1.classList.add("sheet-back");
@@ -41,7 +41,7 @@ export default class GalleryFloor extends Floor {
 			const h2 = document.createElement("h2");
 			h2.innerHTML = file.split(" ").slice(1).join(" ").split(".").slice(0, -1).join(".");
 			const img = document.createElement("img");
-			img.src = `assets/pfps/${file}`;
+			img.src = `/assets/pfps/${file}`;
 			innerDiv.appendChild(h2);
 			innerDiv.appendChild(img);
 			columnDiv!.appendChild(innerDiv);

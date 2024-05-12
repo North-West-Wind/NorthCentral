@@ -26,9 +26,11 @@ app.use(cookieParser());
 app.set('views', path.resolve(__dirname, "../views"));
 app.set('view engine', 'ejs');
 
-app.get("/", (req, res) => {
-	if (!parseInt(req.cookies.no_3d) && !req.query.no_3d) res.sendFile("main.html", { root });
-	else res.sendFile("main2d.html", { root });
+app.get("/", (_req, res) => {
+	res.sendFile("main.html", { root });
+});
+app.get("/2d", (_req, res) => {
+	res.sendFile("main2d.html", { root });
 });
 app.get("/api/ping", (_req, res) => res.sendStatus(200));
 
@@ -112,12 +114,13 @@ app.get("/translate", async (req, res) => {
 });
 
 // elevator
+app.get("/2d/:page", (req, res, next) => {
+	if (!PAGES.includes(req.params.page)) next();
+	else res.sendFile("main2d.html", { root });
+});
 app.get("/:page", (req, res, next) => {
 	if (!PAGES.includes(req.params.page)) next();
-	else {
-		if (!parseInt(req.cookies.no_3d) && !req.query.no_3d) res.sendFile("main.html", { root });
-		else res.sendFile("main2d.html", { root });
-	}
+	else res.sendFile("main.html", { root });
 });
 
 app.use(function (req, res, next) {
