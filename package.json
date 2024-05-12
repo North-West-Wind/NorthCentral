@@ -12,9 +12,6 @@
         "install:elevator": "cd vite/main && npm i",
         "build:elevator": "cd vite/main && npm run build",
 
-        "install:404": "cd vite/404 && npm i",
-        "build:404": "cd vite/404 && npm run build",
-
         "install:uop-editor": "cd uop-editor && npm i",
         "build:uop-editor": "cd uop-editor && npm run build",
         "postbuild:uop-editor": "cp -rT uop-editor/dist/uop-editor-assets public/uop-editor-assets && cp uop-editor/dist/index.html public/uop-editor.html",
