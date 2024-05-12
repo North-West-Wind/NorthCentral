@@ -210,9 +210,13 @@ const resetAnimate = () => {
   background.style.transitionTimingFunction = "";
 }
 window.ontouchend = (evt) => {
-  if (!touchCheck()) return;
-  if (evt.touches.length) touch.ix = Array.from(evt.touches).map(t => t.clientX).reduce((a, b) => a + b) / evt.touches.length;
-  else resetAnimate();
+  if (touchCheck()) {
+    if (evt.touches.length) touch.ix = Array.from(evt.touches).map(t => t.clientX).reduce((a, b) => a + b) / evt.touches.length;
+    else resetAnimate();
+  }
+  // click-starter
+  if (clickOnButton) clickOnButton = false;
+  else if (touch.x == touch.ix && (state == 0 || state == 5)) anyToThree();
 }
 window.onmouseup = () => {
   if (touchCheck()) {
