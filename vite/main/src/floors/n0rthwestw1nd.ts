@@ -60,15 +60,19 @@ export default class N0rthWestW1ndFloor extends Floor {
 		const maxDist1 = 148;
 		const maxDist2 = 3;
 		const touched = getTouched();
-		var zoomLimitReached = false;
+		var zoomLimitReached = false, maxed = false;
 		if (camera.position.z <= -maxDist0) {
 			if (div.classList.contains('hidden')) {
 				if (scroll > 0 && !this.phase) {
 					if (!touched) openOrCloseInfo(this.num);
 					else zoomLimitReached = true;
+					maxed = true;
 				} else if (this.phase) {
 					camera.translateZ(-scroll);
-					if (camera.position.z < -maxDist1) camera.position.z = -maxDist1;
+					if (camera.position.z < -maxDist1) {
+						camera.position.z = -maxDist1;
+						maxed = true;
+					}
 					camera.position.x = (Math.abs(camera.position.z) - maxDist0) * maxDist2 / (maxDist1 - maxDist0);
 					setRotatedY(rotateAngle * (Math.abs(camera.position.z) - maxDist0) / (maxDist1 - maxDist0));
 					if (camera.position.z > -maxDist0) {
@@ -80,8 +84,14 @@ export default class N0rthWestW1ndFloor extends Floor {
 			}
 		} else if (!(camera.position.z == 0 && scroll < 0)) {
 			camera.translateZ(-scroll);
-			if (camera.position.z > 0) camera.position.z = 0;
-			else if (camera.position.z < -maxDist0) camera.position.z = -maxDist0;
+			if (camera.position.z > 0) {
+				camera.position.z = 0;
+				maxed = true;
+			}
+			else if (camera.position.z < -maxDist0) {
+				camera.position.z = -maxDist0;
+				maxed = true;
+			}
 			if (camera.position.z > -maxDist0) this.phase = 0;
 			if (camera.position.x != 0) camera.position.x = 0;
 		}
@@ -91,6 +101,7 @@ export default class N0rthWestW1ndFloor extends Floor {
 			openOrCloseInfo(this.num);
 			if (div.classList.contains("visuallyhidden") && !this.phase) this.phase = 1;
 		}
+		return maxed;
 	}
 
 	private openOrCloseNWWInfo(index = 0) {

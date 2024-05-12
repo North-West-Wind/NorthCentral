@@ -74,21 +74,24 @@ export default class AutoFishFloor extends Floor {
 		return { ocean, oakFloor, fishingRod, string, holder };
 	}
 
-	handleWheel(scroll: number): void {
+	handleWheel(scroll: number) {
 		const camera = getCamera();
 		if (camera.position.y != this.num * 1000) camera.position.y = this.num * 1000;
 		const rotateAngle = -1 / 2;
 		const maxDist = 70;
 		const touched = getTouched();
-		var zoomLimitReached = false;
+		var zoomLimitReached = false, maxed = false;
 		if (camera.position.z == -maxDist && scroll > 0 && !touched) {
 			if (div.classList.contains('hidden')) openOrCloseInfo(this.num);
 		} else if (!(camera.position.z == 0 && scroll < 0)) {
 			camera.translateZ(-scroll);
-			if (camera.position.z > 0) camera.position.z = 0;
-			else if (camera.position.z < -maxDist) {
+			if (camera.position.z > 0) {
+				camera.position.z = 0;
+				maxed = true;
+			} else if (camera.position.z < -maxDist) {
 				camera.position.z = -maxDist;
 				if (touched) zoomLimitReached = true;
+				maxed = true;
 			}
 		}
 
@@ -96,5 +99,6 @@ export default class AutoFishFloor extends Floor {
 		setRotatedX(rotateAngle * Math.abs(camera.position.z) / maxDist);
 
 		if (zoomLimitReached) openOrCloseInfo(this.num);
+		return maxed;
 	}
 }

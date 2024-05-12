@@ -116,13 +116,21 @@ export default class GalleryFloor extends Floor {
 	}
 
 	handleWheel(scroll: number) {
+		let maxed = false;
 		const camera = getCamera();
 		const maxDist = FLOOR_LENGTH + 10;
 		if (camera.position.z >= -maxDist) camera.translateZ(-scroll);
-		if (camera.position.z < -maxDist) camera.position.setZ(-maxDist);
-		if (camera.position.z > 0) camera.position.setZ(0);
+		if (camera.position.z < -maxDist) {
+			camera.position.setZ(-maxDist);
+			maxed = true;
+		}
+		if (camera.position.z > 0) {
+			camera.position.setZ(0);
+			maxed = true;
+		}
 		camera.position.setX(0);
 		camera.position.setY(this.num * 1000);
+		return maxed;
 	}
 
 	private openOrCloseGalleryInfo(index: number) {

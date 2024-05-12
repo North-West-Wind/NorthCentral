@@ -79,14 +79,21 @@ export default class SheetMusicFloor extends Floor {
 		const camera = getCamera();
 		const rotateAngle = -1.2;
 		const maxDist = 175;
+		let maxed = false;
 		if (!(camera.position.z == 0 && scroll < 0)) {
 			camera.translateZ(-scroll);
-			if (camera.position.z > 0) camera.position.z = 0;
-			else if (camera.position.z < -maxDist) camera.position.z = -maxDist;
+			if (camera.position.z > 0) {
+				camera.position.z = 0;
+				maxed = true;
+			} else if (camera.position.z < -maxDist) {
+				camera.position.z = -maxDist;
+				maxed = true;
+			}
 		}
 		if (camera.position.x != 0) camera.position.x = 0;
 		camera.position.y = this.num * 1000 + camera.position.z / 10;
 		setRotatedY(rotateAngle * Math.abs(camera.position.z) / maxDist);
+		return maxed;
 	}
 
 	private openOrCloseSheetInfo(index: number) {

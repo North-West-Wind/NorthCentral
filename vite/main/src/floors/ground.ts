@@ -31,6 +31,7 @@ export default class GroundFloor extends Floor {
 			camera.translateZ(camera.position.z > 0 ? -absoluted : absoluted);
 			if (Math.abs(camera.position.z) <= absoluted) camera.position.z = 0;
 		}
+		return true;
 	}
 
 	private createRain(scene: THREE.Scene, amount: number) {

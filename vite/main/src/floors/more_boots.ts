@@ -51,20 +51,25 @@ export default class MoreBootsFloor extends Floor {
 		const rotateAngle = -1.2;
 		const maxDist = 100;
 		const touched = getTouched();
-		var zoomLimitReached = false;
+		var zoomLimitReached = false, maxed = false;
 		if (camera.position.z == -maxDist && scroll > 0 && !touched) {
 			if (div.classList.contains('hidden')) openOrCloseInfo(this.num);
 		} else if (!(camera.position.z == 0 && scroll < 0)) {
 			camera.translateZ(-scroll);
-			if (camera.position.z > 0) camera.position.z = 0;
+			if (camera.position.z > 0) {
+				camera.position.z = 0;
+				maxed = true;
+			}
 			else if (camera.position.z < -maxDist) {
 				camera.position.z = -maxDist;
 				if (touched) zoomLimitReached = true;
+				maxed = true;
 			}
 		}
 		if (camera.position.x != 0) camera.position.x = 0;
 		setRotatedY(rotateAngle * Math.abs(camera.position.z) / maxDist);
 
 		if (zoomLimitReached) openOrCloseInfo(this.num);
+		return maxed;
 	}
 }

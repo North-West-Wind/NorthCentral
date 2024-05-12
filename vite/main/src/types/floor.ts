@@ -17,7 +17,7 @@ export default abstract class Floor {
 
 	abstract generate(scene: THREE.Scene): Generated | Promise<Generated>;
 
-	abstract handleWheel(scroll: number): void;
+	abstract handleWheel(scroll: number): boolean;
 
 	clickRaycast(_raycaster: THREE.Raycaster): void { }
 

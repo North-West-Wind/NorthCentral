@@ -4,6 +4,7 @@ import { openOrCloseInfo } from "./helpers/html";
 import { FLOORS } from "./constants";
 import { displayTexture } from "./generators";
 import { getCamera, getCurrentFloor, getFloor, getGotoFloor, getRatio, getRotatedX, getRotatedY, getSpawned, getStarted, getTouched, setActualFloor, setCurrentFloor, setGotoFloor, setStarted, setTouched } from "./states";
+import { wait } from "./helpers/control";
 
 window.addEventListener("resize", () => {
 	resize();
@@ -151,7 +152,6 @@ var displayPressed = false, opened = false, moving = false, starting = false, pe
 var diff = 0, scrollDisplacement = 0, scrollVelocity = 0;
 function update() {
 	if (displayPressed) {
-		poppedState = false;
 		if (opened) moving = true;
 		displayPressed = false;
 		diff = getGotoFloor() - getCurrentFloor();
@@ -203,6 +203,7 @@ function update() {
 		setTimeout(() => {
 			const gotoFloor = getGotoFloor();
 			if (!poppedState) history.pushState({ floor: gotoFloor }, "", "/" + (gotoFloor == 0 ? "" : Array.from(FLOORS.keys())[gotoFloor]));
+			else poppedState = false;
 			setActualFloor(setCurrentFloor(gotoFloor));
 			const xm = new THREE.MeshStandardMaterial({ map: displayTexture(getCurrentFloor()), transparent: true });
 			xm.map!.needsUpdate = true;
@@ -245,7 +246,14 @@ setInterval(() => {
 	}
 }, 10);
 
-window.onpopstate = () => {
+window.onpopstate = async () => {
+	if (!div.classList.contains("hidden")) openOrCloseInfo();
+	await wait(250);
+	const camera = getCamera();
+	if (camera.position.x != 0 || camera.position.z != 0) {
+		scrollDisplacement = -10000;
+		await wait(1500);
+	}
 	setGotoFloor(history.state?.floor ?? 0);
 	displayPressed = true;
 	poppedState = true;
@@ -259,5 +267,9 @@ div.addEventListener("wheel", (e) => {
 function handleWheel(scroll: number) {
 	scroll = scroll / 10;
 	if (!div.classList.contains('hidden')) return;
-	Array.from(FLOORS.values())[getCurrentFloor()].handleWheel(scroll);
+	if (Array.from(FLOORS.values())[getCurrentFloor()].handleWheel(scroll)) {
+		console.log("maxed");
+		scrollDisplacement = 0;
+		scrollVelocity = 0;
+	}
 }

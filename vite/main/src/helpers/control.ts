@@ -1,4 +1,3 @@
-
 export function useCookies() {
 	return window.sessionStorage.getItem("use_cookies") || getVar("use_cookies", true);
 }
@@ -35,4 +34,8 @@ export function toggleMusic() {
 		setVar("no_music", 0);
 		(document.getElementById("player") as HTMLAudioElement).play();
 	}
+}
+
+export async function wait(ms: number) {
+	await new Promise(res => setTimeout(res, ms));
 }

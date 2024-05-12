@@ -1,5 +1,5 @@
 import { CONTENTS } from "../constants";
-import { getVar, setVar, toggleMusic } from "./cookies";
+import { getVar, setVar, toggleMusic } from "./control";
 
 export function gotoRoot() {
 	document.location.href = "/";
@@ -17,17 +17,26 @@ export function setInnerHTML(elm: HTMLElement, html: string) {
 }
 
 const div = document.getElementById("info")!;
+const closer = document.getElementById("closer")!;
+closer.onclick = () => {
+	if (!div.classList.contains('hidden')) openOrCloseInfo();
+}
+
 export function hideOrUnhideInfo(cb = (_bool: boolean) => { }) {
 	if (div.classList.contains('hidden')) {
 		div.classList.remove('hidden');
+		closer.classList.remove('hidden');
 		setTimeout(function () {
 			div.classList.remove('visuallyhidden');
+			closer.classList.remove('visuallyhidden');
 		}, 20);
 		cb(false);
 	} else {
+		closer.classList.add('visuallyhidden');
 		div.classList.add('visuallyhidden');
 		function onTransitionEnd() {
 			div.classList.add('hidden');
+			closer.classList.add('hidden');
 			cb(true);
 			div.removeEventListener("transitionend", onTransitionEnd);
 		}

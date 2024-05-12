@@ -3,7 +3,7 @@ import WebGL from "three/examples/jsm/capabilities/WebGL.js";
 import { displayTexture, makeLift } from "./generators";
 import { getGotoFloor, getRatio, setActualFloor, setCamera, setCurrentFloor, setFloor, setGotoFloor, setPassedInFloor, setRatio, setRenderer, setSpawned } from "./states";
 import { enableStylesheet, disableStylesheet } from "./helpers/css";
-import { getVar, setVar, toggleMusic } from "./helpers/cookies";
+import { getVar, setVar, toggleMusic } from "./helpers/control";
 import { holdModelLoads } from "./loaders";
 import { FLOORS } from "./constants";
 import "./handler";

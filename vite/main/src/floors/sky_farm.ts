@@ -91,13 +91,14 @@ export default class SkyFarmFloor extends Floor {
 		const maxDist2 = 8;
 		const maxDist3 = 17.5;
 		const touched = getTouched();
-		var zoomLimitReached = false;
+		var zoomLimitReached = false, maxed = false;
 		if (camera.position.z <= -maxDist0) {
 			if (camera.position.z > -maxDist1 || scroll < 0) {
 				camera.translateZ(-scroll);
 				if (camera.position.z < -maxDist1) {
 					camera.position.z = -maxDist1;
 					if (touched) zoomLimitReached = true;
+					maxed = true;
 				}
 				camera.position.x = -(Math.abs(camera.position.z) - maxDist0) * maxDist2 / (maxDist1 - maxDist0);
 				camera.position.y = -(Math.abs(camera.position.z) - maxDist0) * maxDist3 / (maxDist1 - maxDist0) + this.num * 1000;
@@ -107,12 +108,16 @@ export default class SkyFarmFloor extends Floor {
 			}
 		} else {
 			camera.translateZ(-scroll);
-			if (camera.position.z > 0) camera.position.z = 0;
+			if (camera.position.z > 0) {
+				camera.position.z = 0;
+				maxed = true;
+			}
 			if (camera.position.x != 0) camera.position.x = 0;
 			if (camera.position.y != this.num * 1000) camera.position.y = this.num * 1000;
 			setRotatedX(0);
 		}
 
 		if (zoomLimitReached) openOrCloseInfo(this.num);
+		return maxed;
 	}
 }
