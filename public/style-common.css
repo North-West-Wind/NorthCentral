@@ -198,9 +198,9 @@ a:hover, .link-like *:hover {
   height: auto;
   min-height: 100%;
   min-width: 100%;
-  top: 0;
+  top: 50%;
   left: 50%;
-  transform: translateX(-50%);
+  transform: translate(-50%, -50%);
   position: relative;
 }
 
