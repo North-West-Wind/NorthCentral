@@ -1,54 +1,57 @@
-import { Camera, WebGLRenderer } from "three";
+import { Camera } from "three";
 import Floor from "./types/floor";
 
-var ratio: number;
-export function getRatio() { return ratio; }
-export function setRatio(r: number) { return ratio = r; }
+const internal: { floor?: Floor, currentFloor: number, targetFloor: number, started: boolean, camera?: Camera, rotatedX: number, rotatedY: number, ratio: number, touched: boolean } = {
+	currentFloor: 0,
+	targetFloor: 0,
+	started: false,
+	rotatedX: 0,
+	rotatedY: 0,
+	ratio: window.innerWidth / window.innerHeight,
+	touched: false,
+};
 
-var spawned = false;
-export function getSpawned() { return spawned; }
-export function setSpawned(s: boolean) { return spawned = s; }
+export function ratio(r?: number) {
+	if (r !== undefined) internal.ratio = r;
+	return internal.ratio;
+}
 
-var passedInFloor = 0;
-export function getPassedInFloor() { return passedInFloor; }
-export function setPassedInFloor(f: number) { return passedInFloor = f; }
+export function currentFloor(f?: number) {
+	if (f !== undefined) internal.currentFloor = f;
+	return internal.currentFloor;
+}
 
-var currentFloor = 0;
-export function getCurrentFloor() { return currentFloor; }
-export function setCurrentFloor(f: number) { return currentFloor = f; }
+export function targetFloor(f?: number) {
+	if (f !== undefined) internal.targetFloor = f;
+	return internal.targetFloor;
+}
 
-var actualFloor = 0;
-export function getActualFloor() { return actualFloor; }
-export function setActualFloor(f: number) { return actualFloor = f; }
+export function camera(c?: Camera) {
+	if (c) internal.camera = c;
+	return internal.camera!;
+}
 
-var gotoFloor = 0;
-export function getGotoFloor() { return gotoFloor; }
-export function setGotoFloor(f: number) { return gotoFloor = f; }
+export function touched(t?: boolean) {
+	if (t !== undefined) internal.touched = t;
+	return internal.touched;
+}
 
-var renderer: WebGLRenderer;
-export function getRenderer() { return renderer; }
-export function setRenderer(r: WebGLRenderer) { return renderer = r; }
+export function rotatedX(r?: number) {
+	if (r !== undefined) internal.rotatedX = r;
+	return internal.rotatedX;
+}
 
-var camera: Camera;
-export function getCamera() { return camera; }
-export function setCamera(c: Camera) { return camera = c; }
+export function rotatedY(r?: number) {
+	if (r !== undefined) internal.rotatedY = r;
+	return internal.rotatedY;
+}
 
-var touched = false;
-export function getTouched() { return touched; }
-export function setTouched(t: boolean) { return touched = t; }
+export function floor(f?: Floor) {
+	if (f) internal.floor = f;
+	return internal.floor;
+}
 
-var rotatedX = 0;
-export function getRotatedX() { return rotatedX; }
-export function setRotatedX(r: number) { return rotatedX = r; }
-
-var rotatedY = 0;
-export function getRotatedY() { return rotatedY; }
-export function setRotatedY(r: number) { return rotatedY = r; }
-
-var floor: Floor;
-export function getFloor() { return floor; }
-export function setFloor(f: Floor) { return floor = f; }
-
-var started = false;
-export function getStarted() { return started; }
-export function setStarted(s: boolean) { return started = s; }
+export function started(s?: boolean) {
+	if (s !== undefined) internal.started = s;
+	return internal.started;
+}

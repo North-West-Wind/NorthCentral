@@ -119,13 +119,7 @@ app.get("/2d/:page", (req, res, next) => {
 	else res.sendFile("main2d.html", { root });
 });
 app.get("/:page", (req, res, next) => {
-	if (!PAGES.includes(req.params.page)) next();
-	else res.sendFile("main.html", { root });
-});
-
-app.use(function (req, res, next) {
-	res.status(404);
-	res.sendFile("404.html", { root });
+	res.sendFile("main.html", { root });
 });
 
 const server = app.listen(process.env.PORT || 3000, async () => {

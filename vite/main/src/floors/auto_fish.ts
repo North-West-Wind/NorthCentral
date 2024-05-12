@@ -1,7 +1,7 @@
 import * as THREE from "three";
 import Floor from "../types/floor";
 import { LOADER } from "../loaders";
-import { getRenderer, getCamera, getTouched, setRotatedX } from "../states";
+import { camera, rotatedX, touched } from "../states";
 import { openOrCloseInfo } from "../helpers/html";
 
 const div = document.getElementById("info")!;
@@ -11,7 +11,7 @@ export default class AutoFishFloor extends Floor {
 		super("auto-fish", 1);
 	}
 
-	generate(scene: THREE.Scene) {
+	spawn(scene: THREE.Scene) {
 		for (let i = 0; i < 32; i++) {
 			const water = LOADER.load(`/assets/textures/water/water_still-00-${(i < 10 ? "0" : "") + i}.png`, texture => {
 				texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
@@ -69,34 +69,32 @@ export default class AutoFishFloor extends Floor {
 			const materialW = new THREE.MeshBasicMaterial({ map: WATER_TEXTURES[oceanCounter], opacity: 0.4, transparent: true });
 			materialW.map!.needsUpdate = true;
 			ocean.material = materialW;
-			getRenderer().render(scene, getCamera());
 		}, 250);
 		return { ocean, oakFloor, fishingRod, string, holder };
 	}
 
 	handleWheel(scroll: number) {
-		const camera = getCamera();
-		if (camera.position.y != this.num * 1000) camera.position.y = this.num * 1000;
+		const cam = camera();
+		if (cam.position.y != this.num * 1000) cam.position.y = this.num * 1000;
 		const rotateAngle = -1 / 2;
 		const maxDist = 70;
-		const touched = getTouched();
 		var zoomLimitReached = false, maxed = false;
-		if (camera.position.z == -maxDist && scroll > 0 && !touched) {
+		if (cam.position.z == -maxDist && scroll > 0 && !touched()) {
 			if (div.classList.contains('hidden')) openOrCloseInfo(this.num);
-		} else if (!(camera.position.z == 0 && scroll < 0)) {
-			camera.translateZ(-scroll);
-			if (camera.position.z > 0) {
-				camera.position.z = 0;
+		} else if (!(cam.position.z == 0 && scroll < 0)) {
+			cam.translateZ(-scroll);
+			if (cam.position.z > 0) {
+				cam.position.z = 0;
 				maxed = true;
-			} else if (camera.position.z < -maxDist) {
-				camera.position.z = -maxDist;
-				if (touched) zoomLimitReached = true;
+			} else if (cam.position.z < -maxDist) {
+				cam.position.z = -maxDist;
+				if (touched()) zoomLimitReached = true;
 				maxed = true;
 			}
 		}
 
-		if (camera.position.x != 0) camera.position.x = 0;
-		setRotatedX(rotateAngle * Math.abs(camera.position.z) / maxDist);
+		if (cam.position.x != 0) cam.position.x = 0;
+		rotatedX(rotateAngle * Math.abs(cam.position.z) / maxDist);
 
 		if (zoomLimitReached) openOrCloseInfo(this.num);
 		return maxed;

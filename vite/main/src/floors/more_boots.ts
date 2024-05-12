@@ -1,7 +1,7 @@
 import * as THREE from "three";
 import Floor from "../types/floor";
 import { GLTF_LOADED, LOADER } from "../loaders";
-import { getCamera, getTouched, setRotatedY } from "../states";
+import { camera, rotatedY, touched } from "../states";
 import { openOrCloseInfo } from "../helpers/html";
 
 const div = document.getElementById("info")!;
@@ -10,7 +10,7 @@ export default class MoreBootsFloor extends Floor {
 		super("more-boots", 2);
 	}
 
-	generate(scene: THREE.Scene) {
+	spawn(scene: THREE.Scene) {
 		const armorStand = GLTF_LOADED.armor_stand;
 		armorStand.position.set(0, 1969.5, -156.5);
 		armorStand.scale.set(20, 20, 20);
@@ -46,28 +46,27 @@ export default class MoreBootsFloor extends Floor {
 	}
 
 	handleWheel(scroll: number) {
-		const camera = getCamera();
-		if (camera.position.y != this.num * 1000) camera.position.y = this.num * 1000;
+		const cam = camera();
+		if (cam.position.y != this.num * 1000) cam.position.y = this.num * 1000;
 		const rotateAngle = -1.2;
 		const maxDist = 100;
-		const touched = getTouched();
 		var zoomLimitReached = false, maxed = false;
-		if (camera.position.z == -maxDist && scroll > 0 && !touched) {
+		if (cam.position.z == -maxDist && scroll > 0 && !touched()) {
 			if (div.classList.contains('hidden')) openOrCloseInfo(this.num);
-		} else if (!(camera.position.z == 0 && scroll < 0)) {
-			camera.translateZ(-scroll);
-			if (camera.position.z > 0) {
-				camera.position.z = 0;
+		} else if (!(cam.position.z == 0 && scroll < 0)) {
+			cam.translateZ(-scroll);
+			if (cam.position.z > 0) {
+				cam.position.z = 0;
 				maxed = true;
 			}
-			else if (camera.position.z < -maxDist) {
-				camera.position.z = -maxDist;
-				if (touched) zoomLimitReached = true;
+			else if (cam.position.z < -maxDist) {
+				cam.position.z = -maxDist;
+				if (touched()) zoomLimitReached = true;
 				maxed = true;
 			}
 		}
-		if (camera.position.x != 0) camera.position.x = 0;
-		setRotatedY(rotateAngle * Math.abs(camera.position.z) / maxDist);
+		if (cam.position.x != 0) cam.position.x = 0;
+		rotatedY(rotateAngle * Math.abs(cam.position.z) / maxDist);
 
 		if (zoomLimitReached) openOrCloseInfo(this.num);
 		return maxed;

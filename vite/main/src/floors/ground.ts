@@ -1,6 +1,6 @@
 import * as THREE from "three";
 import Floor from "../types/floor";
-import { getCamera } from "../states";
+import { camera } from "../states";
 
 export default class GroundFloor extends Floor {
 	allRains: THREE.Mesh[] = [];
@@ -10,7 +10,7 @@ export default class GroundFloor extends Floor {
 		this.listenUpdate = true;
 	}
 
-	generate(scene: THREE.Scene) {
+	spawn(scene: THREE.Scene) {
 		const geometry = new THREE.BoxGeometry(55, 2, 500);
 		const material = new THREE.MeshStandardMaterial({ color: 0xcccccc });
 		const floor = new THREE.Mesh(geometry, material);
@@ -20,16 +20,16 @@ export default class GroundFloor extends Floor {
 	}
 
 	handleWheel(scroll: number) {
-		const camera = getCamera();
-		if (camera.position.y != 0) camera.position.y = 0;
+		const cam = camera();
+		if (cam.position.y != 0) cam.position.y = 0;
 		const absoluted = Math.abs(scroll);
-		if (camera.position.x != 0) {
-			camera.translateX(camera.position.x > 0 ? -absoluted : absoluted);
-			if (Math.abs(camera.position.x) <= absoluted) camera.position.x = 0;
+		if (cam.position.x != 0) {
+			cam.translateX(cam.position.x > 0 ? -absoluted : absoluted);
+			if (Math.abs(cam.position.x) <= absoluted) cam.position.x = 0;
 		}
-		if (camera.position.z != 0) {
-			camera.translateZ(camera.position.z > 0 ? -absoluted : absoluted);
-			if (Math.abs(camera.position.z) <= absoluted) camera.position.z = 0;
+		if (cam.position.z != 0) {
+			cam.translateZ(cam.position.z > 0 ? -absoluted : absoluted);
+			if (Math.abs(cam.position.z) <= absoluted) cam.position.z = 0;
 		}
 		return true;
 	}

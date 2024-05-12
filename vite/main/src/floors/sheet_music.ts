@@ -1,7 +1,7 @@
 import * as THREE from "three";
 import Floor from "../types/floor";
 import { GLTF_LOADED } from "../loaders";
-import { getCamera, getStarted, setRotatedY } from "../states";
+import { camera, rotatedY, started } from "../states";
 import { hideOrUnhideInfo, setInnerHTML } from "../helpers/html";
 import { readPageGenerator } from "../helpers/reader";
 
@@ -44,7 +44,7 @@ export default class SheetMusicFloor extends Floor {
 		});
 	}
 
-	async generate(scene: THREE.Scene) {
+	async spawn(scene: THREE.Scene) {
 		const piano = GLTF_LOADED.piano;
 		piano.position.set(0, 4956, -215);
 		piano.setRotationFromAxisAngle(new THREE.Vector3(0, 1, 0), -Math.PI / 6 - Math.random() * Math.PI * 2 / 3);
@@ -76,23 +76,23 @@ export default class SheetMusicFloor extends Floor {
 	}
 
 	handleWheel(scroll: number) {
-		const camera = getCamera();
+		const cam = camera();
 		const rotateAngle = -1.2;
 		const maxDist = 175;
 		let maxed = false;
-		if (!(camera.position.z == 0 && scroll < 0)) {
-			camera.translateZ(-scroll);
-			if (camera.position.z > 0) {
-				camera.position.z = 0;
+		if (!(cam.position.z == 0 && scroll < 0)) {
+			cam.translateZ(-scroll);
+			if (cam.position.z > 0) {
+				cam.position.z = 0;
 				maxed = true;
-			} else if (camera.position.z < -maxDist) {
-				camera.position.z = -maxDist;
+			} else if (cam.position.z < -maxDist) {
+				cam.position.z = -maxDist;
 				maxed = true;
 			}
 		}
-		if (camera.position.x != 0) camera.position.x = 0;
-		camera.position.y = this.num * 1000 + camera.position.z / 10;
-		setRotatedY(rotateAngle * Math.abs(camera.position.z) / maxDist);
+		if (cam.position.x != 0) cam.position.x = 0;
+		cam.position.y = this.num * 1000 + cam.position.z / 10;
+		rotatedY(rotateAngle * Math.abs(cam.position.z) / maxDist);
 		return maxed;
 	}
 
@@ -104,7 +104,7 @@ export default class SheetMusicFloor extends Floor {
 	}
 
 	clickRaycast(raycaster: THREE.Raycaster): void {
-		if (this.sheets && getStarted()) {
+		if (this.sheets && started()) {
 			for (let i = 0; i < this.sheets.length; i++)
 				if (raycaster.intersectObject(this.sheets[i]).length > 0) {
 					this.openOrCloseSheetInfo(i);

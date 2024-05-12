@@ -1,7 +1,7 @@
 import * as THREE from "three";
 import Floor from "../types/floor";
 import { GLTF_LOADED } from "../loaders";
-import { getCamera, getTouched, setRotatedY } from "../states";
+import { camera, rotatedY, touched } from "../states";
 import { hideOrUnhideInfo, openOrCloseInfo, setInnerHTML } from "../helpers/html";
 import { readPageGenerator } from "../helpers/reader";
 
@@ -27,7 +27,7 @@ export default class N0rthWestW1ndFloor extends Floor {
 		for (let i = 0; i < 3; i++) readPageGenerator(`/contents/n0rthwestw1nd/info-${i}.html`, N0RTHWESTW1ND_CONTENTS);
 	}
 
-	generate(scene: THREE.Scene) {
+	spawn(scene: THREE.Scene) {
 		const desk = GLTF_LOADED.desk;
 		desk.position.set(-0.25, 3993.5, -150);
 		desk.setRotationFromAxisAngle(new THREE.Vector3(0, 1, 0), -Math.PI / 2);
@@ -54,48 +54,47 @@ export default class N0rthWestW1ndFloor extends Floor {
 	}
 
 	handleWheel(scroll: number) {
-		const camera = getCamera();
+		const cam = camera();
 		const rotateAngle = -3;
 		const maxDist0 = 140;
 		const maxDist1 = 148;
 		const maxDist2 = 3;
-		const touched = getTouched();
 		var zoomLimitReached = false, maxed = false;
-		if (camera.position.z <= -maxDist0) {
+		if (cam.position.z <= -maxDist0) {
 			if (div.classList.contains('hidden')) {
 				if (scroll > 0 && !this.phase) {
-					if (!touched) openOrCloseInfo(this.num);
+					if (!touched()) openOrCloseInfo(this.num);
 					else zoomLimitReached = true;
 					maxed = true;
 				} else if (this.phase) {
-					camera.translateZ(-scroll);
-					if (camera.position.z < -maxDist1) {
-						camera.position.z = -maxDist1;
+					cam.translateZ(-scroll);
+					if (cam.position.z < -maxDist1) {
+						cam.position.z = -maxDist1;
 						maxed = true;
 					}
-					camera.position.x = (Math.abs(camera.position.z) - maxDist0) * maxDist2 / (maxDist1 - maxDist0);
-					setRotatedY(rotateAngle * (Math.abs(camera.position.z) - maxDist0) / (maxDist1 - maxDist0));
-					if (camera.position.z > -maxDist0) {
-						camera.position.x = 0;
-						setRotatedY(0);
+					cam.position.x = (Math.abs(cam.position.z) - maxDist0) * maxDist2 / (maxDist1 - maxDist0);
+					rotatedY(rotateAngle * (Math.abs(cam.position.z) - maxDist0) / (maxDist1 - maxDist0));
+					if (cam.position.z > -maxDist0) {
+						cam.position.x = 0;
+						rotatedY(0);
 						this.phase = 0;
 					}
-				} else camera.translateZ(-scroll);
+				} else cam.translateZ(-scroll);
 			}
-		} else if (!(camera.position.z == 0 && scroll < 0)) {
-			camera.translateZ(-scroll);
-			if (camera.position.z > 0) {
-				camera.position.z = 0;
+		} else if (!(cam.position.z == 0 && scroll < 0)) {
+			cam.translateZ(-scroll);
+			if (cam.position.z > 0) {
+				cam.position.z = 0;
 				maxed = true;
 			}
-			else if (camera.position.z < -maxDist0) {
-				camera.position.z = -maxDist0;
+			else if (cam.position.z < -maxDist0) {
+				cam.position.z = -maxDist0;
 				maxed = true;
 			}
-			if (camera.position.z > -maxDist0) this.phase = 0;
-			if (camera.position.x != 0) camera.position.x = 0;
+			if (cam.position.z > -maxDist0) this.phase = 0;
+			if (cam.position.x != 0) cam.position.x = 0;
 		}
-		if (camera.position.y != this.num * 1000) camera.position.y = this.num * 1000;
+		if (cam.position.y != this.num * 1000) cam.position.y = this.num * 1000;
 
 		if (zoomLimitReached) {
 			openOrCloseInfo(this.num);

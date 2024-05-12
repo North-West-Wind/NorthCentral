@@ -1,14 +1,13 @@
 import * as THREE from "three";
-import { getPassedInFloor } from "./states";
+import { FLOORS } from "./constants";
 
-export function makeLift(scene: THREE.Scene) {
+export function makeLift(scene: THREE.Scene, passedInFloor: number) {
 	const { rectL, rectR, rectT, rectB, doorL, doorR } = makeDoors(scene);
 	const { floor } = makeFloor(scene);
 	const { wallFL, wallFR, wallFT, wallL, wallR, ceiling } = makeWalls(scene);
 	const { base, buttonU, buttonD, display } = makeButtons(scene);
 	const { sign } = makeSign(scene);
 	const obj = { rectL, rectR, rectT, rectB, doorL, doorR, floor, wallFL, wallFR, wallFT, wallL, wallR, ceiling, base, buttonU, buttonD, display, sign };
-	const passedInFloor = getPassedInFloor();
 	if (passedInFloor > 0) {
 			Object.values(obj).forEach(mesh => mesh.position.y += 1000 * passedInFloor);
 	}
@@ -171,7 +170,7 @@ export function displayTexture(floor: string | number | null) {
 	xc.font = "256px 'Courier New'";
 	xc.textAlign = "center";
 	xc.textBaseline = "middle";
-	if (floor !== 0 && !floor) xc.fillText("?", x.width / 2, x.height / 2);
+	if (floor !== 0 && !floor || typeof floor === "number" && floor >= FLOORS.size) xc.fillText("?", x.width / 2, x.height / 2);
 	else if (typeof floor == "string") xc.fillText(floor, x.width / 2, x.height / 2);
 	else xc.fillText(floor <= 0 ? "G" : floor.toString(), x.width / 2, x.height / 2);
 	const texture = new THREE.Texture(x);

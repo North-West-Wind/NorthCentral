@@ -1,6 +1,6 @@
 import * as THREE from "three";
 import Floor from "../types/floor";
-import { getCamera } from "../states";
+import { camera } from "../states";
 import { LOADER } from "../loaders";
 import { readPageGenerator } from "../helpers/reader";
 import { hideOrUnhideInfo, setInnerHTML } from "../helpers/html";
@@ -31,7 +31,7 @@ export default class GalleryFloor extends Floor {
 		});
 	}
 
-	generate(scene: THREE.Scene) {
+	spawn(scene: THREE.Scene) {
 		const objects: any = {};
 
 		const geometryR = new THREE.BoxGeometry(50, 2, FLOOR_LENGTH - 40);
@@ -117,19 +117,19 @@ export default class GalleryFloor extends Floor {
 
 	handleWheel(scroll: number) {
 		let maxed = false;
-		const camera = getCamera();
+		const cam = camera();
 		const maxDist = FLOOR_LENGTH + 10;
-		if (camera.position.z >= -maxDist) camera.translateZ(-scroll);
-		if (camera.position.z < -maxDist) {
-			camera.position.setZ(-maxDist);
+		if (cam.position.z >= -maxDist) cam.translateZ(-scroll);
+		if (cam.position.z < -maxDist) {
+			cam.position.setZ(-maxDist);
 			maxed = true;
 		}
-		if (camera.position.z > 0) {
-			camera.position.setZ(0);
+		if (cam.position.z > 0) {
+			cam.position.setZ(0);
 			maxed = true;
 		}
-		camera.position.setX(0);
-		camera.position.setY(this.num * 1000);
+		cam.position.setX(0);
+		cam.position.setY(this.num * 1000);
 		return maxed;
 	}
 

@@ -1,7 +1,7 @@
 import * as THREE from "three";
 import Floor from "../types/floor";
 import { LOADER } from "../loaders";
-import { getCamera, getTouched, setRotatedX } from "../states";
+import { camera, rotatedX, touched } from "../states";
 import { openOrCloseInfo } from "../helpers/html";
 
 const div = document.getElementById("info")!;
@@ -10,7 +10,7 @@ export default class SkyFarmFloor extends Floor {
 		super("sky-farm", 3);
 	}
 
-	generate(scene: THREE.Scene) {
+	spawn(scene: THREE.Scene) {
 		const geometryS = new THREE.BoxGeometry(250, 2, 250);
 		const material = new THREE.MeshBasicMaterial({ color: 0x46c7ec });
 		const skyT = new THREE.Mesh(geometryS, material);
@@ -84,37 +84,36 @@ export default class SkyFarmFloor extends Floor {
 	}
 
 	handleWheel(scroll: number) {
-		const camera = getCamera();
+		const cam = camera();
 		const rotateAngle = -1;
 		const maxDist0 = 100;
 		const maxDist1 = 162;
 		const maxDist2 = 8;
 		const maxDist3 = 17.5;
-		const touched = getTouched();
 		var zoomLimitReached = false, maxed = false;
-		if (camera.position.z <= -maxDist0) {
-			if (camera.position.z > -maxDist1 || scroll < 0) {
-				camera.translateZ(-scroll);
-				if (camera.position.z < -maxDist1) {
-					camera.position.z = -maxDist1;
-					if (touched) zoomLimitReached = true;
+		if (cam.position.z <= -maxDist0) {
+			if (cam.position.z > -maxDist1 || scroll < 0) {
+				cam.translateZ(-scroll);
+				if (cam.position.z < -maxDist1) {
+					cam.position.z = -maxDist1;
+					if (touched()) zoomLimitReached = true;
 					maxed = true;
 				}
-				camera.position.x = -(Math.abs(camera.position.z) - maxDist0) * maxDist2 / (maxDist1 - maxDist0);
-				camera.position.y = -(Math.abs(camera.position.z) - maxDist0) * maxDist3 / (maxDist1 - maxDist0) + this.num * 1000;
-				setRotatedX(rotateAngle * (Math.abs(camera.position.z) - maxDist0) / (maxDist1 - maxDist0));
-			} else if (scroll > 0 && !touched) {
+				cam.position.x = -(Math.abs(cam.position.z) - maxDist0) * maxDist2 / (maxDist1 - maxDist0);
+				cam.position.y = -(Math.abs(cam.position.z) - maxDist0) * maxDist3 / (maxDist1 - maxDist0) + this.num * 1000;
+				rotatedX(rotateAngle * (Math.abs(cam.position.z) - maxDist0) / (maxDist1 - maxDist0));
+			} else if (scroll > 0 && !touched()) {
 				if (div.classList.contains('hidden')) openOrCloseInfo(this.num);
 			}
 		} else {
-			camera.translateZ(-scroll);
-			if (camera.position.z > 0) {
-				camera.position.z = 0;
+			cam.translateZ(-scroll);
+			if (cam.position.z > 0) {
+				cam.position.z = 0;
 				maxed = true;
 			}
-			if (camera.position.x != 0) camera.position.x = 0;
-			if (camera.position.y != this.num * 1000) camera.position.y = this.num * 1000;
-			setRotatedX(0);
+			if (cam.position.x != 0) cam.position.x = 0;
+			if (cam.position.y != this.num * 1000) cam.position.y = this.num * 1000;
+			rotatedX(0);
 		}
 
 		if (zoomLimitReached) openOrCloseInfo(this.num);
