@@ -34,14 +34,6 @@ app.get("/2d", (_req, res) => {
 });
 app.get("/api/ping", (_req, res) => res.sendStatus(200));
 
-// discord bot stuff
-app.get("/n0rthwestw1nd/manual", (req, res) => res.sendFile("assets/safe_manual.pdf", { root }));
-app.get("/n0rthwestw1nd/manual/:ver", (req, res) => {
-	if (req.params.ver === "unsafe") res.sendFile("assets/unsafe_manual.pdf", { root });
-	else if (req.params.ver === "tradew1nd") res.sendFile("assets/tradew1nd_manual.pdf", { root });
-	else res.sendFile("assets/safe_manual.pdf", { root });
-});
-
 // tradew1nd bot stuff
 app.get("/api/download/:guild", async (req, res) => {
 	const response = await fetch("http://localhost:3001/download/" + req.params.guild);

@@ -3,7 +3,7 @@ The homepage of NorthWestWind, as an elevator. Made with THREE.js.
 It displays things I have worked on in the past.
 
 ## Navigation
-Go to https://northwestwind.ml  
+Go to https://www.northwestw.in
 To start off, you will want to click on the paper on the right side.  
 It should tell you how to use the lift, as well as things on each floor.  
 There is also elevator music.
@@ -17,8 +17,8 @@ Keep scrolling/zooming in until you reach the limit and text pops up.
 ## Other Sites
 This website also routes to some other things besides the elevator.
 
-https://northwestwind.ml/tradew1nd - The homepage of my Discord music bot.  
-https://northwestwind.ml/n0rthwestw1nd/manual - User manual for my general purpose Discord bot.
+https://www.northwestw.in/tradew1nd - The homepage of my Discord music bot.  
+https://www.northwestw.in/n0rthwestw1nd/manual - User manual for my general purpose Discord bot.
 
 # License
 GPL v3
