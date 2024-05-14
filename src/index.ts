@@ -7,6 +7,7 @@ import * as fs from "fs";
 import translate from "google-translate-api-x";
 import * as path from "path";
 import { isbot } from "isbot";
+import { translateToEng } from "./translate";
 const isEnglish = require("is-english");
 
 const root = path.resolve(__dirname, "../public");
@@ -86,21 +87,8 @@ app.get("/uop-editor", (req, res) => {
 
 // translator
 app.get("/translate", async (req, res) => {
-	const input = <string> req.query.in;
-	if (isEnglish(input)) return res.json({ lang: "en", out: input });
 	try {
-		const result = await translate(input, { to: "en" });
-		const useDeepL = !!req.query.deepl;
-		const send = { lang: result.from.language.iso, out: "" };
-		if (useDeepL) {
-			const resp = await fetch("https://deeplx.vercel.app/translate", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ text: input, source_lang: "auto", target_lang: "EN" }) });
-			if (!resp.ok) return res.sendStatus(resp.status);
-			const json = await resp.json();
-			if (Math.floor(json.code / 100) != 2) return res.sendStatus(json.code);
-			if (isEnglish(json.data)) send.out = result.text;
-			else send.out = json.data;
-		} else send.out = result.text;
-		res.json(send);
+		res.json(await translateToEng(<string> req.query.in, !!req.query.deepl));
 	} catch (err) {
 		console.error(err);
 		res.sendStatus(500);
