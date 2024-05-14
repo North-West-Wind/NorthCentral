@@ -10,7 +10,7 @@ async function translateOnly(input: string, useDeepL = false): Promise<{ lang: s
 		if (!resp.ok) send.out = result.text;
 		else {
 			const json = await resp.json();
-			if (Math.floor(json.code / 100) != 2 || isEnglish(json.data)) send.out = result.text;
+			if (Math.floor(json.code / 100) != 2 || !isEnglish(json.data)) send.out = result.text;
 			else send.out = json.data;
 		}
 	} else send.out = result.text;
@@ -20,11 +20,18 @@ async function translateOnly(input: string, useDeepL = false): Promise<{ lang: s
 export async function translateToEng(input: string, useDeepL = false) {
 	const send = await translateOnly(input, useDeepL);
 	if (send.out == input) {
-		// output is same as input. try to translate only non-english characters
-		let newInput = input.match(/([^a-zA-Z])+/g)?.join("");
+		// output is same as input. try to translate only words with non-english characters
+		let newInput = input.match(/[^ ]*[^a-zA-Z ]+[^ ]*/g)?.join("");
 		if (!newInput) return send;
 		newInput = newInput.replace(/^\s+/g, "");
-		return await translateOnly(newInput, useDeepL);
+		const retry = await translateOnly(newInput, useDeepL);
+		if (retry.out == newInput) {
+			// if that still doesn't work, try to remove all english characters
+			newInput = newInput.match(/[^a-zA-Z ]+/g)?.join("");
+			if (!newInput) return retry;
+			return await translateOnly(newInput, useDeepL);
+		}
+		return retry;
 	}
 	return send;
 }
