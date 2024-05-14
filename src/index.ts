@@ -6,18 +6,26 @@ import fetch from "node-fetch";
 import * as fs from "fs";
 import translate from "google-translate-api-x";
 import * as path from "path";
+import { isbot } from "isbot";
 const isEnglish = require("is-english");
 
-const PAGES = [
-	"auto-fish",
-	"more-boots",
-	"sky-farm",
-	"n0rthwestw1nd",
-	"sheet-music",
-	"gallery"
-];
-
 const root = path.resolve(__dirname, "../public");
+const PAGES = new Map(fs.readdirSync(path.join(root, "contents")).filter(file => file.endsWith(".html")).map(file => {
+	const split = file.slice(0, -5).split("-");
+	const num = parseInt(split.shift()!);
+	return [split.join("-"), num]
+}));
+const SEO_CONFIG = {
+	title: "North's Elevator",
+	description: `The really cool home page of NorthWestWind!
+	Made with THREE.JS
+	World record of most impractical homepage`,
+	url: "https://www.northwestw.in",
+	image: "/assets/images/screenshot.png",
+	author: "NorthWestWind",
+	twitterCreator: "@NorthWestWindNW"
+};
+
 const app = express();
 
 app.use(express.static("public"));
@@ -26,12 +34,6 @@ app.use(cookieParser());
 app.set('views', path.resolve(__dirname, "../views"));
 app.set('view engine', 'ejs');
 
-app.get("/", (_req, res) => {
-	res.sendFile("main.html", { root });
-});
-app.get("/2d", (_req, res) => {
-	res.sendFile("main2d.html", { root });
-});
 app.get("/api/ping", (_req, res) => res.sendStatus(200));
 
 // tradew1nd bot stuff
@@ -106,12 +108,24 @@ app.get("/translate", async (req, res) => {
 });
 
 // elevator
-app.get("/2d/:page", (req, res, next) => {
-	if (!PAGES.includes(req.params.page)) next();
+app.get("/2d/:page?", (req, res, next) => {
+	if (isbot(req.get("user-agent")) || !PAGES.has(req.params.page || "ground")) next();
 	else res.sendFile("main2d.html", { root });
 });
-app.get("/:page", (req, res, next) => {
-	res.sendFile("main.html", { root });
+app.get("/:page?", (req, res) => {
+	if (isbot(req.get("user-agent"))) {
+		// create page using seo template
+		let template = fs.readFileSync(path.join(root, "contents/templates/seo.html"), { encoding: "utf8" });
+		for (const [key, value] of Object.entries(SEO_CONFIG)) template = template.replace(new RegExp(`\\{${key}\\}`, "g"), value);
+		let filename = "0-ground.html";
+		if (PAGES.has(req.params.page || "")) {
+			const page = PAGES.get(req.params.page!);
+			filename = `${page}-${req.params.page}.html`;
+		}
+		const content = fs.readFileSync(path.join(root, "contents", filename), { encoding: "utf8" });
+		template = template.replace("{content}", content);
+		res.send(template);
+	} else res.sendFile("main.html", { root });
 });
 
 const server = app.listen(process.env.PORT || 3000, async () => {

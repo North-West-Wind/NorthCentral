@@ -3,6 +3,10 @@
 	src: url('/assets/odin-rounded.regular.otf') format("opentype");
 }
 
+html {
+	overscroll-behavior: none;
+}
+
 body {
 	font-family: 'OdinRounded', Helvetica, sans-serif;
 	color: white;
