@@ -4,11 +4,9 @@ import cookieParser from "cookie-parser";
 import bodyParser from "body-parser";
 import fetch from "node-fetch";
 import * as fs from "fs";
-import translate from "google-translate-api-x";
 import * as path from "path";
 import { isbot } from "isbot";
 import { translateToEng } from "./translate";
-const isEnglish = require("is-english");
 
 const root = path.resolve(__dirname, "../public");
 const PAGES = new Map(fs.readdirSync(path.join(root, "contents")).filter(file => file.endsWith(".html")).map(file => {
