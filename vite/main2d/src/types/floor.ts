@@ -7,6 +7,7 @@ export default abstract class Floor {
 	svg: LazyLoader<string>;
 	content: LazyLoader<string>;
 	phase = 0;
+	disableContent = false;
 
 	constructor(id: string, num: number, loaders?: { svg?: LazyLoader<string>, content?: LazyLoader<string> }) {
 		this.id = id;

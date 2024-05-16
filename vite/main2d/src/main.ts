@@ -60,9 +60,10 @@ async function toggleCloser() {
 }
 
 // toggle html content of current floor
-async function toggleContent() {
+export async function toggleContent(html?: string) {
   if (info.classList.contains("hidden")) {
-    info.innerHTML = await floor().content.get();
+    if (html) info.innerHTML = html;
+    else info.innerHTML = await floor().content.get();
     floor().loadContent(info);
     info.classList.remove("hidden");
     await wait(20);
@@ -105,11 +106,13 @@ async function anyToThree() {
   background.style.transform = "scale(1.2, 1.2)";
   await wait(1500);
   state = 3;
-  toggleContent();
+  elevator.classList.add("hidden");
+  if (!floor().disableContent) toggleContent();
 }
 
-// transition from state 3 to 4
+// transition from state 3 to 5
 async function threeToFive() {
+  elevator.classList.remove("hidden");
   await wait(500);
   state = 4;
   elevator.style.transform = "";
@@ -119,7 +122,7 @@ async function threeToFive() {
   state = 5;
 }
 
-// transition from state 4 to 0
+// transition from state 5 to 0
 async function fiveToZero() {
   state = 6;
   leftDoor.style.transform = "";
