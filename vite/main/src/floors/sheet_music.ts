@@ -1,5 +1,5 @@
 import * as THREE from "three";
-import Floor from "../types/floor";
+import Floor, { Generated } from "../types/floor";
 import { GLTF_LOADED } from "../loaders";
 import { camera, rotatedY, started } from "../states";
 import { hideOrUnhideInfo, setInnerHTML } from "../helpers/html";
@@ -65,22 +65,27 @@ export default class SheetMusicFloor extends Floor {
 		floor0.position.set(0, 4965, -200);
 		scene.add(floor0);
 
+		const spotLight = new THREE.SpotLight(0xffffff, 2, 300, Math.PI / 2, 1, 2);
+		spotLight.position.set(0, 5006, -215);
+		scene.add(spotLight);
+
+		const objects: Generated = { piano, floor0, spotLight };
+
 		const geometryS = new THREE.BoxGeometry(5, 0.1, 5 * Math.SQRT2);
 		const materialS = new THREE.MeshStandardMaterial({ color: 0x777777 });
 		this.sheets = [];
-		for (let i = 0; i < SHEETS; i++) {
-			const xm = new THREE.MeshStandardMaterial({ map: await this.sheetTexture(i), transparent: true });
+		for (let ii = 0; ii < SHEETS; ii++) {
+			const xm = new THREE.MeshStandardMaterial({ map: await this.sheetTexture(ii), transparent: true });
 			const sheet = new THREE.Mesh(geometryS, [materialS, materialS, xm, materialS, materialS, materialS]);
 			sheet.position.set(THREE.MathUtils.randFloatSpread(40), 4965.9875 + THREE.MathUtils.randFloatSpread(0.001), THREE.MathUtils.randFloatSpread(20) - 195);
 			sheet.setRotationFromAxisAngle(new THREE.Vector3(0, 1, 0), THREE.MathUtils.randFloatSpread(Math.PI * 2));
 			this.sheets.push(sheet);
+			objects[`sheet${ii}`] = sheet;
 		}
 		scene.add(...this.sheets);
 
-		const spotLight = new THREE.SpotLight(0xffffff, 2, 300, Math.PI / 2, 1, 2);
-		spotLight.position.set(0, 5006, -215);
-		scene.add(spotLight);
-		return { floor0, sheets: this.sheets };
+
+		return objects;
 	}
 
 	handleWheel(scroll: number) {

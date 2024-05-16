@@ -1,5 +1,5 @@
-import { TextureLoader } from "three";
-import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
+import { Group, TextureLoader } from "three";
+import { GLTF, GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 
 const MODELS = [
 	"armor_stand",
@@ -13,9 +13,9 @@ const MODELS = [
 export const LOADER = new TextureLoader();
 const GLTF_LOADER = new GLTFLoader();
 
-export const GLTF_LOADED: any = {};
+export const GLTF_LOADED: { [key: string]: Group } = {};
 function loadGltf(path: string) {
-	GLTF_LOADER.load(`/assets/models/${path}/scene.gltf`, (gltf: any) => { GLTF_LOADED[path] = gltf.scene; });
+	GLTF_LOADER.load(`/assets/models/${path}/scene.gltf`, (gltf: GLTF) => { GLTF_LOADED[path] = gltf.scene; });
 }
 for (const model of MODELS) {
 	loadGltf(model);

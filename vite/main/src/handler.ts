@@ -96,7 +96,7 @@ window.addEventListener("mousemove", (e) => {
 	const mouse2D = new THREE.Vector2((e.clientX / window.innerWidth) * 2 - 1, -(e.clientY / window.innerHeight) * 2 + 1);
 	const raycaster = new THREE.Raycaster();
 	raycaster.setFromCamera(mouse2D, camera());
-	const check: THREE.Mesh[] = [buttonU, buttonD, display, sign];
+	const check: THREE.Object3D[] = [buttonU, buttonD, display, sign];
 	if (floor()?.listenMove) check.push(...floor()!.moveCheck());
 	const intersect = raycaster.intersectObjects(check);
 	if (intersect.length > 0) document.body.style.cursor = "pointer";

@@ -1,6 +1,6 @@
 import * as THREE from "three";
 
-export type Generated = { [key: string]: THREE.Mesh | THREE.Mesh[] }
+export type Generated = { [key: string]: THREE.Object3D }
 
 export default abstract class Floor {
 	id: string;
@@ -10,7 +10,7 @@ export default abstract class Floor {
 	listenMove = false;
 	listenUpdate = false;
 	special = false;
-	private meshes?: Generated;
+	protected meshes?: Generated;
 
 	constructor(id: string, num: number) {
 		this.id = id;
@@ -25,17 +25,17 @@ export default abstract class Floor {
 	
 	despawn(scene: THREE.Scene) {
 		if (!this.meshes) return;
-		for (const ob of Object.values(this.meshes)) {
-			if (Array.isArray(ob)) scene.remove(...ob);
-			else if (ob) scene.remove(ob as THREE.Mesh);
-		}
+		for (const ob of Object.values(this.meshes))
+			if (ob)
+				scene.remove(ob);
+		this.meshes = undefined;
 	}
 
 	abstract handleWheel(scroll: number): boolean;
 
 	clickRaycast(_raycaster: THREE.Raycaster): void { }
 
-	moveCheck(): THREE.Mesh[] { return []; }
+	moveCheck(): THREE.Object3D[] { return []; }
 
 	update(_scene: THREE.Scene): void { }
 }
