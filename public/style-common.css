@@ -184,6 +184,10 @@ a:hover, .link-like *:hover {
 	width: 100%;
 }
 
+.highlight {
+	color: #fcf803;
+}
+
 /* 2d specific */
 
 .background {

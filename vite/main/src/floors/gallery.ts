@@ -25,9 +25,9 @@ export default class GalleryFloor extends Floor {
 	}
 
 	static {
-		fetch(`/files/${encodeURIComponent("public/assets/pfps")}`).then(async res => {
+		fetch(`/api/config`).then(async res => {
 			if (!res.ok) return;
-			const files = <string[]>await res.json();
+			const files = <string[]>(await res.json()).pfps;
 			this.fileNames = files.sort();
 		});
 	}

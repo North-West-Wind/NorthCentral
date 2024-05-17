@@ -34,6 +34,12 @@ app.set('views', path.resolve(__dirname, "../views"));
 app.set('view engine', 'ejs');
 
 app.get("/api/ping", (_req, res) => res.sendStatus(200));
+app.get("/api/config", (req, res) => {
+	res.json({
+		pfps: fs.readdirSync(path.join(root, "assets/pfps")),
+		info: fs.readdirSync(path.join(root, "contents/info-center"))
+	});
+});
 
 // tradew1nd bot stuff
 app.get("/api/download/:guild", async (req, res) => {
@@ -71,12 +77,6 @@ app.get("/tradew1nd", (_req, res) => res.render("tradew1nd/index"));
 // redirectors
 app.get("/matrix", (_req, res) => res.redirect(301, "https://matrix.to/#/#northwestwind:matrix.northwestw.in"));
 app.get("/portal", (_req, res) => res.render("portal"));
-
-app.get("/files/:path", (req, res) => {
-	const p = decodeURIComponent(req.params.path);
-	if (p.includes("..")) return res.status(403);
-	res.json(fs.readdirSync(path.join(".", p)));
-});
 
 // uop editor
 app.get("/uop-editor", (req, res) => {

@@ -1,9 +1,18 @@
 import { wait } from "../helpers/control";
 import { randomBetween } from "../helpers/math";
+import { readPage } from "../helpers/reader";
 import { toggleContent } from "../main";
 import Floor from "../types/floor";
+import { LazyLoader } from "../types/misc";
 
 const audio = new Audio('/assets/sounds/ding.mp3');
+const PAGES = new Map<string, LazyLoader<string>>();
+fetch(`/api/config`).then(async res => {
+	if (!res.ok) return;
+	const files = <string[]>(await res.json()).info;
+	for (const file of files)
+		PAGES.set(file.split(".").slice(0, -1).join("."), new LazyLoader(() => readPage(`/contents/info/${file}`)));
+});
 
 export default class InfoCenterFloor extends Floor {
 	dinged = false;
@@ -67,8 +76,19 @@ export default class InfoCenterFloor extends Floor {
 		this.dinged = false;
 		this.disableContent = true;
 	}
-
-	loadContent(info: HTMLDivElement) {
+	
+	async loadConversation(info: HTMLDivElement, next: string) {
+		const page = PAGES.get(next);
+		if (page) info.innerHTML = await page.get();
+		else info.innerHTML = await this.content.get();
 		
+		this.loadContent(info);
+	}
+
+	async loadContent(info: HTMLDivElement) {
+		for (const li of info.querySelectorAll<HTMLLIElement>("#li")) {
+			if (li.hasAttribute("next"))
+				li.onclick = () => this.loadConversation(info, li.getAttribute("next")!);
+		}
 	}
 }
