@@ -1,7 +1,7 @@
 import * as THREE from "three";
 import Floor from "../types/floor";
 import { camera } from "../states";
-import { LOADER } from "../loaders";
+import { TEXTURE_LOADER } from "../loaders";
 import { readPage } from "../helpers/reader";
 import { hideOrUnhideInfo, setInnerHTML } from "../helpers/html";
 import { LazyLoader } from "../types/misc";
@@ -80,7 +80,7 @@ export default class GalleryFloor extends Floor {
 
 		for (let ii = 0; ii < PAINTINGS - 1; ii++) {
 			const geometry = new THREE.BoxGeometry(2, 50, 50);
-			const texture = LOADER.load(`/assets/pfps/${GalleryFloor.fileNames[ii]}`, texture => {
+			const texture = TEXTURE_LOADER.load(`/assets/pfps/${GalleryFloor.fileNames[ii]}`, texture => {
 				texture.generateMipmaps = false;
 				texture.magFilter = THREE.NearestFilter;
 				texture.minFilter = THREE.LinearMipMapLinearFilter;
@@ -101,7 +101,7 @@ export default class GalleryFloor extends Floor {
 		}
 
 		const geometryP = new THREE.BoxGeometry(50, 50, 2);
-		const texture = LOADER.load(`/assets/pfps/${GalleryFloor.fileNames[PAINTINGS - 1]}`, texture => {
+		const texture = TEXTURE_LOADER.load(`/assets/pfps/${GalleryFloor.fileNames[PAINTINGS - 1]}`, texture => {
 			texture.magFilter = THREE.NearestFilter;
 			texture.minFilter = THREE.LinearMipMapLinearFilter;
 		});

@@ -1,6 +1,6 @@
 import * as THREE from "three";
 import Floor from "../types/floor";
-import { LOADER } from "../loaders";
+import { TEXTURE_LOADER } from "../loaders";
 import { camera, rotatedX, touched } from "../states";
 import { openOrCloseInfo } from "../helpers/html";
 
@@ -30,53 +30,53 @@ export default class SkyFarmFloor extends Floor {
 		scene.add(skyT, skyB, skyL, skyR, skyF);
 	
 		const geometryB = new THREE.BoxGeometry(24, 8, 24);
-		const matSide = new THREE.MeshBasicMaterial({ color: 0x888888, map: LOADER.load("/assets/textures/grass/side.png", tex => { tex.wrapS = tex.wrapT = THREE.RepeatWrapping; tex.offset.set(0, 0); tex.repeat.set(3, 1); tex.magFilter = THREE.NearestFilter; tex.minFilter = THREE.LinearMipMapLinearFilter; }) });
+		const matSide = new THREE.MeshBasicMaterial({ color: 0x888888, map: TEXTURE_LOADER.load("/assets/textures/grass/side.png", tex => { tex.wrapS = tex.wrapT = THREE.RepeatWrapping; tex.offset.set(0, 0); tex.repeat.set(3, 1); tex.magFilter = THREE.NearestFilter; tex.minFilter = THREE.LinearMipMapLinearFilter; }) });
 		const materials = [
 				matSide,
 				matSide,
-				new THREE.MeshBasicMaterial({ color: 0x888888, map: LOADER.load("/assets/textures/grass/top.png", tex => { tex.wrapS = tex.wrapT = THREE.RepeatWrapping; tex.offset.set(0, 0); tex.repeat.set(3, 3); tex.magFilter = THREE.NearestFilter; tex.minFilter = THREE.LinearMipMapLinearFilter; }) }),
+				new THREE.MeshBasicMaterial({ color: 0x888888, map: TEXTURE_LOADER.load("/assets/textures/grass/top.png", tex => { tex.wrapS = tex.wrapT = THREE.RepeatWrapping; tex.offset.set(0, 0); tex.repeat.set(3, 3); tex.magFilter = THREE.NearestFilter; tex.minFilter = THREE.LinearMipMapLinearFilter; }) }),
 				matSide,
 				matSide,
-				new THREE.MeshBasicMaterial({ color: 0x888888, map: LOADER.load("/assets/textures/grass/bottom.png", tex => { tex.wrapS = tex.wrapT = THREE.RepeatWrapping; tex.offset.set(0, 0); tex.repeat.set(3, 3); tex.magFilter = THREE.NearestFilter; tex.minFilter = THREE.LinearMipMapLinearFilter; }) }),
+				new THREE.MeshBasicMaterial({ color: 0x888888, map: TEXTURE_LOADER.load("/assets/textures/grass/bottom.png", tex => { tex.wrapS = tex.wrapT = THREE.RepeatWrapping; tex.offset.set(0, 0); tex.repeat.set(3, 3); tex.magFilter = THREE.NearestFilter; tex.minFilter = THREE.LinearMipMapLinearFilter; }) }),
 		];
 		const block = new THREE.Mesh(geometryB, materials);
 		block.position.set(0, 2970, -175);
 		scene.add(block);
 	
 		const geometryL = new THREE.BoxGeometry(8, 40, 8);
-		const matSideL = new THREE.MeshBasicMaterial({ color: 0x888888, map: LOADER.load("/assets/textures/tree/side.png", tex => { tex.wrapS = tex.wrapT = THREE.RepeatWrapping; tex.offset.set(0, 0); tex.repeat.set(1, 5); tex.magFilter = THREE.NearestFilter; tex.minFilter = THREE.LinearMipMapLinearFilter; }) });
+		const matSideL = new THREE.MeshBasicMaterial({ color: 0x888888, map: TEXTURE_LOADER.load("/assets/textures/tree/side.png", tex => { tex.wrapS = tex.wrapT = THREE.RepeatWrapping; tex.offset.set(0, 0); tex.repeat.set(1, 5); tex.magFilter = THREE.NearestFilter; tex.minFilter = THREE.LinearMipMapLinearFilter; }) });
 		const materialsL = [
 				matSideL,
 				matSideL,
-				new THREE.MeshBasicMaterial({ color: 0x888888, map: LOADER.load("/assets/textures/tree/top.png", tex => { tex.magFilter = THREE.NearestFilter; tex.minFilter = THREE.LinearMipMapLinearFilter; }) }),
+				new THREE.MeshBasicMaterial({ color: 0x888888, map: TEXTURE_LOADER.load("/assets/textures/tree/top.png", tex => { tex.magFilter = THREE.NearestFilter; tex.minFilter = THREE.LinearMipMapLinearFilter; }) }),
 				matSideL,
 				matSideL,
-				new THREE.MeshBasicMaterial({ color: 0x888888, map: LOADER.load("/assets/textures/tree/top.png", tex => { tex.magFilter = THREE.NearestFilter; tex.minFilter = THREE.LinearMipMapLinearFilter; }) })
+				new THREE.MeshBasicMaterial({ color: 0x888888, map: TEXTURE_LOADER.load("/assets/textures/tree/top.png", tex => { tex.magFilter = THREE.NearestFilter; tex.minFilter = THREE.LinearMipMapLinearFilter; }) })
 		];
 		const logs = new THREE.Mesh(geometryL, materialsL);
 		logs.position.set(0, 2994, -175);
 		scene.add(logs);
 	
 		const geometryL0 = new THREE.BoxGeometry(40, 16, 40);
-		const matSideL0 = new THREE.MeshBasicMaterial({ color: 0x888888, transparent: true, map: LOADER.load("/assets/textures/tree/leaves.png", tex => { tex.wrapS = tex.wrapT = THREE.RepeatWrapping; tex.offset.set(0, 0); tex.repeat.set(5, 2); tex.magFilter = THREE.NearestFilter; tex.minFilter = THREE.LinearMipMapLinearFilter; }) });
-		const matTopL0 = new THREE.MeshBasicMaterial({ color: 0x888888, transparent: true, map: LOADER.load("/assets/textures/tree/leaves.png", tex => { tex.wrapS = tex.wrapT = THREE.RepeatWrapping; tex.offset.set(0, 0); tex.repeat.set(5, 5); tex.magFilter = THREE.NearestFilter; tex.minFilter = THREE.LinearMipMapLinearFilter; }) });
+		const matSideL0 = new THREE.MeshBasicMaterial({ color: 0x888888, transparent: true, map: TEXTURE_LOADER.load("/assets/textures/tree/leaves.png", tex => { tex.wrapS = tex.wrapT = THREE.RepeatWrapping; tex.offset.set(0, 0); tex.repeat.set(5, 2); tex.magFilter = THREE.NearestFilter; tex.minFilter = THREE.LinearMipMapLinearFilter; }) });
+		const matTopL0 = new THREE.MeshBasicMaterial({ color: 0x888888, transparent: true, map: TEXTURE_LOADER.load("/assets/textures/tree/leaves.png", tex => { tex.wrapS = tex.wrapT = THREE.RepeatWrapping; tex.offset.set(0, 0); tex.repeat.set(5, 5); tex.magFilter = THREE.NearestFilter; tex.minFilter = THREE.LinearMipMapLinearFilter; }) });
 		const leaves0 = new THREE.Mesh(geometryL0, [matSideL0, matSideL0, matTopL0, matSideL0, matSideL0, matTopL0]);
 		leaves0.position.set(0, 2998, -175);
 	
 		const geometryL1 = new THREE.BoxGeometry(24, 8, 24);
-		const matSideL1 = new THREE.MeshBasicMaterial({ color: 0x888888, transparent: true, map: LOADER.load("/assets/textures/tree/leaves.png", tex => { tex.wrapS = tex.wrapT = THREE.RepeatWrapping; tex.offset.set(0, 0); tex.repeat.set(3, 1); tex.magFilter = THREE.NearestFilter; tex.minFilter = THREE.LinearMipMapLinearFilter; }) });
-		const matTopL1 = new THREE.MeshBasicMaterial({ color: 0x888888, transparent: true, map: LOADER.load("/assets/textures/tree/leaves.png", tex => { tex.wrapS = tex.wrapT = THREE.RepeatWrapping; tex.offset.set(0, 0); tex.repeat.set(3, 3); tex.magFilter = THREE.NearestFilter; tex.minFilter = THREE.LinearMipMapLinearFilter; }) });
+		const matSideL1 = new THREE.MeshBasicMaterial({ color: 0x888888, transparent: true, map: TEXTURE_LOADER.load("/assets/textures/tree/leaves.png", tex => { tex.wrapS = tex.wrapT = THREE.RepeatWrapping; tex.offset.set(0, 0); tex.repeat.set(3, 1); tex.magFilter = THREE.NearestFilter; tex.minFilter = THREE.LinearMipMapLinearFilter; }) });
+		const matTopL1 = new THREE.MeshBasicMaterial({ color: 0x888888, transparent: true, map: TEXTURE_LOADER.load("/assets/textures/tree/leaves.png", tex => { tex.wrapS = tex.wrapT = THREE.RepeatWrapping; tex.offset.set(0, 0); tex.repeat.set(3, 3); tex.magFilter = THREE.NearestFilter; tex.minFilter = THREE.LinearMipMapLinearFilter; }) });
 		const leaves1 = new THREE.Mesh(geometryL1, [matSideL1, matSideL1, matTopL1, matSideL1, matSideL1, matTopL1]);
 		leaves1.position.set(0, 3010, -175);
 	
 		const geometryL2 = new THREE.BoxGeometry(24, 8, 8);
-		const matSideL2 = new THREE.MeshBasicMaterial({ color: 0x888888, transparent: true, map: LOADER.load("/assets/textures/tree/leaves.png", tex => { tex.wrapS = tex.wrapT = THREE.RepeatWrapping; tex.offset.set(0, 0); tex.repeat.set(3, 1); tex.magFilter = THREE.NearestFilter; tex.minFilter = THREE.LinearMipMapLinearFilter; }) });
-		const matTopL2 = new THREE.MeshBasicMaterial({ color: 0x888888, transparent: true, map: LOADER.load("/assets/textures/tree/leaves.png", tex => { tex.magFilter = THREE.NearestFilter; tex.minFilter = THREE.LinearMipMapLinearFilter; }) });
+		const matSideL2 = new THREE.MeshBasicMaterial({ color: 0x888888, transparent: true, map: TEXTURE_LOADER.load("/assets/textures/tree/leaves.png", tex => { tex.wrapS = tex.wrapT = THREE.RepeatWrapping; tex.offset.set(0, 0); tex.repeat.set(3, 1); tex.magFilter = THREE.NearestFilter; tex.minFilter = THREE.LinearMipMapLinearFilter; }) });
+		const matTopL2 = new THREE.MeshBasicMaterial({ color: 0x888888, transparent: true, map: TEXTURE_LOADER.load("/assets/textures/tree/leaves.png", tex => { tex.magFilter = THREE.NearestFilter; tex.minFilter = THREE.LinearMipMapLinearFilter; }) });
 		const leaves2 = new THREE.Mesh(geometryL2, [matTopL2, matSideL2, matSideL2, matTopL2, matSideL2, matSideL2]);
 		leaves2.position.set(0, 3018, -175);
 	
 		const geometryL3 = new THREE.BoxGeometry(8, 8, 24);
-		const matSideL3 = new THREE.MeshBasicMaterial({ color: 0x888888, transparent: true, map: LOADER.load("/assets/textures/tree/leaves.png", tex => { tex.wrapS = tex.wrapT = THREE.RepeatWrapping; tex.offset.set(0, 0); tex.repeat.set(1, 3); tex.magFilter = THREE.NearestFilter; tex.minFilter = THREE.LinearMipMapLinearFilter; }) });
+		const matSideL3 = new THREE.MeshBasicMaterial({ color: 0x888888, transparent: true, map: TEXTURE_LOADER.load("/assets/textures/tree/leaves.png", tex => { tex.wrapS = tex.wrapT = THREE.RepeatWrapping; tex.offset.set(0, 0); tex.repeat.set(1, 3); tex.magFilter = THREE.NearestFilter; tex.minFilter = THREE.LinearMipMapLinearFilter; }) });
 		const leaves3 = new THREE.Mesh(geometryL3, [matSideL2, matTopL2, matSideL3, matSideL2, matTopL2, matSideL3]);
 		leaves3.position.set(0, 3018, -175);
 		scene.add(leaves0, leaves1, leaves2, leaves3);

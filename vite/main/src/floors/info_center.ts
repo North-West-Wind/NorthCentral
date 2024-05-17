@@ -1,11 +1,14 @@
 import * as THREE from "three";
-import Floor from "../types/floor";
+import Floor, { Generated } from "../types/floor";
 import { camera } from "../states";
 import { hideOrUnhideInfo, setInnerHTML } from "../helpers/html";
 import { readPage } from "../helpers/reader";
 import { LazyLoader } from "../types/misc";
 import { CONTENTS } from "../constants";
 import { wait } from "../helpers/control";
+import { SVG_LOADER } from "../loaders";
+import { createSVGCenteredGroup, createSVGGroupWithCenter, randomBetween } from "../helpers/math";
+import { SVGResult } from "three/examples/jsm/loaders/SVGLoader.js";
 
 const div = document.getElementById("info")!;
 const audio = new Audio('/assets/sounds/ding.mp3');
@@ -16,19 +19,27 @@ fetch(`/api/config`).then(async res => {
 	for (const file of files)
 		PAGES.set(file.split(".").slice(0, -1).join("."), new LazyLoader(() => readPage(`/contents/info-center/${file}`)));
 });
+
+const topLength = 120, bottomLength = 108, topDepth = 25;
+const deskHeight = 30;
+const integrelleScale = 0.3;
+
 export default class InfoCenterFloor extends Floor {
 	dinged = false;
+	svgLoaded = false;
+	handsData?: SVGResult;
+	armsData?: SVGResult;
+	integrelleData?: SVGResult;
+	integrelleCloseData?: SVGResult;
 
 	constructor() {
 		super("info-center", 1);
 		this.listenClick = true;
 		this.listenMove = true;
+		this.listenUpdate = true;
 	}
 
 	spawn(scene: THREE.Scene) {
-		const topLength = 120, bottomLength = 108, topDepth = 25;
-		const deskHeight = 30;
-
 		const trapezium = new THREE.Shape([new THREE.Vector2(-topLength / 2, deskHeight / 2), new THREE.Vector2(topLength / 2, deskHeight / 2), new THREE.Vector2(bottomLength / 2, -deskHeight / 2), new THREE.Vector2(-bottomLength / 2, -deskHeight / 2)]);
 		const geometryDeskBottom = new THREE.ExtrudeGeometry(trapezium, { bevelEnabled: false, depth: topDepth });
 		const materialDeskBottom = new THREE.MeshStandardMaterial({ color: 0x7db4cb });
@@ -103,13 +114,96 @@ export default class InfoCenterFloor extends Floor {
 		bell.translateX(25);
 		scene.add(bell);
 
-		return { floor, deskBottom, deskTop, deskTopRight, deskBottomRight, pillarL, pillarR, railing, glass, bell };
+		const meshes: Generated = { floor, deskBottom, deskTop, deskTopRight, deskBottomRight, pillarL, pillarR, railing, glass, bell };
+
+		if (!this.svgLoaded) {
+			this.svgLoaded = true;
+			SVG_LOADER.load(`/assets/images/integrelle/hands.svg`, data => {
+				this.handsData = data;
+				const group = this.setupHands();
+				this.meshes!.hands = group;
+				scene.add(group);
+			});
+			SVG_LOADER.load(`/assets/images/integrelle/arms.svg`, data => {
+				this.armsData = data;
+				const group = this.setupArms();
+				this.meshes!.arms = group;
+				scene.add(group);
+			});
+			SVG_LOADER.load(`/assets/images/integrelle/integrelle.svg`, data => {
+				this.integrelleData = data;
+				const { nextCenter, group } = this.setupIntegrelle();
+				this.meshes!.integrelle = group;
+				scene.add(group);
+
+				// loading inside to use last group center
+				SVG_LOADER.load(`/assets/images/integrelle/integrelle-close.svg`, data => {
+					this.integrelleCloseData = data;
+					const closeGroup = this.setupIntegrelleClose(nextCenter);
+					this.meshes!.integrelleClose = group;
+					scene.add(closeGroup);
+				});
+			});
+		} else {
+			const hands = this.setupHands();
+			const arms = this.setupArms();
+			const { nextCenter, group: integrelle } = this.setupIntegrelle();
+			const integrelleClose = this.setupIntegrelleClose(nextCenter);
+			scene.add(hands, integrelle, integrelleClose, arms);
+			meshes.hands = hands;
+			meshes.arms = arms;
+			meshes.integrelle = integrelle;
+			meshes.integrelleClose = integrelleClose;
+		}
+
+		return meshes;
+	}
+
+	private setupHands() {
+		const group = createSVGCenteredGroup(this.handsData!, true);
+		group.rotateZ(Math.PI);
+		group.rotateX(Math.PI / 4);
+		group.position.set(0, this.num * 1000 - 29 + deskHeight / 2 + 1.15, -124);
+		group.scale.set(integrelleScale, integrelleScale, integrelleScale);
+		group.visible = false;
+		return group;
+	}
+
+	private setupArms() {
+		const group = createSVGCenteredGroup(this.armsData!);
+		group.rotateX(Math.PI);
+		group.position.set(0, this.num * 1000 - 55 + deskHeight / 2 + 1, -126);
+		group.scale.set(integrelleScale, integrelleScale, integrelleScale);
+		return group;
+	}
+
+	private setupIntegrelle() {
+		const group = createSVGCenteredGroup(this.integrelleData!);
+		const nextCenter = group.position.clone();
+		group.rotateX(Math.PI);
+		group.position.set(0, this.num * 1000 - 55 + deskHeight / 2 + 1, -127);
+		group.scale.set(integrelleScale, integrelleScale, integrelleScale);
+		return { nextCenter, group };
+	}
+
+	private setupIntegrelleClose(nextCenter: THREE.Vector3) {
+		const group = createSVGGroupWithCenter(this.integrelleCloseData!, nextCenter);
+		group.rotateX(Math.PI);
+		group.position.set(0, this.num * 1000 - 20 + deskHeight / 2 + 1, -127);
+		group.scale.set(integrelleScale, integrelleScale, integrelleScale);
+		group.visible = false;
+		return group;
+	}
+
+	despawn(scene: THREE.Scene): void {
+		super.despawn(scene);
+		this.dinged = false;
 	}
 
 	handleWheel(scroll: number) {
 		const cam = camera();
 		if (cam.position.y != this.num * 1000) cam.position.y = this.num * 1000;
-		const maxDist = 60;
+		const maxDist = 200 //65;
 		let maxed = false;
 		if (!(cam.position.z == 0 && scroll < 0)) {
 			cam.translateZ(-scroll);
@@ -127,6 +221,18 @@ export default class InfoCenterFloor extends Floor {
 		return maxed;
 	}
 
+	async blinker() {
+		while (this.dinged) {
+			await wait(randomBetween(10000, 20000));
+			if (!this.dinged) return;
+			this.meshes!.integrelle.visible = false;
+			this.meshes!.integrelleClose.visible = true;
+			await wait(200);
+			this.meshes!.integrelleClose.visible = false;
+			this.meshes!.integrelle.visible = true;
+		}
+	}
+
 	private async loadConversation(next: string) {
 		setInnerHTML(div, await (PAGES.has(next) ? PAGES.get(next) : CONTENTS.get(this.num))!.get());
 		for (const li of div.querySelectorAll<HTMLLIElement>("li")) {
@@ -137,22 +243,18 @@ export default class InfoCenterFloor extends Floor {
 
 	private async ding() {
 		audio.play();
-		if (this.dinged) return;
-		this.dinged = true;
-		await wait(500);
-		//arms.classList.remove("hidden");
-		await wait(10);
-		//arms.style.transform = "";
-		await wait(1000);
-		//arms.classList.add("hidden");
-		//hands.classList.remove("hidden");
-		await wait(500);
-		//integrelle.classList.remove("hidden");
-		await wait(10);
-		//integrelle.style.transform = "";
-
-		//this.blinker();
-		await wait(1500);
+		if (!this.dinged) {
+			this.dinged = true;
+			await wait(500);
+			this.meshes!.arms.position.add(new THREE.Vector3(0, 25, 0));
+			await wait(1000);
+			this.meshes!.arms.visible = false;
+			this.meshes!.hands.visible = true;
+			await wait(500);
+			this.meshes!.integrelle.position.add(new THREE.Vector3(0, 35, 0));
+			this.blinker();
+			await wait(1500);
+		}
 
 		hideOrUnhideInfo(async hidden => {
 			if (hidden) setInnerHTML(div, "");
@@ -168,5 +270,9 @@ export default class InfoCenterFloor extends Floor {
 	moveCheck() {
 		if (this.meshes) return [this.meshes.bell];
 		return super.moveCheck();
+	}
+
+	update(scene: THREE.Scene) {
+		
 	}
 }

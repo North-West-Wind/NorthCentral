@@ -1,5 +1,6 @@
 import { Group, TextureLoader } from "three";
 import { GLTF, GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
+import { SVGLoader } from "three/examples/jsm/loaders/SVGLoader.js";
 
 const MODELS = [
 	"armor_stand",
@@ -10,7 +11,8 @@ const MODELS = [
 	"marshmallow"
 ];
 
-export const LOADER = new TextureLoader();
+export const TEXTURE_LOADER = new TextureLoader();
+export const SVG_LOADER = new SVGLoader();
 const GLTF_LOADER = new GLTFLoader();
 
 export const GLTF_LOADED: { [key: string]: Group } = {};
