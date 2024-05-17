@@ -11,7 +11,7 @@ fetch(`/api/config`).then(async res => {
 	if (!res.ok) return;
 	const files = <string[]>(await res.json()).info;
 	for (const file of files)
-		PAGES.set(file.split(".").slice(0, -1).join("."), new LazyLoader(() => readPage(`/contents/info/${file}`)));
+		PAGES.set(file.split(".").slice(0, -1).join("."), new LazyLoader(() => readPage(`/contents/info-center/${file}`)));
 });
 
 export default class InfoCenterFloor extends Floor {
@@ -78,6 +78,7 @@ export default class InfoCenterFloor extends Floor {
 	}
 	
 	async loadConversation(info: HTMLDivElement, next: string) {
+		console.log(next);
 		const page = PAGES.get(next);
 		if (page) info.innerHTML = await page.get();
 		else info.innerHTML = await this.content.get();
@@ -86,7 +87,7 @@ export default class InfoCenterFloor extends Floor {
 	}
 
 	async loadContent(info: HTMLDivElement) {
-		for (const li of info.querySelectorAll<HTMLLIElement>("#li")) {
+		for (const li of info.querySelectorAll<HTMLLIElement>("li")) {
 			if (li.hasAttribute("next"))
 				li.onclick = () => this.loadConversation(info, li.getAttribute("next")!);
 		}

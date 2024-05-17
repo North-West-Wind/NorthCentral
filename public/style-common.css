@@ -188,6 +188,11 @@ a:hover, .link-like *:hover {
 	color: #fcf803;
 }
 
+.answer-list {
+	list-style-type: none;
+	font-size: 2vmax;
+}
+
 /* 2d specific */
 
 .background {
