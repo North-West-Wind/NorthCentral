@@ -283,3 +283,7 @@ a:hover, .link-like *:hover {
 	width: 50%;
 	border-radius: 2vmax;
 }
+
+svg * {
+	transition: transform 1s ease;
+}

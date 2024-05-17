@@ -22,7 +22,6 @@ export default class MoreBootsFloor extends Floor {
 	}
 
 	loadSvg() {
-		console.log("loading svg");
 		const rod = document.querySelector<SVGGElement>("#rod")!;
 		const boots = document.querySelector<SVGGElement>("#boots")!;
 

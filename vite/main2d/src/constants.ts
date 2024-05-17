@@ -1,4 +1,4 @@
-import AutoFishFloor from "./floors/auto_fish";
+import InfoCenterFloor from "./floors/info_center";
 import GalleryFloor from "./floors/gallery";
 import GroundFloor from "./floors/ground";
 import MoreBootsFloor from "./floors/mods";
@@ -15,7 +15,7 @@ function addFloor(floor: Floor) {
 }
 
 addFloor(new GroundFloor());
-addFloor(new AutoFishFloor());
+addFloor(new InfoCenterFloor());
 addFloor(new MoreBootsFloor());
 addFloor(new SkyFarmFloor());
 addFloor(new N0rthWestW1ndFloor());
