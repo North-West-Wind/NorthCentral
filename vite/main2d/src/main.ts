@@ -86,7 +86,7 @@ export async function toggleContent(html?: string) {
 // transition from state 0 to 3
 async function anyToThree() {
   if (state == 0) {
-    const audio = new Audio('/assets/lift.mp3');
+    const audio = new Audio('/assets/sounds/lift.mp3');
     audio.play();
     state = 1;
     leftDoor.style.transform = "translateX(-25%)";
