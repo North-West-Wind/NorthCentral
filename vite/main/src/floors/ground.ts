@@ -1,6 +1,7 @@
 import * as THREE from "three";
 import Floor from "../types/floor";
 import { camera } from "../states";
+import { getVar, setVar, toggleMusic } from "../helpers/control";
 
 export default class GroundFloor extends Floor {
 	allRains: THREE.Mesh[] = [];
@@ -57,5 +58,29 @@ export default class GroundFloor extends Floor {
 		}
 		newRains.push(...this.createRain(scene, 10));
 		this.allRains = newRains;
+	}
+
+	loadContent(info: HTMLDivElement) {
+		// Add buttons functionality
+		if (getVar("answered")) {
+			const cookieInfo = document.getElementById("cookies")!;
+			cookieInfo.classList.add("hidden");
+		}
+		function accept() {
+			window.sessionStorage.setItem("use_cookies", "1");
+			setVar("use_cookies", 1);
+			for (const key of Object.keys(window.sessionStorage)) setVar(key, window.sessionStorage.getItem(key));
+			answer();
+		}
+		function answer() {
+			setVar("answered", 1);
+			const cookieInfo = document.getElementById("cookies")!;
+			cookieInfo.classList.add("hidden");
+		}
+
+		(<HTMLAnchorElement>document.getElementsByClassName("cookie-button accept")[0]).onclick = () => accept();
+		(<HTMLAnchorElement>document.getElementsByClassName("cookie-button deny")[0]).onclick = () => answer();
+
+		document.getElementById("toggleMusic")!.onclick = () => toggleMusic();
 	}
 }

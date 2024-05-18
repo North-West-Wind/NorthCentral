@@ -2,7 +2,7 @@ import * as THREE from "three";
 import Floor from "../types/floor";
 import { GLTF_LOADED, TEXTURE_LOADER } from "../loaders";
 import { camera } from "../states";
-import { hideOrUnhideInfo, setInnerHTML } from "../helpers/html";
+import { toggleContent } from "../helpers/html";
 import { LazyLoader } from "../types/misc";
 import { readPage } from "../helpers/reader";
 
@@ -11,11 +11,9 @@ enum ModPage {
 	MORE_BOOTS = "more-boots"
 };
 
-const div = document.getElementById("info")!;
 const WATER_TEXTURES: THREE.Texture[] = [];
 const MOD_CONTENTS = new Map<string, LazyLoader<string>>();
 for (const page of Object.values(ModPage)) MOD_CONTENTS.set(page, new LazyLoader(() => readPage(`/contents/mods/${page}.html`)));
-
 
 export default class ModsFloor extends Floor {
 	textureUpdater?: NodeJS.Timer;
@@ -151,11 +149,8 @@ export default class ModsFloor extends Floor {
 		return maxed;
 	}
 
-	private toggleModInfo(page: ModPage) {
-		hideOrUnhideInfo(async hidden => {
-			if (hidden) setInnerHTML(div, "");
-			else setInnerHTML(div, await MOD_CONTENTS.get(page)!.get());
-		});
+	private async toggleModInfo(page: ModPage) {
+		toggleContent({ html: await MOD_CONTENTS.get(page)!.get() });
 	}
 
 	clickRaycast(raycaster: THREE.Raycaster) {

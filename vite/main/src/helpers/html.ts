@@ -1,77 +1,54 @@
-import { CONTENTS } from "../constants";
-import { getVar, setVar, toggleMusic } from "./control";
+import { FLOORS } from "../constants";
+import { floor } from "../states";
+import { wait } from "./control";
 
 export function gotoRoot() {
 	document.location.href = "/";
 }
 
-export function setInnerHTML(elm: HTMLElement, html = "") {
-	elm.innerHTML = html;
-	Array.from(elm.querySelectorAll("script")).forEach(oldScript => {
-		const newScript = document.createElement("script");
-		Array.from(oldScript.attributes)
-			.forEach(attr => newScript.setAttribute(attr.name, attr.value));
-		newScript.appendChild(document.createTextNode(oldScript.innerHTML));
-		oldScript.parentNode!.replaceChild(newScript, oldScript);
-	});
-}
-
-const div = document.getElementById("info")!;
+const div = document.getElementById("info") as HTMLDivElement;
 const closer = document.getElementById("closer")!;
 closer.onclick = () => {
-	if (!div.classList.contains('hidden')) openOrCloseInfo();
+	if (!div.classList.contains('hidden')) toggleContent();
 }
 
-export function hideOrUnhideInfo(cb = (_bool: boolean) => { }) {
-	if (div.classList.contains('hidden')) {
-		div.classList.remove('hidden');
-		closer.classList.remove('hidden');
-		setTimeout(function () {
-			div.classList.remove('visuallyhidden');
-			closer.classList.remove('visuallyhidden');
-		}, 20);
-		cb(false);
-	} else {
-		closer.classList.add('visuallyhidden');
-		div.classList.add('visuallyhidden');
+// toggle the closing button for content
+async function toggleCloser() {
+  if (closer.classList.contains("hidden")) {
+    closer.classList.remove("hidden");
+    await wait(20);
+    closer.classList.remove("visuallyhidden");
+  } else {
+		function onTransitionEnd() {
+			closer.classList.add('hidden');
+			closer.removeEventListener("transitionend", onTransitionEnd);
+		}
+    closer.addEventListener("transitionend", onTransitionEnd);
+    closer.classList.add("visuallyhidden");
+  }
+}
+
+export async function toggleContent(options?: { html?: string | (() => Promise<string>), index?: number }) {
+  if (div.classList.contains("hidden")) {
+    if (options?.html) {
+			if (typeof options.html === "string") div.innerHTML = options.html;
+			else div.innerHTML = await options.html();
+		} else if (options?.index !== undefined) div.innerHTML = await Array.from(FLOORS.values())[options.index].content.get();
+    else div.innerHTML = await floor()!.content.get();
+    floor()!.loadContent(div);
+    div.classList.remove("hidden");
+    await wait(20);
+    div.classList.remove("visuallyhidden");
+    toggleCloser();
+  } else {
+    toggleCloser();
+    floor()!.unloadContent(div);
+    div.innerHTML = "";
 		function onTransitionEnd() {
 			div.classList.add('hidden');
-			closer.classList.add('hidden');
-			cb(true);
 			div.removeEventListener("transitionend", onTransitionEnd);
 		}
-		div.addEventListener('transitionend', onTransitionEnd, { capture: false, once: true, passive: false });
-	}
-}
-
-export function openOrCloseInfo(index = 0) {
-	hideOrUnhideInfo(async hidden => {
-		if (hidden) setInnerHTML(div, "");
-		else {
-			setInnerHTML(div, await CONTENTS.get(index)?.get());
-			if (!index) {
-				// Add buttons functionality
-				if (getVar("answered")) {
-					const cookieInfo = document.getElementById("cookies")!;
-					cookieInfo.classList.add("hidden");
-				}
-				function accept() {
-					window.sessionStorage.setItem("use_cookies", "1");
-					setVar("use_cookies", 1);
-					for (const key of Object.keys(window.sessionStorage)) setVar(key, window.sessionStorage.getItem(key));
-					answer();
-				}
-				function answer() {
-					setVar("answered", 1);
-					const cookieInfo = document.getElementById("cookies")!;
-					cookieInfo.classList.add("hidden");
-				}
-
-				(<HTMLAnchorElement>document.getElementsByClassName("cookie-button accept")[0]).onclick = () => accept();
-				(<HTMLAnchorElement>document.getElementsByClassName("cookie-button deny")[0]).onclick = () => answer();
-
-				document.getElementById("toggleMusic")!.onclick = () => toggleMusic();
-			}
-		}
-	});
+    div.addEventListener("transitionend", onTransitionEnd);
+    div.classList.add("visuallyhidden");
+  }
 }

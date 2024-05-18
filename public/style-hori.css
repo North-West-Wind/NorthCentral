@@ -15,3 +15,18 @@
 .gallery-item {
     width: 60vh;
 }
+
+.double-container {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.double-container > div {
+    position: relative;
+    width: 50%;
+}
+
+.double-container > div p {
+    padding: 0;
+}

@@ -3,7 +3,7 @@ import Floor from "../types/floor";
 import { camera } from "../states";
 import { TEXTURE_LOADER } from "../loaders";
 import { readPage } from "../helpers/reader";
-import { hideOrUnhideInfo, setInnerHTML } from "../helpers/html";
+import { toggleContent } from "../helpers/html";
 import { LazyLoader } from "../types/misc";
 
 const TEMPLATE = new LazyLoader(() => readPage("/contents/gallery/template.html"));
@@ -13,7 +13,6 @@ const PAINTING_LENGTH = 50;
 const LENGTH_PER_PAINTING = PAINTING_LENGTH + 30;
 const FLOOR_LENGTH = Math.ceil((PAINTINGS - 1) * 0.5) * LENGTH_PER_PAINTING;
 
-const div = document.getElementById("info")!;
 export default class GalleryFloor extends Floor {
 	private static fileNames: string[];
 	paintings: THREE.Mesh[] = [];
@@ -135,14 +134,11 @@ export default class GalleryFloor extends Floor {
 	}
 
 	private openOrCloseGalleryInfo(index: number) {
-		hideOrUnhideInfo(async hidden => {
-			if (hidden) setInnerHTML(div, "");
-			else {
-				const file = GalleryFloor.fileNames[index];
-				if (!file) return;
-				setInnerHTML(div, (await TEMPLATE.get()).replace("{title}", file.split(" ").slice(1).join(" ").split(".").slice(0, -1).join(".")).replace("{src}", `assets/pfps/${file}`));
-			}
-		});
+		toggleContent({ html: async () => {
+			const file = GalleryFloor.fileNames[index];
+			if (!file) return "";
+			return (await TEMPLATE.get()).replace("{title}", file.split(" ").slice(1).join(" ").split(".").slice(0, -1).join(".")).replace("{src}", `assets/pfps/${file}`);
+		}})
 	}
 
 	clickRaycast(raycaster: THREE.Raycaster) {

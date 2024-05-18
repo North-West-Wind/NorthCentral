@@ -1,7 +1,7 @@
 import * as THREE from "three";
 import Floor, { Generated } from "../types/floor";
 import { camera } from "../states";
-import { hideOrUnhideInfo, setInnerHTML } from "../helpers/html";
+import { toggleContent } from "../helpers/html";
 import { readPage } from "../helpers/reader";
 import { LazyLoader } from "../types/misc";
 import { CONTENTS } from "../constants";
@@ -10,7 +10,7 @@ import { SVG_LOADER } from "../loaders";
 import { clamp, createSVGCenteredGroup, createSVGGroupWithCenter, randomBetween } from "../helpers/math";
 import { SVGResult } from "three/examples/jsm/loaders/SVGLoader.js";
 
-const div = document.getElementById("info")!;
+const info = document.getElementById("info") as HTMLDivElement;
 const audio = new Audio('/assets/sounds/ding.mp3');
 const PAGES = new Map<string, LazyLoader<string>>();
 fetch(`/api/config`).then(async res => {
@@ -244,11 +244,9 @@ export default class InfoCenterFloor extends Floor {
 	}
 
 	private async loadConversation(next: string) {
-		setInnerHTML(div, await (PAGES.has(next) ? PAGES.get(next) : CONTENTS.get(this.num))!.get());
-		for (const li of div.querySelectorAll<HTMLLIElement>("li")) {
-			if (li.hasAttribute("next"))
-				li.onclick = () => this.loadConversation(li.getAttribute("next")!);
-		}
+		if (info.classList.contains("hidden")) toggleContent({ html: await (PAGES.has(next) ? PAGES.get(next) : CONTENTS.get(this.num))!.get() });
+		else info.innerHTML = await (PAGES.has(next) ? PAGES.get(next) : CONTENTS.get(this.num))!.get();
+		this.loadContent(info);
 	}
 
 	private async ding() {
@@ -271,10 +269,7 @@ export default class InfoCenterFloor extends Floor {
 			await wait(500);
 		}
 
-		hideOrUnhideInfo(async hidden => {
-			if (hidden) setInnerHTML(div, "");
-			else this.loadConversation("");
-		});
+		this.loadConversation("");
 	}
 
 	clickRaycast(raycaster: THREE.Raycaster) {
@@ -314,6 +309,13 @@ export default class InfoCenterFloor extends Floor {
 			default:
 				if (this.animationPos) this.animationPos = undefined;
 				if (this.animationStart) this.animationStart = undefined;
+		}
+	}
+
+	loadContent(info: HTMLDivElement) {
+		for (const li of info.querySelectorAll<HTMLLIElement>("li")) {
+			if (li.hasAttribute("next"))
+				li.onclick = () => this.loadConversation(li.getAttribute("next")!);
 		}
 	}
 }

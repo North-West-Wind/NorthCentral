@@ -1,6 +1,6 @@
 import * as THREE from "three";
 import { scene, buttonD, buttonU, display, doorL, doorR, midX, midY, sign, pointLight, obj, loadFloor } from ".";
-import { openOrCloseInfo } from "./helpers/html";
+import { toggleContent } from "./helpers/html";
 import { FLOORS } from "./constants";
 import { displayTexture } from "./generators";
 import { camera, currentFloor, floor, ratio, rotatedX, rotatedY, started, targetFloor, touched } from "./states";
@@ -73,7 +73,7 @@ window.addEventListener("touchend", (e) => {
 	if (!e.touches.length) touched(false);
 	if (touch.x == touch.originX && touch.y == touch.originY) {
 		clickEventsCommon({ clientX: touch.x, clientY: touch.y });
-		if (!div.classList.contains("visuallyhidden") && e.touches.length == 0 && touch.originX == touch.x && touch.originY == touch.y) openOrCloseInfo();
+		if (!div.classList.contains("visuallyhidden") && e.touches.length == 0 && touch.originX == touch.x && touch.originY == touch.y) toggleContent();
 	} else {
 		if (e.touches.length) {
 			touch.ix = touch.x = e.touches[0].clientX;
@@ -121,7 +121,7 @@ function clickEventsCommon(e: { clientX: number, clientY: number }) {
 	else if (raycaster.intersectObject(buttonD).length > 0) { button = buttonD; if (currentFl != -1 && targetFl > 0) targetFl = targetFloor(targetFl - 1); }
 	else if (raycaster.intersectObject(display).length > 0 && currentFl != targetFl && currentFl != -1 && state != State.OPENING && state != State.CLOSING) displayPressed = true;
 	else if (raycaster.intersectObject(sign).length > 0) {
-		openOrCloseInfo(floor()?.special ? floor()!.num : 0);
+		toggleContent({ index: floor()?.special ? floor()!.num : 0 });
 		start = true;
 	} else if (floor()?.listenClick) {
 		floor()!.clickRaycast(raycaster);
@@ -141,7 +141,7 @@ function clickEventsCommon(e: { clientX: number, clientY: number }) {
 		// initial start
 		if (start && state != State.WAITING && !displayPressed) {
 			state = State.OPENING;
-			const audio = new Audio('/assets/lift.mp3');
+			const audio = new Audio('/assets/sounds/lift.mp3');
 			audio.play();
 		}
 	}
@@ -152,10 +152,8 @@ window.addEventListener("wheel", e => {
 });
 
 window.addEventListener("keydown", e => {
-	if (e.key == "Escape" && !div.classList.contains("hidden")) {
-		openOrCloseInfo();
-		if (!floor()?.phase) floor()!.phase = 1;
-	}
+	if (e.key == "Escape" && !div.classList.contains("hidden"))
+		toggleContent();
 });
 
 function update() {
@@ -213,7 +211,7 @@ function update() {
 				camera().position.y = 1000 * currentFloor();
 				pointLight.position.y += 1000 * diff;
 				state = State.OPENING;
-				const audio = new Audio('/assets/lift.mp3');
+				const audio = new Audio('/assets/sounds/lift.mp3');
 				audio.play();
 			}, 500 + 200 * Math.abs(diff));
 		}
@@ -251,7 +249,7 @@ setInterval(() => {
 }, 10);
 
 window.onpopstate = async () => {
-	if (!div.classList.contains("hidden")) openOrCloseInfo();
+	if (!div.classList.contains("hidden")) toggleContent();
 	await wait(250);
 	const cam = camera();
 	if (cam.position.x != 0 || cam.position.z != 0) {

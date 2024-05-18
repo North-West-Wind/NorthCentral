@@ -2,7 +2,7 @@ import * as THREE from "three";
 import Floor from "../types/floor";
 import { TEXTURE_LOADER } from "../loaders";
 import { camera, rotatedX, touched } from "../states";
-import { openOrCloseInfo } from "../helpers/html";
+import { toggleContent } from "../helpers/html";
 
 const div = document.getElementById("info")!;
 export default class SkyFarmFloor extends Floor {
@@ -103,7 +103,7 @@ export default class SkyFarmFloor extends Floor {
 				cam.position.y = -(Math.abs(cam.position.z) - maxDist0) * maxDist3 / (maxDist1 - maxDist0) + this.num * 1000;
 				rotatedX(rotateAngle * (Math.abs(cam.position.z) - maxDist0) / (maxDist1 - maxDist0));
 			} else if (scroll > 0 && !touched()) {
-				if (div.classList.contains('hidden')) openOrCloseInfo(this.num);
+				if (div.classList.contains('hidden')) toggleContent({ index: this.num });
 			}
 		} else {
 			cam.translateZ(-scroll);
@@ -116,7 +116,7 @@ export default class SkyFarmFloor extends Floor {
 			rotatedX(0);
 		}
 
-		if (zoomLimitReached) openOrCloseInfo(this.num);
+		if (zoomLimitReached) toggleContent({ index: this.num });
 		return maxed;
 	}
 }

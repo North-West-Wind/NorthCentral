@@ -22,6 +22,10 @@ canvas {
 	padding: 0;
 }
 
+h2 {
+	margin: 0;
+}
+
 .info {
 	position: absolute;
 	top: 0;
@@ -59,19 +63,28 @@ canvas {
 
 .hint {
 	font-size: 1.25vmax;
-	opacity: 0.5;
+	opacity: 0.6;
 }
 
 .credits {
-	font-size: 0.75vmax;
+	font-size: 1.25vmax;
 }
 
-.floors {
+.floors, .credits {
 	margin: auto;
 }
 
-.floors th {
+.credits th, .floors th {
 	text-align: right;
+}
+
+.floors td {
+	text-align: left;
+}
+
+.credits td {
+	padding-left: 1.25vmax;
+	text-align: left;
 }
 
 .info iframe {
@@ -193,6 +206,23 @@ a:hover, .link-like *:hover {
 	font-size: 2vmax;
 }
 
+.flex {
+	display: flex;
+}
+
+.flex.vcenter {
+	align-items: center;
+}
+
+.flex.hcenter {
+	justify-content: center;
+}
+
+.double-container {
+	width: 76vw;
+	margin: auto;
+}
+
 /* 2d specific */
 
 .background {
@@ -269,18 +299,6 @@ a:hover, .link-like *:hover {
 .sheet-back:hover {
 	text-decoration: underline;
 	cursor: pointer;
-}
-
-.flex {
-	display: flex;
-}
-
-.flex.vcenter {
-	align-items: center;
-}
-
-.flex.hcenter {
-	justify-content: center;
 }
 
 .gallery-entry {

@@ -2,7 +2,7 @@ import * as THREE from "three";
 import Floor, { Generated } from "../types/floor";
 import { GLTF_LOADED } from "../loaders";
 import { camera, rotatedY, started } from "../states";
-import { hideOrUnhideInfo, setInnerHTML } from "../helpers/html";
+import { toggleContent } from "../helpers/html";
 import { readPage } from "../helpers/reader";
 import { LazyLoader } from "../types/misc";
 
@@ -109,11 +109,8 @@ export default class SheetMusicFloor extends Floor {
 		return maxed;
 	}
 
-	private openOrCloseSheetInfo(index: number) {
-		hideOrUnhideInfo(async hidden => {
-			if (hidden) setInnerHTML(div, "");
-			else setInnerHTML(div, await SHEETMUSIC_CONTENTS[index].get());
-		});
+	private async openOrCloseSheetInfo(index: number) {
+		toggleContent({ html: await SHEETMUSIC_CONTENTS[index].get() });
 	}
 
 	clickRaycast(raycaster: THREE.Raycaster): void {

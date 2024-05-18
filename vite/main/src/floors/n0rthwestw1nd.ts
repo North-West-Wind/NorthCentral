@@ -2,7 +2,7 @@ import * as THREE from "three";
 import Floor from "../types/floor";
 import { GLTF_LOADED } from "../loaders";
 import { camera, rotatedY, touched } from "../states";
-import { hideOrUnhideInfo, openOrCloseInfo, setInnerHTML } from "../helpers/html";
+import { toggleContent } from "../helpers/html";
 import { readPage } from "../helpers/reader";
 import { LazyLoader } from "../types/misc";
 
@@ -64,7 +64,7 @@ export default class N0rthWestW1ndFloor extends Floor {
 		if (cam.position.z <= -maxDist0) {
 			if (div.classList.contains('hidden')) {
 				if (scroll > 0 && !this.phase) {
-					if (!touched()) openOrCloseInfo(this.num);
+					if (!touched()) toggleContent({ index: this.num });
 					else zoomLimitReached = true;
 					maxed = true;
 				} else if (this.phase) {
@@ -98,17 +98,14 @@ export default class N0rthWestW1ndFloor extends Floor {
 		if (cam.position.y != this.num * 1000) cam.position.y = this.num * 1000;
 
 		if (zoomLimitReached) {
-			openOrCloseInfo(this.num);
+			toggleContent({ index: this.num });
 			if (div.classList.contains("visuallyhidden") && !this.phase) this.phase = 1;
 		}
 		return maxed;
 	}
 
-	private openOrCloseNWWInfo(index = 0) {
-		hideOrUnhideInfo(async hidden => {
-			if (hidden) setInnerHTML(div, "");
-			else setInnerHTML(div, await N0RTHWESTW1ND_CONTENTS[index].get());
-		});
+	private async openOrCloseNWWInfo(index = 0) {
+		toggleContent({ html: await N0RTHWESTW1ND_CONTENTS[index].get() })
 	}
 
 	clickRaycast(raycaster: THREE.Raycaster) {
@@ -155,5 +152,9 @@ export default class N0rthWestW1ndFloor extends Floor {
 		}
 		newParticles.push(...this.createParticle(scene, 1));
 		this.allParticles = newParticles;
+	}
+
+	unloadContent() {
+		if (!this.phase) this.phase = 1;
 	}
 }
