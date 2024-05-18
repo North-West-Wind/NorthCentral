@@ -7,9 +7,8 @@ import { LazyLoader } from "../types/misc";
 import { CONTENTS } from "../constants";
 import { wait } from "../helpers/control";
 import { SVG_LOADER } from "../loaders";
-import { createSVGCenteredGroup, createSVGGroupWithCenter, randomBetween } from "../helpers/math";
+import { clamp, createSVGCenteredGroup, createSVGGroupWithCenter, randomBetween } from "../helpers/math";
 import { SVGResult } from "three/examples/jsm/loaders/SVGLoader.js";
-import { clamp } from "three/src/math/MathUtils.js";
 
 const div = document.getElementById("info")!;
 const audio = new Audio('/assets/sounds/ding.mp3');
