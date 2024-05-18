@@ -151,7 +151,7 @@ export default class InfoCenterFloor extends Floor {
 				SVG_LOADER.load(`/assets/images/integrelle/integrelle-close.svg`, data => {
 					this.integrelleCloseData = data;
 					const closeGroup = this.setupIntegrelleClose(nextCenter);
-					this.meshes!.integrelleClose = group;
+					this.meshes!.integrelleClose = closeGroup;
 					scene.add(closeGroup);
 				});
 			});
@@ -234,7 +234,7 @@ export default class InfoCenterFloor extends Floor {
 
 	async blinker() {
 		while (this.dinged) {
-			await wait(randomBetween(10000, 20000));
+			await wait(randomBetween(8000, 12000));
 			if (!this.dinged) return;
 			this.meshes!.integrelle.visible = false;
 			this.meshes!.integrelleClose.visible = true;
@@ -313,8 +313,8 @@ export default class InfoCenterFloor extends Floor {
 				break;
 			}
 			default:
-				this.animationPos = undefined;
-				this.animationStart = undefined;
+				if (this.animationPos) this.animationPos = undefined;
+				if (this.animationStart) this.animationStart = undefined;
 		}
 	}
 }
