@@ -5,7 +5,6 @@ import { toggleContent } from "../main";
 import Floor from "../types/floor";
 import { LazyLoader } from "../types/misc";
 
-const audio = new Audio('/assets/sounds/ding.mp3');
 const PAGES = new Map<string, LazyLoader<string>>();
 fetch(`/api/config`).then(async res => {
 	if (!res.ok) return;
@@ -50,6 +49,7 @@ export default class InfoCenterFloor extends Floor {
 		arms.style.transform = "translateY(50vh)";
 
 		bell.onclick = async () => {
+			const audio = new Audio('/assets/sounds/ding.mp3');
 			audio.play();
 			if (this.dinged) return;
 			this.dinged = true;

@@ -11,7 +11,6 @@ import { clamp, createSVGCenteredGroup, createSVGGroupWithCenter, randomBetween 
 import { SVGResult } from "three/examples/jsm/loaders/SVGLoader.js";
 
 const info = document.getElementById("info") as HTMLDivElement;
-const audio = new Audio('/assets/sounds/ding.mp3');
 const PAGES = new Map<string, LazyLoader<string>>();
 fetch(`/api/config`).then(async res => {
 	if (!res.ok) return;
@@ -26,6 +25,7 @@ const integrelleScale = 0.3;
 
 enum AnimationState {
 	IDLE = 0,
+	START = 0.5,
 	ARMS = 1,
 	SWAP_HANDS = 2,
 	INTEGRELLE = 3
@@ -250,9 +250,11 @@ export default class InfoCenterFloor extends Floor {
 	}
 
 	private async ding() {
+		const audio = new Audio('/assets/sounds/ding.mp3');
 		audio.play();
 		if (!this.dinged) {
 			this.dinged = true;
+			this.animationState = AnimationState.START;
 			await wait(500);
 			this.animationState = AnimationState.ARMS;
 			await wait(1000);
@@ -269,7 +271,7 @@ export default class InfoCenterFloor extends Floor {
 			await wait(500);
 		}
 
-		this.loadConversation("");
+		if (this.animationState == AnimationState.IDLE) this.loadConversation("");
 	}
 
 	clickRaycast(raycaster: THREE.Raycaster) {
