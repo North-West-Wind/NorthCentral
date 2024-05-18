@@ -136,7 +136,7 @@ function clickEventsCommon(e: { clientX: number, clientY: number }) {
 		xm.map!.needsUpdate = true;
 		display.material.splice(4, 1, xm);
 	}
-	if (!started()) {
+	if (!started() && start) {
 		started(true);
 		// initial start
 		if (start && state != State.WAITING && !displayPressed) {
@@ -180,7 +180,6 @@ function update() {
 				doorL.position.x = -12.5;
 				doorR.position.x = 12.5;
 				state = State.INSIDE;
-				loadFloor();
 			} else {
 				doorL.translateX(0.4);
 				doorR.translateX(-0.4);
@@ -201,6 +200,7 @@ function update() {
 		if (state == State.INSIDE) {
 			state = State.WAITING;
 			setTimeout(() => {
+				loadFloor();
 				const targetFl = targetFloor();
 				if (!poppedState) history.pushState({ floor: targetFl }, "", "/" + (targetFl == 0 ? "" : Array.from(FLOORS.keys())[targetFl]));
 				else poppedState = false;
