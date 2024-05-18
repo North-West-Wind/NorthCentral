@@ -3,7 +3,7 @@ import WebGL from "three/examples/jsm/capabilities/WebGL.js";
 import { displayTexture, makeLift } from "./generators";
 import { camera, currentFloor, floor, ratio, targetFloor } from "./states";
 import { enableStylesheet, disableStylesheet } from "./helpers/css";
-import { getVar, setVar, toggleMusic } from "./helpers/control";
+import { getConfig, writeConfig } from "./helpers/control";
 import { holdModelLoads } from "./loaders";
 import { FLOORS } from "./constants";
 import "./handler";
@@ -18,13 +18,12 @@ if (!WebGL.isWebGLAvailable()) {
 
 const passedInFloor = ((Array.from(FLOORS.keys()).indexOf(window.location.pathname.split("/")[1] || "ground") + 1) || (404 + 1)) - 1;
 
-if (getVar("use_cookies")) {
-  setVar("use_cookies", 1);
-  setVar("answered", 1);
-  for (const key of Object.keys(window.sessionStorage)) setVar(key, window.sessionStorage.getItem(key));
+const config = getConfig();
+if (config.useCookies) {
+  config.answeredCookies = true;
+  writeConfig();
 }
-if (getVar("no_music") == "0") (document.getElementById("player") as HTMLAudioElement).play();
-else if (!getVar("no_music")) toggleMusic();
+if (config.music) (document.getElementById("player") as HTMLAudioElement).play();
 
 export const scene = new THREE.Scene();
 const cam = camera(new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000)) as THREE.PerspectiveCamera;

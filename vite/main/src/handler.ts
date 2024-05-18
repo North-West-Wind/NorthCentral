@@ -208,8 +208,8 @@ function update() {
 				display.material.splice(4, 1, xm);
 	
 				Object.values(obj).forEach(mesh => mesh.position.y += 1000 * diff);
-				camera().position.y = 1000 * currentFloor();
-				pointLight.position.y += 1000 * diff;
+				camera().position.setY(1000 * currentFloor());
+				pointLight.position.add(new THREE.Vector3(0, 1000 * diff, 0));
 				state = State.OPENING;
 				const audio = new Audio('/assets/sounds/lift.mp3');
 				audio.play();

@@ -78,7 +78,6 @@ export default class InfoCenterFloor extends Floor {
 	}
 	
 	async loadConversation(info: HTMLDivElement, next: string) {
-		console.log(next);
 		const page = PAGES.get(next);
 		if (page) info.innerHTML = await page.get();
 		else info.innerHTML = await this.content.get();

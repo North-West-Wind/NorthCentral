@@ -1,6 +1,5 @@
 import { FLOORS } from './constants';
-import { wait } from './helpers/control';
-import { getVar, setVar, toggleMusic } from './helpers/cookies';
+import { getConfig, wait, writeConfig } from './helpers/control';
 import { disableStylesheet, enableStylesheet } from './helpers/css';
 import { clamp } from './helpers/math';
 import { floor } from './states';
@@ -290,13 +289,12 @@ resize();
 window.onresize = resize;
 
 // cookie reading
-if (getVar("use_cookies")) {
-  setVar("use_cookies", 1);
-  setVar("answered", 1);
-  for (const key of Object.keys(window.sessionStorage)) setVar(key, window.sessionStorage.getItem(key));
+const config = getConfig();
+if (config.useCookies) {
+  config.answeredCookies = true;
+  writeConfig();
 }
-if (getVar("no_music") == "0") (document.getElementById("player") as HTMLAudioElement).play();
-else if (!getVar("no_music")) toggleMusic();
+if (config.music) (document.getElementById("player") as HTMLAudioElement).play();
 
 // additional setup
 closer.onclick = () => {

@@ -1,39 +1,46 @@
-export function useCookies() {
-	return window.sessionStorage.getItem("use_cookies") || getVar("use_cookies", true);
-}
+import Cookies from "js-cookie";
 
-export function setVar(cname: string, cvalue: any) {
-	if (useCookies()) document.cookie = cname + "=" + cvalue + ";SameSite=Strict;expires=Tue, 19 Jan 2038 04:14:07 GMT;path=/";
-	else window.sessionStorage.setItem(cname, cvalue);
-}
+const DEFAULT_CONFIG = {
+	useCookies: false,
+	answeredCookies: false,
+	music: false
+};
+const CONFIG_COOKIE_NAME = "elevator_config";
 
-export function getVar(cname: string, forceCookie = false) {
-	if (forceCookie || useCookies()) {
-		let name = cname + "=";
-		let decodedCookie = decodeURIComponent(document.cookie);
-		let ca = decodedCookie.split(';');
-		for (let i = 0; i < ca.length; i++) {
-			let c = ca[i];
-			while (c.charAt(0) == ' ') {
-				c = c.substring(1);
-			}
-			if (c.indexOf(name) == 0) {
-				return c.substring(name.length, c.length);
-			}
+let config = DEFAULT_CONFIG;
+readConfig();
+
+export function readConfig() {
+	const configStr = window.sessionStorage.getItem(CONFIG_COOKIE_NAME) || Cookies.get(CONFIG_COOKIE_NAME);
+	if (!configStr) config = DEFAULT_CONFIG;
+	else {
+		try {
+			config = JSON.parse(configStr);
+		} catch (err) {
+			config = DEFAULT_CONFIG;
 		}
-		return "";
-	} else return window.sessionStorage.getItem(cname);
+	}
+}
+
+export function writeConfig() {
+	if (config.useCookies) Cookies.set(CONFIG_COOKIE_NAME, JSON.stringify(config));
+	else window.sessionStorage.setItem(CONFIG_COOKIE_NAME, JSON.stringify(config));
+}
+
+export function getConfig() {
+	return config;
 }
 
 export function toggleMusic() {
-	const cookie = getVar("no_music");
-	if (!cookie || cookie == "0") {
-		setVar("no_music", 1);
+	const config = getConfig();
+	if (config.music) {
+		config.music = false;
 		(document.getElementById("player") as HTMLAudioElement).pause();
 	} else {
-		setVar("no_music", 0);
+		config.music = true;
 		(document.getElementById("player") as HTMLAudioElement).play();
 	}
+	writeConfig();
 }
 
 export async function wait(ms: number) {

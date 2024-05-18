@@ -30,10 +30,8 @@ export default abstract class Floor {
 	despawn(scene: THREE.Scene) {
 		if (!this.meshes) return;
 		for (const [key, ob] of Object.entries(this.meshes))
-			if (ob) {
-				console.log("despawning", key);
+			if (ob)
 				scene.remove(ob);
-			}
 		this.meshes = undefined;
 	}
 

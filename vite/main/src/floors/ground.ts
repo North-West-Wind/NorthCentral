@@ -1,7 +1,7 @@
 import * as THREE from "three";
 import Floor from "../types/floor";
 import { camera } from "../states";
-import { getVar, setVar, toggleMusic } from "../helpers/control";
+import { getConfig, toggleMusic, writeConfig } from "../helpers/control";
 
 export default class GroundFloor extends Floor {
 	allRains: THREE.Mesh[] = [];
@@ -62,18 +62,17 @@ export default class GroundFloor extends Floor {
 
 	loadContent(info: HTMLDivElement) {
 		// Add buttons functionality
-		if (getVar("answered")) {
+		if (getConfig().answeredCookies) {
 			const cookieInfo = document.getElementById("cookies")!;
 			cookieInfo.classList.add("hidden");
 		}
 		function accept() {
-			window.sessionStorage.setItem("use_cookies", "1");
-			setVar("use_cookies", 1);
-			for (const key of Object.keys(window.sessionStorage)) setVar(key, window.sessionStorage.getItem(key));
+			getConfig().useCookies = true;
 			answer();
 		}
 		function answer() {
-			setVar("answered", 1);
+			getConfig().answeredCookies = true;
+			writeConfig();
 			const cookieInfo = document.getElementById("cookies")!;
 			cookieInfo.classList.add("hidden");
 		}

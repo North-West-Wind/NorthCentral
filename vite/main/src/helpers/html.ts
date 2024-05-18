@@ -35,7 +35,8 @@ export async function toggleContent(options?: { html?: string | (() => Promise<s
 			else div.innerHTML = await options.html();
 		} else if (options?.index !== undefined) div.innerHTML = await Array.from(FLOORS.values())[options.index].content.get();
     else div.innerHTML = await floor()!.content.get();
-    floor()!.loadContent(div);
+    if (options?.index !== undefined) Array.from(FLOORS.values())[options.index].loadContent(div);
+    else floor()!.loadContent(div);
     div.classList.remove("hidden");
     await wait(20);
     div.classList.remove("visuallyhidden");
