@@ -23,7 +23,7 @@ export function readConfig() {
 }
 
 export function writeConfig() {
-	if (config.useCookies) Cookies.set(CONFIG_COOKIE_NAME, JSON.stringify(config));
+	if (config.useCookies) Cookies.set(CONFIG_COOKIE_NAME, JSON.stringify(config), { expires: 365 });
 	else window.sessionStorage.setItem(CONFIG_COOKIE_NAME, JSON.stringify(config));
 }
 
