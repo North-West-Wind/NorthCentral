@@ -9,6 +9,7 @@ import { wait } from "../helpers/control";
 import { SVG_LOADER } from "../loaders";
 import { createSVGCenteredGroup, createSVGGroupWithCenter, randomBetween } from "../helpers/math";
 import { SVGResult } from "three/examples/jsm/loaders/SVGLoader.js";
+import { clamp } from "three/src/math/MathUtils.js";
 
 const div = document.getElementById("info")!;
 const audio = new Audio('/assets/sounds/ding.mp3');
@@ -24,6 +25,13 @@ const topLength = 120, bottomLength = 108, topDepth = 25;
 const deskHeight = 30;
 const integrelleScale = 0.3;
 
+enum AnimationState {
+	IDLE = 0,
+	ARMS = 1,
+	SWAP_HANDS = 2,
+	INTEGRELLE = 3
+}
+
 export default class InfoCenterFloor extends Floor {
 	dinged = false;
 	svgLoaded = false;
@@ -31,6 +39,9 @@ export default class InfoCenterFloor extends Floor {
 	armsData?: SVGResult;
 	integrelleData?: SVGResult;
 	integrelleCloseData?: SVGResult;
+	animationState = AnimationState.IDLE;
+	animationPos?: THREE.Vector3;
+	animationStart?: number;
 
 	constructor() {
 		super("info-center", 1);
@@ -203,7 +214,7 @@ export default class InfoCenterFloor extends Floor {
 	handleWheel(scroll: number) {
 		const cam = camera();
 		if (cam.position.y != this.num * 1000) cam.position.y = this.num * 1000;
-		const maxDist = 200 //65;
+		const maxDist = 65;
 		let maxed = false;
 		if (!(cam.position.z == 0 && scroll < 0)) {
 			cam.translateZ(-scroll);
@@ -246,14 +257,19 @@ export default class InfoCenterFloor extends Floor {
 		if (!this.dinged) {
 			this.dinged = true;
 			await wait(500);
-			this.meshes!.arms.position.add(new THREE.Vector3(0, 25, 0));
+			this.animationState = AnimationState.ARMS;
 			await wait(1000);
+			this.meshes!.arms.position.setY(this.animationPos!.y + 25);
+			this.animationState = AnimationState.SWAP_HANDS;
 			this.meshes!.arms.visible = false;
 			this.meshes!.hands.visible = true;
 			await wait(500);
-			this.meshes!.integrelle.position.add(new THREE.Vector3(0, 35, 0));
+			this.animationState = AnimationState.INTEGRELLE;
+			await wait(1000);
+			this.meshes!.integrelle.position.setY(this.animationPos!.y + 35);
 			this.blinker();
-			await wait(1500);
+			this.animationState = AnimationState.IDLE;
+			await wait(500);
 		}
 
 		hideOrUnhideInfo(async hidden => {
@@ -272,7 +288,33 @@ export default class InfoCenterFloor extends Floor {
 		return super.moveCheck();
 	}
 
-	update(scene: THREE.Scene) {
-		
+	private interpolate(x: number) {
+		x = clamp(x, 0, 1);
+		return -2 * Math.pow(x, 3) + 3 * Math.pow(x, 2);
+	}
+
+	update() {
+		const animationLength = 1000;
+		switch (this.animationState) {
+			case AnimationState.ARMS: {
+				if (!this.meshes?.arms) break;
+				if (!this.animationPos) this.animationPos = this.meshes!.arms.position.clone();
+				if (!this.animationStart) this.animationStart = Date.now();
+				const y = this.interpolate((Date.now() - this.animationStart) / animationLength);
+				this.meshes.arms.position.setY(this.animationPos.y + 25 * y);
+				break;
+			}
+			case AnimationState.INTEGRELLE: {
+				if (!this.meshes?.integrelle) break;
+				if (!this.animationPos) this.animationPos = this.meshes!.integrelle.position.clone();
+				if (!this.animationStart) this.animationStart = Date.now();
+				const y = this.interpolate((Date.now() - this.animationStart) / animationLength);
+				this.meshes.integrelle.position.setY(this.animationPos.y + 35 * y);
+				break;
+			}
+			default:
+				this.animationPos = undefined;
+				this.animationStart = undefined;
+		}
 	}
 }
