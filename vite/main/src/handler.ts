@@ -5,6 +5,7 @@ import { FLOORS } from "./constants";
 import { displayTexture } from "./generators";
 import { camera, currentFloor, floor, ratio, rotatedX, rotatedY, started, targetFloor, touched } from "./states";
 import { wait } from "./helpers/control";
+import { clamp } from "./helpers/math";
 
 enum State {
 	INSIDE = 0,
@@ -55,7 +56,7 @@ window.addEventListener("touchmove", (e) => {
 	if (ratio() > 1) canMove = Math.abs(x - touch.ix) > window.innerWidth / 16 || Math.abs(y - touch.iy) > window.innerHeight / 12;
 	else if (ratio() < 1) canMove = Math.abs(y - touch.iy) > window.innerHeight / 16 || Math.abs(x - touch.ix) > window.innerWidth / 12;
 	else canMove = Math.abs(x - touch.ix) > window.innerWidth / 12 || Math.abs(y - touch.iy) > window.innerHeight / 12;
-	if (touch.ix != touch.x && touch.iy != touch.y && canMove && div.classList.contains("hidden")) {
+	if (canMove && div.classList.contains("hidden")) {
 		touch.ix = touch.x;
 		touch.iy = touch.y;
 		touch.x = x;
@@ -64,8 +65,8 @@ window.addEventListener("touchmove", (e) => {
 		offsets.y += (touch.y - touch.iy) / midY * 2;
 		if (offsets.x > 2) offsets.x = 2;
 		else if (offsets.x < -2) offsets.x = -2;
-		if (offsets.y > 2) offsets.y = 2;
-		else if (offsets.y < -2) offsets.y = -2;
+		if (offsets.y > 1) offsets.y = 1;
+		else if (offsets.y < -1) offsets.y = -1;
 	}
 });
 
@@ -91,8 +92,8 @@ window.addEventListener("mousedown", e => {
 
 window.addEventListener("mousemove", (e) => {
 	if (touched()) return;
-	offsets.x = -((e.clientX - midX) / midX) / 2;
-	offsets.y = -((e.clientY - midY) / midY) / 2;
+	offsets.x = -((e.clientX - midX) / midX) * 2;
+	offsets.y = -((e.clientY - midY) / midY);
 	const mouse2D = new THREE.Vector2((e.clientX / window.innerWidth) * 2 - 1, -(e.clientY / window.innerHeight) * 2 + 1);
 	const raycaster = new THREE.Raycaster();
 	raycaster.setFromCamera(mouse2D, camera());
@@ -235,7 +236,9 @@ function update() {
 	}
 	// move the camera around
 	const cam = camera();
-	const point = new THREE.Vector3(cam.position.x - (offsets.x + rotatedX()) * 10, cam.position.y + (offsets.y + rotatedY()) * 10, cam.position.z - 20);
+	// 60deg left/right
+	// offset.x normalized to 2
+	const point = new THREE.Vector3(cam.position.x - offsets.x * 10 * clamp(1 / ratio(), Math.tan(Math.PI / 6), Math.tan(Math.PI / 3)) - rotatedX() * 10, cam.position.y + (offsets.y + rotatedY()) * 10, cam.position.z - 20);
 	cam.lookAt(point);
 }
 
