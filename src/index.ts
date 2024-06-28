@@ -1,6 +1,5 @@
 import "dotenv/config";
 import express from "express";
-import cookieParser from "cookie-parser";
 import bodyParser from "body-parser";
 import fetch from "node-fetch";
 import * as fs from "fs";
@@ -29,7 +28,6 @@ const app = express();
 
 app.use(express.static("public"));
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use(cookieParser());
 app.set('views', path.resolve(__dirname, "../views"));
 app.set('view engine', 'ejs');
 
