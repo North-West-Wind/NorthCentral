@@ -103,7 +103,7 @@ export default class SkyFarmFloor extends Floor {
 				cam.position.y = -(Math.abs(cam.position.z) - maxDist0) * maxDist3 / (maxDist1 - maxDist0) + this.num * 1000;
 				rotatedX(rotateAngle * (Math.abs(cam.position.z) - maxDist0) / (maxDist1 - maxDist0));
 			} else if (scroll > 0 && !touched()) {
-				if (div.classList.contains('hidden')) toggleContent({ index: this.num });
+				if (div.classList.contains('hidden')) toggleContent({ page: this.id });
 			}
 		} else {
 			cam.translateZ(-scroll);
@@ -116,7 +116,7 @@ export default class SkyFarmFloor extends Floor {
 			rotatedX(0);
 		}
 
-		if (zoomLimitReached) toggleContent({ index: this.num });
+		if (zoomLimitReached) toggleContent({ page: this.id });
 		return maxed;
 	}
 }

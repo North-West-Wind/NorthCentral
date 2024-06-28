@@ -13,13 +13,13 @@ import { LazyLoader } from "./types/misc";
 export const CONTENTS = new Map<number, LazyLoader<string>>();
 
 export const FLOORS = new Map<string, Floor>();
-export const STATUS_FLOORS = new Map<number, Floor>();
+export const STATUS_FLOORS = new Map<string, Floor>();
 
 function addFloor(floor: Floor) {
 	FLOORS.set(floor.id, floor);
 }
 function addStatusFloor(floor: Floor) {
-	STATUS_FLOORS.set(floor.num, floor);
+	STATUS_FLOORS.set(floor.id, floor);
 }
 
 addFloor(new GroundFloor());

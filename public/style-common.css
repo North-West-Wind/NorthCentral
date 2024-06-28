@@ -40,6 +40,10 @@ h2 {
 	overflow: auto;
 }
 
+h2.note {
+	color: #fcf803;
+}
+
 .hidden {
 	display: none;
 }

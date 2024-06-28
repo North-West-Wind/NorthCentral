@@ -173,7 +173,7 @@ export default class InfoCenterFloor extends Floor {
 		const group = createSVGCenteredGroup(this.handsData!, true);
 		group.rotateZ(Math.PI);
 		group.rotateX(Math.PI / 4);
-		group.position.set(0, this.num * 1000 - 29 + deskHeight / 2 + 1.15, -124);
+		group.position.set(-1, this.num * 1000 - 29 + deskHeight / 2 + 1.15, -124);
 		group.scale.set(integrelleScale, integrelleScale, integrelleScale);
 		group.visible = false;
 		return group;
@@ -182,7 +182,7 @@ export default class InfoCenterFloor extends Floor {
 	private setupArms() {
 		const group = createSVGCenteredGroup(this.armsData!);
 		group.rotateX(Math.PI);
-		group.position.set(0, this.num * 1000 - 55 + deskHeight / 2 + 1, -126);
+		group.position.set(-1, this.num * 1000 - 55 + deskHeight / 2 + 1, -126);
 		group.scale.set(integrelleScale, integrelleScale, integrelleScale);
 		return group;
 	}

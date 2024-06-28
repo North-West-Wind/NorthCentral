@@ -1,4 +1,4 @@
-import { FLOORS } from "../constants";
+import { FLOORS, STATUS_FLOORS } from "../constants";
 import { floor } from "../states";
 import { wait } from "./control";
 
@@ -28,14 +28,14 @@ async function toggleCloser() {
   }
 }
 
-export async function toggleContent(options?: { html?: string | (() => Promise<string>), index?: number }) {
+export async function toggleContent(options?: { html?: string | (() => Promise<string>), page?: string, special?: boolean }) {
   if (div.classList.contains("hidden")) {
     if (options?.html) {
 			if (typeof options.html === "string") div.innerHTML = options.html;
 			else div.innerHTML = await options.html();
-		} else if (options?.index !== undefined) div.innerHTML = await Array.from(FLOORS.values())[options.index].content.get();
+		} else if (options?.page !== undefined) div.innerHTML = await (options.special ? STATUS_FLOORS : FLOORS).get(options.page)!.content.get();
     else div.innerHTML = await floor()!.content.get();
-    if (options?.index !== undefined) Array.from(FLOORS.values())[options.index].loadContent(div);
+    if (options?.page !== undefined) (options.special ? STATUS_FLOORS : FLOORS).get(options.page)!.loadContent(div);
     else floor()!.loadContent(div);
     div.classList.remove("hidden");
     await wait(20);

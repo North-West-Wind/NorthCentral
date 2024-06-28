@@ -64,7 +64,7 @@ export default class N0rthWestW1ndFloor extends Floor {
 		if (cam.position.z <= -maxDist0) {
 			if (div.classList.contains('hidden')) {
 				if (scroll > 0 && !this.phase) {
-					if (!touched()) toggleContent({ index: this.num });
+					if (!touched()) toggleContent({ page: this.id });
 					else zoomLimitReached = true;
 					maxed = true;
 				} else if (this.phase) {
@@ -98,7 +98,7 @@ export default class N0rthWestW1ndFloor extends Floor {
 		if (cam.position.y != this.num * 1000) cam.position.y = this.num * 1000;
 
 		if (zoomLimitReached) {
-			toggleContent({ index: this.num });
+			toggleContent({ page: this.id });
 			if (div.classList.contains("visuallyhidden") && !this.phase) this.phase = 1;
 		}
 		return maxed;

@@ -122,7 +122,7 @@ function clickEventsCommon(e: { clientX: number, clientY: number }) {
 	else if (raycaster.intersectObject(buttonD).length > 0) { button = buttonD; if (currentFl != -1 && targetFl > 0) targetFl = targetFloor(targetFl - 1); }
 	else if (raycaster.intersectObject(display).length > 0 && currentFl != targetFl && currentFl != -1 && state != State.OPENING && state != State.CLOSING) displayPressed = true;
 	else if (raycaster.intersectObject(sign).length > 0) {
-		toggleContent({ index: floor()?.special ? floor()!.num : 0 });
+		toggleContent({ page: floor()?.special ? floor()!.id : "ground", special: floor()?.special });
 		start = true;
 	} else if (floor()?.listenClick) {
 		floor()!.clickRaycast(raycaster);
