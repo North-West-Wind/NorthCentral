@@ -147,7 +147,7 @@ a:hover, .link-like *:hover {
 }
 
 .button {
-	background-color: #7289DA;
+	background-color: #fcba03;
 	border: none;
 	color: white;
 	padding: 1vmax 2vmax;
@@ -159,7 +159,7 @@ a:hover, .link-like *:hover {
 	border-radius: 1vmax;
 }
 
-.cookie-info {
+#storage-prompt {
 	background-color: rgba(0, 0, 0, 0.5);
 	padding: 1vmax;
 	color: white;
@@ -171,7 +171,7 @@ a:hover, .link-like *:hover {
 	border: 0;
 }
 
-.cookie-button {
+.storage-button {
 	border: none;
 	color: white;
 	padding: 0.5vmax;

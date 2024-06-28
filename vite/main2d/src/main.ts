@@ -288,10 +288,10 @@ function resize() {
 resize();
 window.onresize = resize;
 
-// cookie reading
+// storage reading
 const config = getConfig();
-if (config.useCookies) {
-  config.answeredCookies = true;
+if (config.allowStorage) {
+  config.answerStorage = true;
   writeConfig();
 }
 if (config.music) (document.getElementById("player") as HTMLAudioElement).play();

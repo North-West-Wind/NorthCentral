@@ -1,8 +1,6 @@
-import Cookies from "js-cookie";
-
 const DEFAULT_CONFIG = {
-	useCookies: false,
-	answeredCookies: false,
+	allowStorage: false,
+	answerStorage: false,
 	music: false
 };
 const CONFIG_COOKIE_NAME = "elevator_config";
@@ -11,7 +9,7 @@ let config = DEFAULT_CONFIG;
 readConfig();
 
 export function readConfig() {
-	const configStr = window.sessionStorage.getItem(CONFIG_COOKIE_NAME) || Cookies.get(CONFIG_COOKIE_NAME);
+	const configStr = window.sessionStorage.getItem(CONFIG_COOKIE_NAME) || window.localStorage.getItem(CONFIG_COOKIE_NAME);
 	if (!configStr) config = DEFAULT_CONFIG;
 	else {
 		try {
@@ -23,7 +21,7 @@ export function readConfig() {
 }
 
 export function writeConfig() {
-	if (config.useCookies) Cookies.set(CONFIG_COOKIE_NAME, JSON.stringify(config), { expires: 365 });
+	if (config.allowStorage) window.localStorage.setItem(CONFIG_COOKIE_NAME, JSON.stringify(config));
 	else window.sessionStorage.setItem(CONFIG_COOKIE_NAME, JSON.stringify(config));
 }
 

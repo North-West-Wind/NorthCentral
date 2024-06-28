@@ -2,6 +2,8 @@ import * as THREE from "three";
 import Floor from "../types/floor";
 import { camera } from "../states";
 import { GLTF_LOADED } from "../loaders";
+import { getConfig, toggleMusic, writeConfig } from "../helpers/control";
+import { infoPageHandler } from "./ground";
 
 type FireEntry = {
 	mesh: THREE.Mesh;
@@ -102,5 +104,9 @@ export default class NotFoundFloor extends Floor {
 		if (this.allFires.length < 10 || Math.random() < 0.1) 
 			newFires.push(...this.createFire(scene, 1));
 		this.allFires = newFires;
+	}
+
+	loadContent() {
+		infoPageHandler();
 	}
 }

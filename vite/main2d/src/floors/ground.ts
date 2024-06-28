@@ -51,23 +51,23 @@ export default class GroundFloor extends Floor {
 	}
 
 	loadContent(info: HTMLDivElement) {
-		if (getConfig().answeredCookies) {
-			const cookieInfo = document.getElementById("cookies")!;
-			cookieInfo.classList.add("hidden");
+		if (getConfig().answerStorage) {
+			const storageInfo = document.getElementById("storage-prompt")!;
+			storageInfo.classList.add("hidden");
 		}
 		function accept() {
-			getConfig().useCookies = true;
+			getConfig().allowStorage = true;
 			answer();
 		}
 		function answer() {
-			getConfig().answeredCookies = true;
+			getConfig().answerStorage = true;
 			writeConfig();
-			const cookieInfo = document.getElementById("cookies")!;
-			cookieInfo.classList.add("hidden");
+			const storageInfo = document.getElementById("storage-prompt")!;
+			storageInfo.classList.add("hidden");
 		}
 
-		(<HTMLAnchorElement>document.getElementsByClassName("cookie-button accept")[0]).onclick = () => accept();
-		(<HTMLAnchorElement>document.getElementsByClassName("cookie-button deny")[0]).onclick = () => answer();
+		(<HTMLAnchorElement>document.getElementsByClassName("storage-button accept")[0]).onclick = () => accept();
+		(<HTMLAnchorElement>document.getElementsByClassName("storage-button deny")[0]).onclick = () => answer();
 
 		document.getElementById("toggleMusic")!.onclick = () => toggleMusic();
 

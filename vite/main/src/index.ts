@@ -19,8 +19,8 @@ if (!WebGL.isWebGLAvailable()) {
 const passedInFloor = ((Array.from(FLOORS.keys()).indexOf(window.location.pathname.split("/")[1] || "ground") + 1) || (404 + 1)) - 1;
 
 const config = getConfig();
-if (config.useCookies) {
-  config.answeredCookies = true;
+if (config.allowStorage) {
+  config.answerStorage = true;
   writeConfig();
 }
 if (config.music) (document.getElementById("player") as HTMLAudioElement).play();

@@ -60,26 +60,30 @@ export default class GroundFloor extends Floor {
 		this.allRains = newRains;
 	}
 
-	loadContent(info: HTMLDivElement) {
-		// Add buttons functionality
-		if (getConfig().answeredCookies) {
-			const cookieInfo = document.getElementById("cookies")!;
-			cookieInfo.classList.add("hidden");
-		}
-		function accept() {
-			getConfig().useCookies = true;
-			answer();
-		}
-		function answer() {
-			getConfig().answeredCookies = true;
-			writeConfig();
-			const cookieInfo = document.getElementById("cookies")!;
-			cookieInfo.classList.add("hidden");
-		}
-
-		(<HTMLAnchorElement>document.getElementsByClassName("cookie-button accept")[0]).onclick = () => accept();
-		(<HTMLAnchorElement>document.getElementsByClassName("cookie-button deny")[0]).onclick = () => answer();
-
-		document.getElementById("toggleMusic")!.onclick = () => toggleMusic();
+	loadContent() {
+		infoPageHandler();
 	}
+}
+
+export function infoPageHandler() {
+	// Add buttons functionality
+	if (getConfig().answerStorage) {
+		const storageInfo = document.getElementById("storage-prompt")!;
+		storageInfo.classList.add("hidden");
+	}
+	function accept() {
+		getConfig().allowStorage = true;
+		answer();
+	}
+	function answer() {
+		getConfig().answerStorage = true;
+		writeConfig();
+		const storageInfo = document.getElementById("storage-prompt")!;
+		storageInfo.classList.add("hidden");
+	}
+
+	(<HTMLAnchorElement>document.getElementsByClassName("storage-button accept")[0]).onclick = () => accept();
+	(<HTMLAnchorElement>document.getElementsByClassName("storage-button deny")[0]).onclick = () => answer();
+
+	document.getElementById("toggleMusic")!.onclick = () => toggleMusic();
 }
