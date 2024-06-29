@@ -6,7 +6,6 @@ export default abstract class Floor {
 	num: number;
 	svg: LazyLoader<string>;
 	content: LazyLoader<string>;
-	phase = 0;
 	disableContent = false;
 
 	constructor(id: string, num: number, loaders?: { svg?: LazyLoader<string>, content?: LazyLoader<string> }) {
@@ -16,8 +15,8 @@ export default abstract class Floor {
 		this.content = loaders?.content || new LazyLoader(() => readPage(`/contents/${num}-${id}.html`));
 	}
 
-	loadSvg() { }
-	unloadSvg() { }
+	loadSvg(_bg: HTMLDivElement) { }
+	unloadSvg(_bg: HTMLDivElement) { }
 
 	loadContent(_info: HTMLDivElement) { }
 	unloadContent(_info: HTMLDivElement) { }

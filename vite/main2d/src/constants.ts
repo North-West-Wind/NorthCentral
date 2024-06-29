@@ -6,12 +6,14 @@ import N0rthWestW1ndFloor from "./floors/n0rthwestw1nd";
 import SheetMusicFloor from "./floors/sheet_music";
 import SkyFarmFloor from "./floors/sky_farm";
 import Floor from "./types/floor";
+import NotFoundFloor from "./floors/not-found";
 
 // floor objects
 export const FLOORS = new Map<string, Floor>();
+export const STATUS_FLOORS = new Map<string, Floor>();
 
-function addFloor(floor: Floor) {
-	FLOORS.set(floor.id, floor);
+function addFloor(floor: Floor, map?: Map<string, Floor>) {
+	(map || FLOORS).set(floor.id, floor);
 }
 
 addFloor(new GroundFloor());
@@ -21,3 +23,5 @@ addFloor(new SkyFarmFloor());
 addFloor(new N0rthWestW1ndFloor());
 addFloor(new SheetMusicFloor());
 addFloor(new GalleryFloor());
+
+addFloor(new NotFoundFloor(), STATUS_FLOORS);

@@ -1,11 +1,11 @@
 import { FLOORS } from './constants';
 import { getConfig, wait, writeConfig } from './helpers/control';
 import { disableStylesheet, enableStylesheet } from './helpers/css';
-import { clamp } from './helpers/math';
+import { clamp, realOrNotFoundFloor } from './helpers/math';
 import { floor } from './states';
 
 const page = window.location.pathname.split("/").pop();
-let currentFloor = Array.from(FLOORS.keys()).indexOf(page == "2d" || !page ? "ground" : page), targetFloor = currentFloor;
+let currentFloor = ((Array.from(FLOORS.keys()).indexOf(page == "2d" || !page ? "ground" : page) + 1) || (404 + 1)) - 1, targetFloor = currentFloor;
 let moving = 0; // 1 means up, -1 means down, 0 means not moving
 let state = 0; // 0 inside, 1 opening, 2 zooming, 3 htmling, 4 backing, 5 stay, 6 closing
 let elevatorScale = 1; // scale for resizing
@@ -27,16 +27,18 @@ function updateDisplay() {
   if (moving > 0) floorDisplay.innerHTML = "▲";
   else if (moving < 0) floorDisplay.innerHTML = "▼";
   else if (targetFloor == 0) floorDisplay.innerHTML = "G";
+  else if (targetFloor < 0 || targetFloor >= FLOORS.size) floorDisplay.innerHTML = "?";
   else floorDisplay.innerHTML = "" + targetFloor;
 }
 
 // load target floor and unload the last one
 async function loadFloor() {
-  floor().unloadSvg();
-  const f = floor(FLOORS.get(Array.from(FLOORS.keys())[targetFloor]));
+  floor().unloadSvg(background);
+  const f = floor(realOrNotFoundFloor(targetFloor));
+  console.log(f.id);
   currentFloor = targetFloor;
   background.innerHTML = await f.svg.get();
-  f.loadSvg();
+  f.loadSvg(background);
 }
 
 // initial load

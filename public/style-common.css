@@ -318,3 +318,7 @@ a:hover, .link-like *:hover {
 svg * {
 	transition: transform 1s ease;
 }
+
+.fire {
+  transition: transform 2s linear, opacity 2s linear;
+}
