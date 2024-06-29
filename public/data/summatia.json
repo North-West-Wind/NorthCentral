@@ -1,0 +1,71 @@
+{
+	"emotions": {
+		"reference": {
+			"__comment": "emotions is a bit flag.",
+			"1": "opened normal eyes",
+			"2": "closed normal eyes",
+			"4": "opened half eyes",
+			"8": "closed half eyes",
+
+			"16": "smile mouth",
+			"32": "not smile mouth",
+			"64": "open smile mouth",
+			"128": "open not smile mouth",
+
+			"256": "normal brows",
+			"512": "angry brows",
+			"1024": "worried brows",
+
+			"2048": "blush",
+
+			"4096": "lowered head",
+
+			"8192": "hands on table",
+			"16384": "hands holding hand",
+			"32768": "hands around face",
+
+			"131072": "down eyes",
+			"262144": "left eyes",
+			"524288": "right eyes"
+		},
+		"happy": 273,
+		"happy-smile": 322,
+		"happy-blush": 133137
+	},
+
+	"first": {
+		"message": "Hello!",
+		"emotion": "happy",
+		"delay": 3000,
+		"responses": [
+			{
+				"message": "Hi!",
+				"next": "hello"
+			},
+			{
+				"message": "Hi, cutie.",
+				"next": "hello-blush"
+			},
+			{
+				"message": "My cool gal!",
+				"next": "hello-cool"
+			}
+		]
+	},
+	"hello": {
+		"message": "I'm Summatia!",
+		"emotion": "happy-smile"
+	},
+	"hello-blush": {
+		"message": "Oh! Um... Thanks.",
+		"emotion": "happy-blush",
+		"delay": 3000,
+		"next": "hello"
+	},
+	"hello-cool": {
+		"message": "Ay! You're cool too!",
+		"emotion": "happy-laugh",
+		"delay": 3000,
+		"next": "hello"
+	}
+}
