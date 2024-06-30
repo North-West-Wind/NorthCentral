@@ -12,31 +12,56 @@
 			"64": "open smile mouth",
 			"128": "open not smile mouth",
 
-			"256": "normal brows",
+			"256": "blush",
+
 			"512": "angry brows",
 			"1024": "worried brows",
 
-			"2048": "blush",
+			"2048": "lowered head",
 
-			"4096": "lowered head",
+			"4096": "hands on table",
+			"8192": "hands holding head",
+			"16384": "hands around face",
 
-			"8192": "hands on table",
-			"16384": "hands holding hand",
-			"32768": "hands around face",
-
-			"131072": "down eyes",
-			"262144": "left eyes",
-			"524288": "right eyes"
+			"32768": "down eyes",
+			"131072": "left eyes",
+			"262144": "right eyes"
 		},
-		"happy": 273,
-		"happy-smile": 322,
-		"happy-blush": 133137
+		"happy": 17,
+		"happy-smile": 18,
+		"happy-shy-blush": 34065,
+		"happy-smile-blush": 1345,
+		"happy-blush": 1297,
+		"happy-laugh": 66,
+		"happy-laugh-open": 65,
+		"happy-shy": 32785,
+		"think": 33,
+		"sad": 33825,
+		"sad-close": 1058,
+		"sad-mouth-close": 1154,
+		"stare": 10260,
+		"determined": 33297,
+		"mad-mouth": 641,
+		"mad-mouth-close": 642,
+		"mad-close": 546,
+		"mad-down": 33313,
+		"mad": 545,
+		"mild": 33,
+		"sigh": 2178,
+		"unamused": 36,
+		"deep-breath": 34,
+		"deep-breath-smile": 18,
+		"shocked": 1153,
+		"shocked-blush": 1409,
+		"embarrassed": 132385,
+		"super-happy-shy-blush": 50449,
+		"blush-down": 33825
 	},
 
 	"first": {
 		"message": "Hello!",
 		"emotion": "happy",
-		"delay": 3000,
+		"delay": 1500,
 		"responses": [
 			{
 				"message": "Hi!",
@@ -54,18 +79,418 @@
 	},
 	"hello": {
 		"message": "I'm Summatia!",
-		"emotion": "happy-smile"
+		"emotion": "happy-smile",
+		"delay": 2000,
+		"next": "who"
 	},
 	"hello-blush": {
-		"message": "Oh! Um... Thanks.",
-		"emotion": "happy-blush",
+		"message": "Oh! Um... Thanks!",
+		"emotion": "happy-shy-blush",
 		"delay": 3000,
 		"next": "hello"
 	},
 	"hello-cool": {
 		"message": "Ay! You're cool too!",
 		"emotion": "happy-laugh",
-		"delay": 3000,
+		"delay": 2000,
 		"next": "hello"
+	},
+
+	"back": {
+		"message": "You're back!",
+		"emotion": "happy-laugh",
+		"delay": 2000,
+		"next": "back-where"
+	},
+	"back-where": {
+		"message": "Where were we?",
+		"emotion": "think",
+		"delay": 5000,
+		"next": "back-done"
+	},
+	"back-done": {
+		"message": "Ah! I remember!",
+		"emotion": "happy-laugh-open",
+		"delay": 3000
+	},
+
+	"who": {
+		"message": "Who are you?",
+		"emotion": "happy",
+		"delay": 1500,
+		"responses": [
+			{
+				"message": "I am me.",
+				"next": "who-philo"
+			},
+			{
+				"message": "I'd rather not tell you.",
+				"next": "who-anon"
+			},
+			{
+				"message": "Your biggest fan!",
+				"next": "who-fan"
+			},
+			{
+				"message": "Just a random guy on the Internet.",
+				"next": "who-random"
+			},
+			{
+				"message": "Just a random gal on the Internet.",
+				"next": "who-random"
+			}
+		]
+	},
+	"who-philo": {
+		"message": "I see, a philosophist.",
+		"emotion": "stare",
+		"delay": 2000,
+		"next": "who-philo-0"
+	},
+	"who-philo-0": {
+		"message": "I always find you all interesting.",
+		"emotion": "stare",
+		"delay": 2500,
+		"next": "what-philo"
+	},
+
+	"who-anon": {
+		"message": "Make sense. It's not safe to tell a stranger your name.",
+		"emotion": "think",
+		"delay": 3500,
+		"next": "who-anon-bad"
+	},
+	"who-anon-bad": {
+		"message": "I'm not doing a very good job at that.",
+		"emotion": "sad",
+		"delay": 3000,
+		"responses": [
+			{
+				"message": "Don't worry. I won't tell anyone. Just don't do that again.",
+				"next": "who-anon-sad"
+			},
+			{
+				"message": "Exactly! You dumb little inkling girl.",
+				"next": "who-anon-mad"
+			}
+		]
+	},
+	"who-anon-sad": {
+		"message": "But I already did it wrong!",
+		"emotion": "sad-close",
+		"delay": 3000,
+		"responses": [
+			{
+				"message": "It doesn't matter. Everyone makes mistakes. Don't trap yourself in them!",
+				"next": "who-anon-comfort"
+			}
+		]
+	},
+	"who-anon-comfort": {
+		"message": "... Thanks.",
+		"emotion": "sad",
+		"delay": 4500,
+		"next": "who-anon-recover"
+	},
+	"who-anon-recover": {
+		"message": "I can't keep myself in that state!",
+		"emotion": "determined",
+		"delay": 3000,
+		"next": "what"
+	},
+	"who-anon-mad": {
+		"message": "Hey! That's not very nice!",
+		"emotion": "mad",
+		"delay": 1500,
+		"responses": [
+			{
+				"message": "Aren't you though? You're stupid!",
+				"next": "who-anon-mad-0"
+			}
+		]
+	},
+	"who-anon-mad-0": {
+		"message": "NO!",
+		"emotion": "mad-mouth",
+		"delay": 1500,
+		"responses": [
+			{
+				"message": "Face the truth!",
+				"next": "who-anon-mad-1"
+			}
+		]
+	},
+	"who-anon-mad-1": {
+		"message": "STOP IT!",
+		"emotion": "mad-mouth-close",
+		"delay": 2000,
+		"next": "who-anon-mad-2"
+	},
+	"who-anon-mad-2": {
+		"message": "I...",
+		"emotion": "mad-close",
+		"delay": 1500,
+		"next": "who-anon-mad-3"
+	},
+	"who-anon-mad-3": {
+		"message": "You...",
+		"emotion": "sad-close",
+		"delay": 1500,
+		"next": "who-anon-mad-4"
+	},
+	"who-anon-mad-4": {
+		"message": "You can't be that mean to a girl!",
+		"emotion": "sad-mouth-close",
+		"delay": 3000,
+		"next": "who-anon-mad-5"
+	},
+	"who-anon-mad-5": {
+		"message": "...",
+		"emotion": "sad",
+		"delay": 1500,
+		"next": "who-anon-mad-6"
+	},
+	"who-anon-mad-6": {
+		"message": "...",
+		"emotion": "mad-down",
+		"delay": 1500,
+		"next": "what-mad"
+	},
+
+	"who-fan": {
+		"message": "Really!?",
+		"emotion": "happy-smile-blush",
+		"delay": 2500,
+		"next": "who-fan-thank"
+	},
+	"who-fan-thank": {
+		"message": "Thanks!",
+		"emotion": "happy-blush",
+		"delay": 2500,
+		"next": "what-fan"
+	},
+
+	"who-random": {
+		"message": "Hello, random Internet person!",
+		"emotion": "happy-laugh",
+		"delay": 2500,
+		"next": "what"
+	},
+
+	"what": {
+		"message": "So, what brought you here?",
+		"emotion": "happy",
+		"delay": 1500,
+		"responses": [
+			{
+				"message": "BREAKFAST",
+				"next": "what-breakfast"
+			},
+			{
+				"message": "I was passing by.",
+				"next": "what-pass"
+			},
+			{
+				"message": "I thought we are on a date?",
+				"next": "what-date"
+			}
+		]
+	},
+	"what-breakfast": {
+		"message": "Oh. Sorry to break it to you, but this restaurant doesn't sell breakfast.",
+		"emotion": "mild",
+		"delay": 5000,
+		"next": "help"
+	},
+	"what-pass": {
+		"message": "Oh.",
+		"emotion": "mild",
+		"delay": 2000,
+		"next": "what-pass-0"
+	},
+	"what-pass-0": {
+		"message": "I thought you were here for me.",
+		"emotion": "sad",
+		"delay": 5000,
+		"next": "what-pass-1"
+	},
+	"what-pass-1": {
+		"message": "Oh well.",
+		"emotion": "happy-shy",
+		"delay": 1500,
+		"next": "help"
+	},
+	"what-date": {
+		"message": "Wait. We are!?",
+		"emotion": "shocked",
+		"delay": 3000,
+		"next": "what-date-0"
+	},
+	"what-date-0": {
+		"message": "(This is embarrassing...)",
+		"emotion": "embarrassed",
+		"delay": 3000,
+		"next": "what-date-q"
+	},
+
+	"what-mad": {
+		"message": "What do you want?",
+		"emotion": "mad",
+		"delay": 1500,
+		"responses": [
+			{
+				"message": "You to be gone.",
+				"next": "what-mad-mad"
+			},
+			{
+				"message": "You.",
+				"next": "what-mad-like"
+			}
+		]
+	},
+	"what-mad-mad": {
+		"message": "THAT'S IT!",
+		"emotion": "mad-mouth-close",
+		"delay": 1500,
+		"next": "what-mad-mad-0"
+	},
+	"what-mad-mad-0": {
+		"message": "You better leave before I get upset and call NorthWestWind!",
+		"emotion": "mad-mouth",
+		"delay": 3000,
+		"next": "what-mad-mad-1"
+	},
+	"what-mad-mad-1": {
+		"message": "You better leave before I get upset and call NorthWestWind!",
+		"emotion": "mad",
+		"delay": 300000,
+		"next": "what-mad-mad-2"
+	},
+	"what-mad-mad-2": {
+		"message": "*Sigh*",
+		"emotion": "sigh",
+		"delay": 3000,
+		"next": "what-mad-mad-3"
+	},
+	"what-mad-mad-3": {
+		"message": "You're not leaving, are you?",
+		"emotion": "unamused",
+		"delay": 5000,
+		"next": "what-mad-mad-4"
+	},
+	"what-mad-mad-4": {
+		"message": "...",
+		"emotion": "deep-breath",
+		"delay": 3000,
+		"next": "what-mad-mad-5"
+	},
+	"what-mad-mad-5": {
+		"message": "...",
+		"emotion": "deep-breath-smile",
+		"delay": 3000,
+		"next": "what"
+	},
+	"what-mad-like": {
+		"message": "WHAT!?",
+		"emotion": "shocked-blush",
+		"delay": 2000,
+		"next": "what-mad-like-0"
+	},
+	"what-mad-like-0": {
+		"message": "You were so mean just a minute ago, and now you say this!?",
+		"emotion": "shocked-blush",
+		"delay": 5000,
+		"next": "what-mad-like-1"
+	},
+	"what-mad-like-1": {
+		"message": "I... I don't know what to do.",
+		"emotion": "blush-down",
+		"delay": 4000,
+		"next": "what-date-q"
+	},
+
+	"what-fan": {
+		"message": "So, what brought you here?",
+		"emotion": "happy",
+		"delay": 1500,
+		"responses": [
+			{
+				"message": "BREAKFAST",
+				"next": "what-breakfast"
+			},
+			{
+				"message": "I was passing by.",
+				"next": "what-pass"
+			},
+			{
+				"message": "I thought we are on a date?",
+				"next": "what-date"
+			},
+			{
+				"message": "I like you.",
+				"next": "what-fan-like"
+			}
+		]
+	},
+	"what-fan-like": {
+		"message": "WHAT!?",
+		"emotion": "shocked-blush",
+		"delay": 3000,
+		"next": "what-fan-like-0"
+	},
+	"what-fan-like-0": {
+		"message": "You can't be so sudden! I can't handle it!",
+		"emotion": "super-happy-shy-blush",
+		"delay": 5000,
+		"next": "what-date-q"
+	},
+
+	"what-date-q": {
+		"message": "So, uh, what do you like about me?",
+		"emotion": "happy-blush",
+		"delay": 1500,
+		"responses": [
+			{
+				"message": "Your hair.",
+				"next": "what-date-q-hair"
+			},
+			{
+				"message": "Your voice.",
+				"next": "what-date-q-voice"
+			},
+			{
+				"message": "Your [REDACTED].",
+				"next": "what-date-q-creep"
+			}
+		]
+	},
+	"what-date-q-hair": {
+
+	},
+	"what-date-q-voice": {
+
+	},
+	"what-date-q-creep": {
+		"message": "You creep.",
+		"emotion": "unamused",
+		"delay": 2000,
+		"next": "what-date-q-creep-0"
+	},
+	"what-date-q-creep-0": {
+		"message": "You better run before I call the police.",
+		"emotion": "unamused",
+		"delay": 10000,
+		"next": "what-date-q-creep-0"
+	},
+
+	"help": {
+		"message": "What else can I help you with?",
+		"emotion": "happy",
+		"delay": 1500,
+		"responses": [
+			{
+
+			}
+		]
 	}
 }

@@ -109,6 +109,7 @@ async function anyToThree() {
   state = 3;
   elevator.classList.add("hidden");
   if (!floor().disableContent) toggleContent();
+  floor().enter();
 }
 
 // transition from state 3 to 5

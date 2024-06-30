@@ -1,7 +1,8 @@
 const DEFAULT_CONFIG = {
 	allowStorage: false,
 	answerStorage: false,
-	music: false
+	music: false,
+	summatia: ""
 };
 const CONFIG_COOKIE_NAME = "elevator_config";
 
@@ -9,7 +10,7 @@ let config = DEFAULT_CONFIG;
 readConfig();
 
 export function readConfig() {
-	const configStr = window.sessionStorage.getItem(CONFIG_COOKIE_NAME) || window.localStorage.getItem(CONFIG_COOKIE_NAME);
+	const configStr = window.localStorage.getItem(CONFIG_COOKIE_NAME) || window.sessionStorage.getItem(CONFIG_COOKIE_NAME);
 	if (!configStr) config = DEFAULT_CONFIG;
 	else {
 		try {

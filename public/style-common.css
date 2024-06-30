@@ -218,8 +218,16 @@ a:hover, .link-like *:hover {
 	align-items: center;
 }
 
+.flex.vbottom {
+	align-items: end;
+}
+
 .flex.hcenter {
 	justify-content: center;
+}
+
+.flex.vflex {
+	flex-flow: column;
 }
 
 .double-container {
@@ -321,4 +329,56 @@ svg * {
 
 .fire {
   transition: transform 2s linear, opacity 2s linear;
+}
+
+/* summatia */
+.summatia-container {
+	position: fixed;
+	width: 90vw;
+	left: 50%;
+	bottom: 2vh;
+	transform: translateX(-50%);
+	gap: 2vh;
+}
+
+#summatia-say {
+	position: relative;
+	width: 100%;
+	background-color: #120d35;
+	border: .25vmax solid #524c7b;
+	border-radius: 1vmax;
+	font-size: 3vw;
+	padding: 2vw 0;
+}
+
+#summatia-ans {
+	position: relative;
+	width: fit-content;
+	background-color: #353535;
+	border: .25vmax solid #585858;
+	border-radius: 1vmax;
+	font-size: 3vw;
+	padding: 2vw;
+	transition: opacity .25s linear;
+}
+
+#summatia-reset {
+	position: relative;
+	width: fit-content;
+	height: fit-content;
+	background-color: #3b1e1e;
+	border: .25vmax solid #5c2f2f;
+	border-radius: 1vmax;
+	font-size: 3vw;
+	padding: 2vw;
+	margin-left: auto;
+}
+
+.background svg .brow {
+	transform-box: fill-box;
+  transform-origin: center;
+}
+
+.background svg#summatia * {
+	transition: transform .5s ease, opacity .5s linear;
 }

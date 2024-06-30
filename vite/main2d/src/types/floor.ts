@@ -20,4 +20,6 @@ export default abstract class Floor {
 
 	loadContent(_info: HTMLDivElement) { }
 	unloadContent(_info: HTMLDivElement) { }
+
+	enter() { }
 }
