@@ -35,6 +35,7 @@
 		"happy-laugh": 66,
 		"happy-laugh-open": 65,
 		"happy-shy": 32785,
+		"happy-right": 262161,
 		"think": 33,
 		"sad": 33825,
 		"sad-close": 1058,
@@ -465,7 +466,33 @@
 		]
 	},
 	"what-date-q-hair": {
-
+		"message": "Oh! My hair? I'm glad you like them!",
+		"emotion": "happy-smile",
+		"delay": 4000,
+		"next": "what-date-q-hair-0"
+	},
+	"what-date-q-hair-0": {
+		"message": "Mine's a bit harder than other inklings.",
+		"emotion": "happy-right",
+		"delay": 4000,
+		"next": "what-date-q-hair-1"
+	},
+	"what-date-q-hair-1": {
+		"message": "They don't look as great as others. I'm so happy you like them!",
+		"emotion": "happy-laugh",
+		"delay": 1500,
+		"responses": [
+			{
+				"message": "They are cooler in this way!",
+				"next": "what-date-q-hair-2"
+			}
+		]
+	},
+	"what-date-q-hair-2": {
+		"message": "Thank you so much!",
+		"emotion": "happy-smile",
+		"delay": 3000,
+		"next": "what-date-q-hair-1"
 	},
 	"what-date-q-voice": {
 
