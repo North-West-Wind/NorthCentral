@@ -3,6 +3,8 @@ const summatiaSelector = document.querySelector("div#summatia-selector");
 const checkboxes = summatiaSelector.querySelector("#checkboxes");
 const presetSelector = document.querySelector("select#presets");
 const logicSelector = document.querySelector("select#logic");
+const deadends = document.querySelector("div#deadends");
+const nonexist = document.querySelector("div#nonexist");
 const logicDiv = document.querySelector("div#logic-editor");
 const message = logicDiv.querySelector("textarea#message");
 const delay = logicDiv.querySelector("input#delay");
@@ -16,6 +18,8 @@ let preset = "";
 let logic = "";
 let editPresetMode = false;
 
+let stack = [];
+
 function translateEmotionPreset(preset) {
 	if (typeof preset === "number") return preset;
 	else return summatiaData.emotions[preset];
@@ -23,6 +27,7 @@ function translateEmotionPreset(preset) {
 
 function renderEmotion() {
 	if (editPresetMode) summatiaData.emotions[preset] = emotions;
+	else if (logic && summatiaData[logic]) summatiaData[logic].emotion = emotions;
 	const svg = bgDiv.querySelector("#background svg");
 
 	if (!svg) return; // ignore, it will eventually be called by svg fetch
@@ -116,11 +121,12 @@ function updateLogicSelector() {
 	newOption.innerHTML = "New...";
 	logicSelector.appendChild(newOption);
 
-	for (const logic of Object.keys(summatiaData)) {
-		if (logic == "emotions") continue;
+	for (const key in summatiaData) {
+		if (key == "emotions") continue;
 		const option = document.createElement("option");
-		option.setAttribute("value", logic);
-		option.innerHTML = logic;
+		option.setAttribute("value", key);
+		if (key == logic) option.setAttribute("selected", "");
+		option.innerHTML = key;
 		logicSelector.appendChild(option);
 	}
 	logicSelector.onchange = (evt) => {
@@ -137,7 +143,35 @@ function updateLogicSelector() {
 	}
 }
 
+function updateDeadendsNonExist() {
+	deadends.innerHTML = "";
+	nonexist.innerHTML = "";
+
+	for (const key in summatiaData) {
+		if (!Array.isArray(summatiaData[key].responses) && typeof summatiaData[key].next != "string" && key != "emotions") {
+			const div = document.createElement("div");
+			div.innerHTML = key;
+			deadends.appendChild(div);
+		} else if (key != "emotions") {
+			if (Array.isArray(summatiaData[key].responses))
+				for (const response of summatiaData[key].responses) {
+					if (!summatiaData[response.next]) {
+						const div = document.createElement("div");
+						div.innerHTML = response.next;
+						nonexist.appendChild(div);
+					}
+				}
+			else if (summatiaData[key].next && !summatiaData[summatiaData[key].next]) {
+				const div = document.createElement("div");
+				div.innerHTML = summatiaData[key].next;
+				nonexist.appendChild(div);
+			}
+		}
+	}
+}
+
 function updateLogic() {
+	stack.push(logic);
 	let data = summatiaData[logic];
 	if (!data) {
 		data = {
@@ -151,6 +185,7 @@ function updateLogic() {
 	renderEmotion();
 	updateCheckboxes();
 	updateLogicSelector();
+	updateDeadendsNonExist();
 	message.value = data.message;
 	message.onchange = (evt) => {
 		summatiaData[logic].message = evt.target.value;
@@ -161,7 +196,7 @@ function updateLogic() {
 	}
 
 	choices.innerHTML = "";
-	if (data.responses) {
+	if (Array.isArray(data.responses)) {
 		for (let ii = 0; ii < data.responses.length; ii++) {
 			const response = data.responses[ii];
 			const container = document.createElement("div");
@@ -187,7 +222,14 @@ function updateLogic() {
 			container.appendChild(button);
 			choices.appendChild(container);
 		}
-	} else if (data.next) {
+		const button = document.createElement("button");
+		button.innerHTML = "Add";
+		button.onclick = () => {
+			summatiaData[logic].responses.push({ message: "", next: "" });
+			updateLogic();
+		}
+		choices.appendChild(button);
+	} else if (typeof data.next == "string") {
 		const next = document.createElement("input");
 		next.value = data.next;
 		next.onchange = (evt) => {
@@ -211,68 +253,83 @@ fetch("../../assets/background/4-restaurant.svg").then(async res => {
 	}
 });
 
-fetch("../summatia.json").then(async res => {
+if (window.localStorage.getItem("summatiaData") && confirm("Load data from local storage?")) {
+	summatiaData = JSON.parse(window.localStorage.getItem("summatiaData"));
+	afterDataObtained();
+} else fetch("../summatia.json").then(async res => {
 	if (res.ok) {
 		summatiaData = await res.json();
-		// create checkboxes
-		for (const bit of Object.keys(summatiaData.emotions.reference).map(x => parseInt(x)).sort()) {
-			if (isNaN(bit)) continue;
-			const container = document.createElement("div");
-			const checkbox = document.createElement("input");
-			checkbox.setAttribute("type", "checkbox");
-			if (emotions & bit) checkbox.setAttribute("checked", "");
-			checkbox.onchange = (evt) => {
-				if (evt.target.checked) emotions |= bit;
-				else emotions &= ~bit;
-				renderEmotion();
-			}
-			const label = document.createElement("label");
-			label.innerHTML = summatiaData.emotions.reference[bit.toString()];
-			container.appendChild(checkbox);
-			container.appendChild(label);
-			checkboxes.appendChild(container);
-		}
-
-		// preset selector functionality
-		emotionPresets = Object.keys(summatiaData.emotions).filter(x => x != "reference").sort();
-		updatePresets();
-		document.querySelector("input#edit-preset").onchange = (evt) => {
-			editPresetMode = evt.target.checked;
-		}
-		document.querySelector("button#delete-preset").onclick = () => {
-			if (!preset) return;
-			if (confirm(`Are you sure you want to delete ${preset}?`)) {
-				delete summatiaData.emotions[preset];
-				preset = "";
-				updatePresets();
-			}
-		}
-
-		// logic editor
-		logic = "first";
-		updateLogic();
-		// logic next step modifier
-		logicDiv.querySelector("button#add-next").onclick = () => {
-			if (!logic) return;
-			delete summatiaData[logic].responses;
-			summatiaData[logic].next = "";
-			updateLogic();
-		}
-		logicDiv.querySelector("button#add-responses").onclick = () => {
-			if (!logic) return;
-			delete summatiaData[logic].next;
-			summatiaData[logic].responses = "";
-			updateLogic();
-		}
-		logicDiv.querySelector("button#add-nothing").onclick = () => {
-			if (!logic) return;
-			delete summatiaData[logic].next;
-			delete summatiaData[logic].responses;
-			updateLogic();
-		}
-		updateLogicSelector();
+		afterDataObtained();
 	}
 });
+
+function afterDataObtained() {
+	// create checkboxes
+	for (const bit of Object.keys(summatiaData.emotions.reference).map(x => parseInt(x))) {
+		if (isNaN(bit)) continue;
+		const container = document.createElement("div");
+		const checkbox = document.createElement("input");
+		checkbox.setAttribute("type", "checkbox");
+		if (emotions & bit) checkbox.setAttribute("checked", "");
+		checkbox.onchange = (evt) => {
+			if (evt.target.checked) emotions |= bit;
+			else emotions &= ~bit;
+			renderEmotion();
+		}
+		const label = document.createElement("label");
+		label.innerHTML = summatiaData.emotions.reference[bit.toString()];
+		container.appendChild(checkbox);
+		container.appendChild(label);
+		checkboxes.appendChild(container);
+	}
+
+	// preset selector functionality
+	emotionPresets = Object.keys(summatiaData.emotions).filter(x => x != "reference").sort();
+	updatePresets();
+	document.querySelector("input#edit-preset").onchange = (evt) => {
+		editPresetMode = evt.target.checked;
+	}
+	document.querySelector("button#delete-preset").onclick = () => {
+		if (!preset) return;
+		if (confirm(`Are you sure you want to delete ${preset}?`)) {
+			delete summatiaData.emotions[preset];
+			preset = "";
+			updatePresets();
+		}
+	}
+
+	// logic back
+	document.querySelector("button#parent-logic").onclick = () => {
+		if (stack.length <= 1) return;
+		stack.pop();
+		logic = stack[stack.length - 1];
+		updateLogic();
+	}
+
+	// logic editor
+	logic = "first";
+	updateLogic();
+	// logic next step modifier
+	logicDiv.querySelector("button#add-next").onclick = () => {
+		if (!logic) return;
+		delete summatiaData[logic].responses;
+		if (!summatiaData[logic].next) summatiaData[logic].next = "";
+		updateLogic();
+	}
+	logicDiv.querySelector("button#add-responses").onclick = () => {
+		if (!logic) return;
+		delete summatiaData[logic].next;
+		if (!summatiaData[logic].responses) summatiaData[logic].responses = [];
+		updateLogic();
+	}
+	logicDiv.querySelector("button#add-nothing").onclick = () => {
+		if (!logic) return;
+		delete summatiaData[logic].next;
+		delete summatiaData[logic].responses;
+		updateLogic();
+	}
+	updateLogicSelector();
+}
 
 window.addEventListener('keydown', e => {
   if (e.ctrlKey && e.key === 's') {
