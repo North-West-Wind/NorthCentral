@@ -357,7 +357,7 @@ svg * {
 	background-color: #353535;
 	border: .25vmax solid #585858;
 	border-radius: 1vmax;
-	font-size: 3vw;
+	font-size: 2vw;
 	padding: 2vw;
 	transition: opacity .25s linear;
 }
@@ -369,7 +369,7 @@ svg * {
 	background-color: #3b1e1e;
 	border: .25vmax solid #5c2f2f;
 	border-radius: 1vmax;
-	font-size: 3vw;
+	font-size: 2vw;
 	padding: 2vw;
 	margin-left: auto;
 }

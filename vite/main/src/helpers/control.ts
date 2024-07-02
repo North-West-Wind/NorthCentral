@@ -1,7 +1,8 @@
 const DEFAULT_CONFIG = {
 	allowStorage: false,
 	answerStorage: false,
-	music: false
+	music: false,
+	summatia: ""
 };
 const CONFIG_COOKIE_NAME = "elevator_config";
 

@@ -103,6 +103,7 @@ export default class GalleryFloor extends Floor {
 		const texture = TEXTURE_LOADER.load(`/assets/pfps/${GalleryFloor.fileNames[PAINTINGS - 1]}`, texture => {
 			texture.magFilter = THREE.NearestFilter;
 			texture.minFilter = THREE.LinearMipMapLinearFilter;
+			texture.colorSpace = THREE.SRGBColorSpace;
 		});
 		const xm = new THREE.MeshBasicMaterial({ map: texture });
 		const materialP = new THREE.MeshStandardMaterial({ color: 0xffffff });

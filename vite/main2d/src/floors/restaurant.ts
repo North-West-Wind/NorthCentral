@@ -90,8 +90,15 @@ export default class RestaurantFloor extends Floor {
 		ans.innerHTML = "";
 
 		const say = document.querySelector<HTMLDivElement>("#summatia-say")!;
-		say.innerHTML = data.message;
-		await wait(data.delay);
+		let message = "";
+		for (const char of data.message) {
+			message += char;
+			say.innerHTML = message;
+			await wait(50);
+			if ("!,.:;?".includes(char)) await wait(500);
+			if (pid != this.resets) return;
+		}
+		await wait(1000 + data.message.length * 100);
 		if (pid != this.resets) return;
 
 		if (data.responses) {
