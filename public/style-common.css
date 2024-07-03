@@ -371,6 +371,18 @@ svg * {
 	border-radius: 1vmax;
 	font-size: 2vw;
 	padding: 2vw;
+	margin-left: 2vw;
+}
+
+#summatia-auto {
+	position: relative;
+	width: fit-content;
+	height: fit-content;
+	background-color: #323b1e;
+	border: .25vmax solid #525c2f;
+	border-radius: 1vmax;
+	font-size: 2vw;
+	padding: 2vw;
 	margin-left: auto;
 }
 

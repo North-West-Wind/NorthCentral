@@ -380,6 +380,15 @@ export default class RestaurantFloor extends Floor {
 			getConfig().summatia = "";
 			this.next("first");
 		}
+
+		const auto = info.querySelector<HTMLDivElement>("#summatia-auto")!;
+		auto.querySelector("span")!.innerHTML = "Auto: " + (getConfig().autoSummatia ? "On" : "Off");
+		auto.onclick = () => {
+			getConfig().autoSummatia = !getConfig().autoSummatia;
+			writeConfig();
+			auto.querySelector("span")!.innerHTML = "Auto: " + (getConfig().autoSummatia ? "On" : "Off");
+		}
+
 		this.next(getConfig().summatia ? "back" : "first");
 	}
 
@@ -414,7 +423,11 @@ export default class RestaurantFloor extends Floor {
 			if ("!,.:;?".includes(char)) await wait(500);
 			if (pid != this.resets) return;
 		}
-		await wait(1000 + data.message.length * 100);
+		if (data.next) {
+			const waitForClick = new Promise<void>((res) => window.addEventListener("click", () => res(), { once: true }));
+			if (getConfig().autoSummatia) await Promise.race([wait(1000 + data.message.length * 100), waitForClick]);
+			else await waitForClick;
+		}
 		if (pid != this.resets) return;
 
 		if (data.responses) {
