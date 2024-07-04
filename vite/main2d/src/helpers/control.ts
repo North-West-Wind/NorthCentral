@@ -4,6 +4,7 @@ const DEFAULT_CONFIG = {
 	music: false,
 	summatia: "",
 	autoSummatia: false,
+	smoothScroll: true,
 };
 const CONFIG_COOKIE_NAME = "elevator_config";
 
@@ -16,6 +17,11 @@ export function readConfig() {
 	else {
 		try {
 			config = JSON.parse(configStr);
+			for (const key in DEFAULT_CONFIG)
+				if (typeof (config as any)[key] !== typeof (DEFAULT_CONFIG as any)[key]) {
+					(config as any)[key] = (DEFAULT_CONFIG as any)[key];
+					writeConfig();
+				}
 		} catch (err) {
 			config = DEFAULT_CONFIG;
 		}
@@ -43,6 +49,12 @@ export function setMusic(state: boolean, noSave = false) {
 		getConfig().music = state;
 		writeConfig();
 	}
+}
+
+export function toggleSmoothScroll() {
+	const config = getConfig();
+	config.smoothScroll = !config.smoothScroll;
+	writeConfig();
 }
 
 export function wait(ms: number) {

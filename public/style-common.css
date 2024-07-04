@@ -157,6 +157,15 @@ a:hover, .link-like *:hover {
 	font-size: 2.5vmax;
 	margin-top: 1vmax;
 	border-radius: 1vmax;
+	transition: background-color .5s ease;
+}
+
+.button.on {
+	background-color: #3cdd64;
+}
+
+.button.off {
+	background-color: #ff4e4e;
 }
 
 #storage-prompt {

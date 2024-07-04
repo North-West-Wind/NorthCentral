@@ -4,7 +4,7 @@ import { toggleContent } from "./helpers/html";
 import { FLOORS } from "./constants";
 import { displayTexture } from "./generators";
 import { camera, currentFloor, floor, ratio, rotatedX, rotatedY, started, targetFloor, touched } from "./states";
-import { wait } from "./helpers/control";
+import { getConfig, wait } from "./helpers/control";
 import { clamp } from "./helpers/math";
 
 enum State {
@@ -218,11 +218,16 @@ function update() {
 		}
 		// scroll handling
 		if (scrollDisplacement) {
-			var tmpDisplacement = scrollDisplacement;
-			scrollVelocity += (scrollDisplacement < 0 ? -1 : 1) * (Math.abs(scrollVelocity) > Math.abs(scrollDisplacement) ? -1 : 1);
-			tmpDisplacement -= scrollVelocity;
-			if ((scrollDisplacement > 0 && tmpDisplacement < 0) || (scrollDisplacement < 0 && tmpDisplacement > 0)) scrollVelocity = scrollDisplacement;
-			scrollDisplacement -= scrollVelocity;
+			if (getConfig().smoothScroll) {
+				var tmpDisplacement = scrollDisplacement;
+				scrollVelocity += (scrollDisplacement < 0 ? -1 : 1) * (Math.abs(scrollVelocity) > Math.abs(scrollDisplacement) ? -1 : 1);
+				tmpDisplacement -= scrollVelocity;
+				if ((scrollDisplacement > 0 && tmpDisplacement < 0) || (scrollDisplacement < 0 && tmpDisplacement > 0)) scrollVelocity = scrollDisplacement;
+				scrollDisplacement -= scrollVelocity;
+			} else {
+				handleWheel(scrollDisplacement);
+				scrollDisplacement = 0;
+			}
 		} else if (scrollVelocity) {
 			if (scrollVelocity < 0) {
 				if (scrollVelocity > -1) scrollVelocity = 0;

@@ -1,4 +1,4 @@
-import { getConfig, toggleMusic, writeConfig } from "../helpers/control";
+import { getConfig, toggleMusic, toggleSmoothScroll, writeConfig } from "../helpers/control";
 import Floor from "../types/floor";
 
 const ID = "ground";
@@ -69,7 +69,30 @@ export default class GroundFloor extends Floor {
 		(<HTMLAnchorElement>document.getElementsByClassName("storage-button accept")[0]).onclick = () => accept();
 		(<HTMLAnchorElement>document.getElementsByClassName("storage-button deny")[0]).onclick = () => answer();
 
-		document.getElementById("toggleMusic")!.onclick = () => toggleMusic();
+		const setButtonText = (button: HTMLDivElement, prefix: string, key: string) => {
+			if ((getConfig() as any)[key]) {
+				button.innerHTML = prefix + ": On";
+				button.classList.add("on");
+				button.classList.remove("off");
+			} else {
+				button.innerHTML = prefix + ": Off";
+				button.classList.add("off");
+				button.classList.remove("on");
+			}
+		};
+		const musicButton = document.getElementById("toggle-music") as HTMLDivElement;
+		musicButton.onclick = () => {
+			toggleMusic();
+			setButtonText(musicButton, "Music", "music");
+		}
+		setButtonText(musicButton, "Music", "music");
+	
+		const smoothScrollButton = document.getElementById("smooth-scroll") as HTMLDivElement;
+		smoothScrollButton.onclick = () => {
+			toggleSmoothScroll();
+			setButtonText(smoothScrollButton, "Smooth Scroll (3D-Only)", "smoothScroll");
+		}
+		setButtonText(smoothScrollButton, "Smooth Scroll (3D-Only)", "smoothScroll");
 
 		// on-the-fly content patching
 		info.querySelector<HTMLHeadingElement>("h1")!.innerHTML = "North's Elevator (2D Edition)";
