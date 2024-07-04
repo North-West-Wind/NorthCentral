@@ -32,15 +32,17 @@ export function getConfig() {
 }
 
 export function toggleMusic() {
-	const config = getConfig();
-	if (config.music) {
-		config.music = false;
-		(document.getElementById("player") as HTMLAudioElement).pause();
-	} else {
-		config.music = true;
-		(document.getElementById("player") as HTMLAudioElement).play();
+	setMusic((document.getElementById("player") as HTMLAudioElement).paused);
+}
+
+export function setMusic(state: boolean, noSave = false) {
+	if (state) (document.getElementById("player") as HTMLAudioElement).play();
+	else (document.getElementById("player") as HTMLAudioElement).pause();
+
+	if (!noSave) {
+		getConfig().music = state;
+		writeConfig();
 	}
-	writeConfig();
 }
 
 export async function wait(ms: number) {

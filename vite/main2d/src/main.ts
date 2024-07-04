@@ -35,7 +35,6 @@ function updateDisplay() {
 async function loadFloor() {
   floor().unloadSvg(background);
   const f = floor(realOrNotFoundFloor(targetFloor));
-  console.log(f.id);
   currentFloor = targetFloor;
   background.innerHTML = await f.svg.get();
   f.loadSvg(background);

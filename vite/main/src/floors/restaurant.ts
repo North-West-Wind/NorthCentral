@@ -4,8 +4,9 @@ import { camera } from "../states";
 import { toggleContent } from "../helpers/html";
 import { readPage } from "../helpers/reader";
 import { LazyLoader } from "../types/misc";
-import { getConfig, toggleMusic, wait, writeConfig } from "../helpers/control";
+import { getConfig, setMusic, toggleMusic, wait, writeConfig } from "../helpers/control";
 import { SVG, Svg } from "@svgdotjs/svg.js";
+import { randomBetween } from "../helpers/math";
 
 type FireEntry = {
 	mesh: THREE.Mesh;
@@ -45,6 +46,12 @@ function validKeyOrElse(key: string, fallback: string) {
 	return summatiaData && Object.keys(summatiaData).includes(key) ? key : fallback;
 }
 
+const MUSICS = {
+	jazz0: `Music by <a href="https://pixabay.com/users/denis-pavlov-music-35636692/?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=168726">Denis Pavlov</a> from <a href="https://pixabay.com//?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=168726">Pixabay</a>`,
+	jazz1: `Music by <a href="https://pixabay.com/users/denis-pavlov-music-35636692/?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=219314">Denis Pavlov</a> from <a href="https://pixabay.com/music//?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=219314">Pixabay</a>`,
+	jazz2: `Music by <a href="https://pixabay.com/users/denis-pavlov-music-35636692/?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=219302">Denis Pavlov</a> from <a href="https://pixabay.com//?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=219302">Pixabay</a>`
+};
+
 export default class RestaurantFloor extends Floor {
 	phase: Phase;
 	allFires: FireEntry[] = [];
@@ -68,6 +75,9 @@ export default class RestaurantFloor extends Floor {
 	// summatia state
 	emotion = 17;
 	resets = 0;
+	// music stuff
+	musicPlaying = false;
+	audio!: HTMLAudioElement;
 
 	constructor() {
 		super("restaurant", 4);
@@ -106,6 +116,20 @@ export default class RestaurantFloor extends Floor {
 			}
 			img.src = 'data:image/svg+xml;base64,' + btoa(svg);
 		});
+		this.setupJazz();
+	}
+
+	private setupJazz() {
+		const key = "jazz" + randomBetween(0, 2);
+		this.audio = new Audio(`/assets/sounds/jazz/${key}.mp3`);
+		this.audio.onplay = () => {
+			const div = document.querySelector<HTMLDivElement>("div#summatia-credits")!;
+			div.innerHTML = (MUSICS as any)[key];
+			div.style.opacity = "1";
+			setTimeout(() => div.style.opacity = "0", 5000);
+		}
+		this.audio.onended = () => this.setupJazz();
+		if (this.phase == Phase.DATING) this.audio.play();
 	}
 
 	spawn(scene: THREE.Scene) {
@@ -241,7 +265,10 @@ export default class RestaurantFloor extends Floor {
 				this.phase = Phase.TRANSITION;
 				cam.position.z = -maxDist;
 				maxed = true;
-				if (getConfig().music) toggleMusic();
+				
+				this.musicPlaying = getConfig().music;
+				setMusic(false, true);
+
 				setTimeout(() => {
 					this.phase = Phase.DATING;
 					setTimeout(() => toggleContent(), 1000);
@@ -256,6 +283,10 @@ export default class RestaurantFloor extends Floor {
 				this.phase = Phase.TRANSITION;
 				cam.position.z = -maxDist;
 				maxed = true;
+				
+				this.musicPlaying = getConfig().music;
+				setMusic(false, true);
+
 				setTimeout(() => {
 					this.phase = Phase.DATING;
 					toggleContent();
@@ -390,11 +421,14 @@ export default class RestaurantFloor extends Floor {
 		}
 
 		this.next(getConfig().summatia ? "back" : "first");
+		this.audio.play();
 	}
 
 	unloadContent(info: HTMLDivElement) {
 		info.style.backgroundColor = "";
 		this.phase = Phase.DATING_BACK;
+		this.audio.pause();
+		if (this.musicPlaying) setMusic(true, false);
 	}
 
 	private async next(key: string) {

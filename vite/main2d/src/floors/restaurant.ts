@@ -1,4 +1,5 @@
-import { getConfig, wait, writeConfig } from "../helpers/control";
+import { getConfig, setMusic, wait, writeConfig } from "../helpers/control";
+import { randomBetween } from "../helpers/math";
 import { toggleContent } from "../main";
 import Floor from "../types/floor";
 
@@ -22,18 +23,41 @@ function validKeyOrElse(key: string, fallback: string) {
 	return summatiaData && Object.keys(summatiaData).includes(key) ? key : fallback;
 }
 
+const MUSICS = {
+	jazz0: `Music by <a href="https://pixabay.com/users/denis-pavlov-music-35636692/?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=168726">Denis Pavlov</a> from <a href="https://pixabay.com//?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=168726">Pixabay</a>`,
+	jazz1: `Music by <a href="https://pixabay.com/users/denis-pavlov-music-35636692/?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=219314">Denis Pavlov</a> from <a href="https://pixabay.com/music//?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=219314">Pixabay</a>`,
+	jazz2: `Music by <a href="https://pixabay.com/users/denis-pavlov-music-35636692/?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=219302">Denis Pavlov</a> from <a href="https://pixabay.com//?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=219302">Pixabay</a>`
+};
+
 export default class RestaurantFloor extends Floor {
 	emotion: number;
 	resets: number;
+	active = false;
+	musicPlaying = false;
+	audio!: HTMLAudioElement;
 
 	constructor() {
 		super("restaurant", 4);
 		this.disableContent = true;
 		this.emotion = 17;
 		this.resets = 0;
+		this.setupJazz();
 	}
 
-	enableByEmotion() {
+	private setupJazz() {
+		const key = "jazz" + randomBetween(0, 2);
+		this.audio = new Audio(`/assets/sounds/jazz/${key}.mp3`);
+		this.audio.onplay = () => {
+			const div = document.querySelector<HTMLDivElement>("div#summatia-credits")!;
+			div.innerHTML = (MUSICS as any)[key];
+			div.style.opacity = "1";
+			setTimeout(() => div.style.opacity = "0", 5000);
+		}
+		this.audio.onended = () => this.setupJazz();
+		if (this.active) this.audio.play();
+	}
+
+	private enableByEmotion() {
 		const svg = document.querySelector<SVGElement>("#background svg")!;
 
 		svg.querySelector<SVGGElement>("#eye")!.style.display = this.emotion & (1 + 2) ? "inline" : "none";
@@ -134,10 +158,16 @@ export default class RestaurantFloor extends Floor {
 			auto.querySelector("span")!.innerHTML = "Auto: " + (getConfig().autoSummatia ? "On" : "Off");
 		}
 		this.next(getConfig().summatia ? "back" : "first");
+		setMusic(false, false);
+		this.audio.play();
+		this.active = true;
 	}
 
 	unloadContent(info: HTMLDivElement): void {
 		info.style.backgroundColor = "";
+		this.audio.pause();
+		this.active = false;
+		if (this.musicPlaying) setMusic(true, false);
 	}
 
 	loadSvg(bg: HTMLDivElement) {
@@ -148,6 +178,8 @@ export default class RestaurantFloor extends Floor {
 	}
 
 	async enter() {
+		this.musicPlaying = getConfig().music;
+		setMusic(false, true);
 		await wait(3000);
 		const cover = document.querySelector<SVGRectElement>("#background svg rect#cover")!;
 		cover.style.display = "none";
