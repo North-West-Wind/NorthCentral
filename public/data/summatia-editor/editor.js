@@ -7,7 +7,6 @@ const deadends = document.querySelector("div#deadends");
 const nonexist = document.querySelector("div#nonexist");
 const logicDiv = document.querySelector("div#logic-editor");
 const message = logicDiv.querySelector("textarea#message");
-const delay = logicDiv.querySelector("input#delay");
 const choices = logicDiv.querySelector("div#choices");
 
 let emotions = 17;
@@ -66,6 +65,8 @@ function renderEmotion() {
 		svg.querySelectorAll(".right-pupil").forEach(item => item.style.transform = "translate(13px, 9px)");
 	} else
 		svg.querySelectorAll(".pupil").forEach(item => item.style.transform = "");
+
+	svg.querySelectorAll(".tears").forEach(item => item.style.opacity = emotions & (1 << 19) ? "1" : "0")
 }
 
 function updateCheckboxes() {
@@ -134,8 +135,7 @@ function updateLogicSelector() {
 			logic = prompt("Logic name:");
 			summatiaData[preset] = {
 				message: "",
-				emotion: emotions,
-				delay: 3000
+				emotion: emotions
 			};
 		} else if (evt.target.value)
 			logic = evt.target.value;
@@ -176,8 +176,7 @@ function updateLogic() {
 	if (!data) {
 		data = {
 			message: "",
-			emotion: emotions,
-			delay: 3000
+			emotion: emotions
 		};
 		summatiaData[logic] = data;
 	}
@@ -189,10 +188,6 @@ function updateLogic() {
 	message.value = data.message;
 	message.onchange = (evt) => {
 		summatiaData[logic].message = evt.target.value;
-	}
-	delay.value = data.delay;
-	delay.onchange = (evt) => {
-		summatiaData[logic].delay = parseInt(evt.target.value);
 	}
 
 	choices.innerHTML = "";
@@ -264,6 +259,12 @@ if (window.localStorage.getItem("summatiaData") && confirm("Load data from local
 });
 
 function afterDataObtained() {
+	// remove delay attribute
+	for (const key of Object.keys(summatiaData)) {
+		if (key == "emotions") continue;
+		if (summatiaData[key].delay !== undefined) delete summatiaData[key].delay;
+	}
+
 	// create checkboxes
 	for (const bit of Object.keys(summatiaData.emotions.reference).map(x => parseInt(x))) {
 		if (isNaN(bit)) continue;

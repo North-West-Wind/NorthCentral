@@ -27,13 +27,13 @@
      inkscape:pagecheckerboard="0"
      inkscape:deskcolor="#d1d1d1"
      inkscape:document-units="px"
-     inkscape:zoom="2.212655"
-     inkscape:cx="286.75957"
-     inkscape:cy="207.66907"
+     inkscape:zoom="1.8931631"
+     inkscape:cx="231.09473"
+     inkscape:cy="268.5981"
      inkscape:window-width="1920"
      inkscape:window-height="1004"
-     inkscape:window-x="1920"
-     inkscape:window-y="1080"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
      inkscape:window-maximized="1"
      inkscape:current-layer="g22" />
   <defs
@@ -420,7 +420,8 @@
             <g
                id="g24"
                inkscape:label="open"
-               class="eye-open">
+               class="eye-open"
+               style="display:none">
               <path
                  id="path35304-0"
                  style="display:inline;fill:#ffffff;stroke-width:67.4315;stroke-linecap:square;stroke-miterlimit:1.5;paint-order:fill markers stroke"
@@ -473,11 +474,26 @@
                    class="pupil right-pupil"
                    clip-path="none" />
               </g>
+              <g
+                 id="g3"
+                 inkscape:label="tears"
+                 class="tears">
+                <path
+                   id="path3"
+                   style="fill:#d5f9f5;fill-opacity:0.866667;stroke-width:7.554;paint-order:fill markers stroke"
+                   d="m 921.08009,541.49056 c 0.49373,1.89816 -10.01168,4.67093 -15.34648,5.08124 -5.33479,0.41031 -15.15098,-2.36663 -14.7705,-4.35827 0.38048,-1.99165 10.33194,-0.19985 14.73057,-0.23734 4.39863,-0.0375 14.89269,-2.38378 15.38641,-0.48563 z"
+                   sodipodi:nodetypes="zzzzz" />
+                <path
+                   id="path6"
+                   style="fill:#d5f9f5;fill-opacity:0.866667;stroke-width:7.554;paint-order:fill markers stroke"
+                   d="m 1011.0863,541.70744 c -0.4938,1.89816 8.5386,4.33614 13.8734,4.74645 5.3347,0.41031 14.4144,-2.36663 14.034,-4.35827 -0.3805,-1.99165 -9.5955,-0.19985 -13.9941,-0.23734 -4.3986,-0.0375 -13.4196,-2.04899 -13.9133,-0.15084 z"
+                   sodipodi:nodetypes="zzzzz" />
+              </g>
             </g>
             <g
                id="g26"
                inkscape:label="close"
-               style="display:none;stroke-width:1.36366"
+               style="display:inline;stroke-width:1.36366"
                class="eye-close"
                transform="matrix(124.45584,-15.856736,16.19619,144.30208,-3970.7254,-3286.3902)">
               <path
@@ -492,6 +508,24 @@
                  inkscape:label="eye white left"
                  d="m 35.480696,30.293358 -0.179196,-0.0959 -0.205545,-0.04018"
                  sodipodi:nodetypes="ccc" />
+              <g
+                 id="g9-3"
+                 inkscape:label="tears"
+                 class="tears"
+                 style="display:inline;stroke-width:1.36366"
+                 transform="matrix(1.0284167,-0.02324403,-0.03163896,1.1810799,-0.06024834,-4.6540206)">
+                <path
+                   id="path9-5"
+                   style="fill:#d5f9f5;fill-opacity:0.866667;stroke-width:0.0559749;paint-order:fill markers stroke"
+                   transform="matrix(0.9940167,0.10922819,-0.12904781,0.99163837,0,0)"
+                   d="m 38.706377,26.202856 c -0.02763,0 -0.04234,-0.0185 -0.04234,-0.02713 0,-0.0086 0.01088,-0.02401 0.03851,-0.02401 0.02763,0 0.05805,0.02067 0.05804,0.02928 -5e-6,0.0086 -0.0266,0.02186 -0.05422,0.02186 z"
+                   sodipodi:nodetypes="zzzzz" />
+                <path
+                   id="path10-6"
+                   style="fill:#d5f9f5;fill-opacity:0.866667;stroke-width:0.0559693;paint-order:fill markers stroke"
+                   d="m 36.372922,30.359178 c 0.02746,0.003 0.04814,-0.0102 0.04925,-0.0188 0.0011,-0.0085 -0.0154,-0.02262 -0.04286,-0.02563 -0.02746,-0.003 -0.0511,0.0085 -0.0522,0.01703 -0.0011,0.0086 0.01836,0.0244 0.04581,0.0274 z"
+                   sodipodi:nodetypes="zzzzz" />
+              </g>
             </g>
           </g>
           <g
@@ -506,7 +540,8 @@
             <g
                id="g28"
                inkscape:label="open"
-               class="eye-open">
+               class="eye-open"
+               style="display:none">
               <path
                  id="path16"
                  style="display:inline;fill:#ffffff;stroke-width:67.4315;stroke-linecap:square;stroke-miterlimit:1.5;paint-order:fill markers stroke"
@@ -557,11 +592,28 @@
                    mask="none"
                    class="pupil right-pupil" />
               </g>
+              <g
+                 id="g8"
+                 inkscape:label="tears"
+                 class="tears"
+                 style="display:inline"
+                 transform="translate(0.09975782,0.0584014)">
+                <path
+                   id="path7"
+                   style="fill:#d5f9f5;fill-opacity:0.866667;stroke-width:7.554;paint-order:fill markers stroke"
+                   d="m 921.08009,541.49056 c 0.49373,1.89816 -10.01168,4.67093 -15.34648,5.08124 -5.33479,0.41031 -15.15098,-2.36663 -14.7705,-4.35827 0.38048,-1.99165 10.33194,-0.19985 14.73057,-0.23734 4.39863,-0.0375 14.89269,-2.38378 15.38641,-0.48563 z"
+                   sodipodi:nodetypes="zzzzz" />
+                <path
+                   id="path8"
+                   style="fill:#d5f9f5;fill-opacity:0.866667;stroke-width:7.554;paint-order:fill markers stroke"
+                   d="m 1011.0863,541.70744 c -0.4938,1.89816 8.5386,4.33614 13.8734,4.74645 5.3347,0.41031 14.4144,-2.36663 14.034,-4.35827 -0.3805,-1.99165 -9.5955,-0.19985 -13.9941,-0.23734 -4.3986,-0.0375 -13.4196,-2.04899 -13.9133,-0.15084 z"
+                   sodipodi:nodetypes="zzzzz" />
+              </g>
             </g>
             <g
                id="g23"
                inkscape:label="close"
-               style="display:none;stroke-width:1.36366"
+               style="display:inline;stroke-width:1.36366"
                transform="matrix(124.45584,-15.856736,16.19619,144.30208,-3970.7254,-3282.2357)"
                class="eye-close">
               <path
@@ -576,6 +628,22 @@
                  inkscape:label="eye white left"
                  d="M 35.467197,30.271517 35.3015,30.197458 35.095955,30.157278"
                  sodipodi:nodetypes="ccc" />
+              <g
+                 id="g9"
+                 inkscape:label="tears"
+                 class="tears">
+                <path
+                   id="path9"
+                   style="fill:#d5f9f5;fill-opacity:0.866667;stroke-width:0.0559749;paint-order:fill markers stroke"
+                   transform="matrix(0.9940167,0.10922819,-0.12904781,0.99163837,0,0)"
+                   d="m 38.765385,26.18104 c 0,0.0086 -0.03326,0.01509 -0.06088,0.01509 -0.02763,0 -0.05126,-0.01183 -0.05126,-0.02046 0,-0.0086 0.02115,-0.01724 0.04878,-0.01724 0.02763,0 0.06337,0.01398 0.06337,0.02261 z"
+                   sodipodi:nodetypes="zzzzz" />
+                <path
+                   id="path10"
+                   style="fill:#d5f9f5;fill-opacity:0.866667;stroke-width:0.0559693;paint-order:fill markers stroke"
+                   d="m 36.313412,30.330259 c -0.0011,0.0085 0.03112,0.0186 0.05857,0.0216 0.02746,0.003 0.05248,-0.0061 0.05359,-0.01469 0.0011,-0.0085 -0.0188,-0.01941 -0.04626,-0.02242 -0.02746,-0.003 -0.0648,0.0069 -0.06591,0.0155 z"
+                   sodipodi:nodetypes="zzzzz" />
+              </g>
             </g>
           </g>
           <g

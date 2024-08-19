@@ -26,11 +26,32 @@ enum Phase {
 	DATING_BACK
 }
 
+enum FaceComponent {
+	EYES_NORMAL_OPEN = 1,
+	EYES_NORMAL_CLOSE = 1 << 1,
+	EYES_HALF_OPEN = 1 << 2,
+	EYES_HALF_CLOSE = 1 << 3,
+	MOUTH_SMILE_CLOSE = 1 << 4,
+	MOUTH_SAD_CLOSE = 1 << 5,
+	MOUTH_SMILE_OPEN = 1 << 6,
+	MOUTH_SAD_OPEN = 1 << 7,
+	FACE_BLUSH = 1 << 8,
+	BROWS_ANGRY = 1 << 9,
+	BROWS_WORRIED = 1 << 10,
+	HEAD_LOWERED = 1 << 11,
+	HANDS_TABLE = 1 << 12,
+	HANDS_HEAD = 1 << 13,
+	HANDS_FACE = 1 << 14,
+	EYES_DOWN = 1 << 15,
+	EYES_LEFT = 1 << 17,
+	EYES_RIGHT = 1 << 18,
+	FACE_TEARS = 1 << 19
+};
+
 type SummatiaData = {
 	[key: string]: {
 		message: string;
 		emotion: string | number;
-		delay: number;
 		responses?: { message: string, next: string }[];
 		next?: string;
 	}
@@ -356,27 +377,27 @@ export default class RestaurantFloor extends Floor {
 				}
 				img.src = 'data:image/svg+xml;base64,' + btoa(draw.svg(false));
 			});
-			this.meshes!.handsTable.visible = !!(this.emotion & (4096));
-			this.meshes!.handsHold.visible = !!(this.emotion & (8192));
+			this.meshes!.handsTable.visible = !!(this.emotion & (FaceComponent.HANDS_TABLE));
+			this.meshes!.handsHold.visible = !!(this.emotion & (FaceComponent.HANDS_HEAD));
 		}
 	}
 	
 	private enableByEmotion(draw: Svg) {
-		draw.find("#eye").forEach(item => item.css({ display: this.emotion & (1 + 2) ? "inline" : "none" }));
-		draw.find("#eye-half").forEach(item => item.css({ display: this.emotion & (4 + 8) ? "inline" : "none" }));
-		draw.find(".eye-open").forEach(item => item.css({ display: this.emotion & (1 + 4) ? "inline" : "none" }));
-		draw.find(".eye-close").forEach(item => item.css({ display: this.emotion & (2 + 8) ? "inline" : "none" }));
+		draw.find("#eye").forEach(item => item.css({ display: this.emotion & (FaceComponent.EYES_NORMAL_OPEN | FaceComponent.EYES_NORMAL_CLOSE) ? "inline" : "none" }));
+		draw.find("#eye-half").forEach(item => item.css({ display: this.emotion & (FaceComponent.EYES_HALF_OPEN | FaceComponent.EYES_HALF_CLOSE) ? "inline" : "none" }));
+		draw.find(".eye-open").forEach(item => item.css({ display: this.emotion & (FaceComponent.EYES_NORMAL_OPEN | FaceComponent.EYES_HALF_OPEN) ? "inline" : "none" }));
+		draw.find(".eye-close").forEach(item => item.css({ display: this.emotion & (FaceComponent.EYES_NORMAL_CLOSE | FaceComponent.EYES_HALF_CLOSE) ? "inline" : "none" }));
 
-		draw.find("#mouth-smile").forEach(item => item.css({ display: this.emotion & (16) ? "inline" : "none" }));
-		draw.find("#mouth-sad").forEach(item => item.css({ display: this.emotion & (32) ? "inline" : "none" }));
-		draw.find("#mouth-laugh").forEach(item => item.css({ display: this.emotion & (64) ? "inline" : "none" }));
-		draw.find("#mouth-mad").forEach(item => item.css({ display: this.emotion & (128) ? "inline" : "none" }));
+		draw.find("#mouth-smile").forEach(item => item.css({ display: this.emotion & FaceComponent.MOUTH_SMILE_CLOSE ? "inline" : "none" }));
+		draw.find("#mouth-sad").forEach(item => item.css({ display: this.emotion & FaceComponent.MOUTH_SAD_CLOSE ? "inline" : "none" }));
+		draw.find("#mouth-laugh").forEach(item => item.css({ display: this.emotion & FaceComponent.MOUTH_SMILE_OPEN ? "inline" : "none" }));
+		draw.find("#mouth-mad").forEach(item => item.css({ display: this.emotion & FaceComponent.MOUTH_SAD_OPEN ? "inline" : "none" }));
 
-		draw.find("#blush").forEach(item => item.css({ opacity: this.emotion & (256) ? "1" : "0" }));
+		draw.find("#blush").forEach(item => item.css({ opacity: this.emotion & FaceComponent.FACE_BLUSH ? "1" : "0" }));
 
-		if (this.emotion & (512 + 1024)) {
-			draw.find(".left-brow").forEach(item => item.css({ transform: `rotate(${this.emotion & 512 ? "-10" : "20"}deg)` }));
-			draw.find(".right-brow").forEach(item => item.css({ transform: `rotate(${this.emotion & 512 ? "10" : "-20"}deg)` }));
+		if (this.emotion & (FaceComponent.BROWS_ANGRY | FaceComponent.BROWS_WORRIED)) {
+			draw.find(".left-brow").forEach(item => item.css({ transform: `rotate(${this.emotion & FaceComponent.BROWS_ANGRY ? "-10" : "20"}deg)` }));
+			draw.find(".right-brow").forEach(item => item.css({ transform: `rotate(${this.emotion & FaceComponent.BROWS_ANGRY ? "10" : "-20"}deg)` }));
 		} else
 			draw.find(".brow").forEach(item => item.css({ transform: "" }));
 
@@ -387,20 +408,22 @@ export default class RestaurantFloor extends Floor {
 		draw.find("#brows").forEach(item => item.css({ display: !(this.emotion & (512 + 1024)) ? "inline" : "none" }));
 		*/
 
-		draw.find(".summatia-head").forEach(item => item.css({ transform: `translateY(${this.emotion & 2048 ? "5" : "0"}px)` }));
+		draw.find(".summatia-head").forEach(item => item.css({ transform: `translateY(${this.emotion & FaceComponent.HEAD_LOWERED ? "5" : "0"}px)` }));
 
-		draw.find("#hands-face").forEach(item => item.css({ display: this.emotion & (16384) ? "inline" : "none" }));
+		draw.find("#hands-face").forEach(item => item.css({ display: this.emotion & FaceComponent.HANDS_FACE ? "inline" : "none" }));
 
-		if (this.emotion & 32768)
+		if (this.emotion & FaceComponent.EYES_DOWN)
 			draw.find(".pupil").forEach(item => item.css({ transform: "translateY(18px)" }));
-		else if (this.emotion & 131072) {
+		else if (this.emotion & FaceComponent.EYES_LEFT) {
 			draw.find(".left-pupil").forEach(item => item.css({ transform: "translate(-14px, 9px)" }));
 			draw.find(".right-pupil").forEach(item => item.css({ transform: "translate(-24px, 9px)" }));
-		} else if (this.emotion & 262144) {
+		} else if (this.emotion & FaceComponent.EYES_RIGHT) {
 			draw.find(".left-pupil").forEach(item => item.css({ transform: "translate(20px, 9px)" }));
 			draw.find(".right-pupil").forEach(item => item.css({ transform: "translate(13px, 9px)" }));
 		} else
 			draw.find(".pupil").forEach(item => item.css({ transform: "" }));
+
+		draw.find(".tears").forEach(item => item.css({ opacity: this.emotion & FaceComponent.FACE_TEARS ? "1" : "0" }));
 	}
 
 	loadContent(info: HTMLDivElement) {

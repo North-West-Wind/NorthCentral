@@ -3,11 +3,32 @@ import { randomBetween } from "../helpers/math";
 import { toggleContent } from "../main";
 import Floor from "../types/floor";
 
+enum FaceComponent {
+	EYES_NORMAL_OPEN = 1,
+	EYES_NORMAL_CLOSE = 1 << 1,
+	EYES_HALF_OPEN = 1 << 2,
+	EYES_HALF_CLOSE = 1 << 3,
+	MOUTH_SMILE_CLOSE = 1 << 4,
+	MOUTH_SAD_CLOSE = 1 << 5,
+	MOUTH_SMILE_OPEN = 1 << 6,
+	MOUTH_SAD_OPEN = 1 << 7,
+	FACE_BLUSH = 1 << 8,
+	BROWS_ANGRY = 1 << 9,
+	BROWS_WORRIED = 1 << 10,
+	HEAD_LOWERED = 1 << 11,
+	HANDS_TABLE = 1 << 12,
+	HANDS_HEAD = 1 << 13,
+	HANDS_FACE = 1 << 14,
+	EYES_DOWN = 1 << 15,
+	EYES_LEFT = 1 << 17,
+	EYES_RIGHT = 1 << 18,
+	FACE_TEARS = 1 << 19
+};
+
 type SummatiaData = {
 	[key: string]: {
 		message: string;
 		emotion: string | number;
-		delay: number;
 		responses?: { message: string, next: string }[];
 		next?: string;
 	}
@@ -60,40 +81,42 @@ export default class RestaurantFloor extends Floor {
 	private enableByEmotion() {
 		const svg = document.querySelector<SVGElement>("#background svg")!;
 
-		svg.querySelector<SVGGElement>("#eye")!.style.display = this.emotion & (1 + 2) ? "inline" : "none";
-		svg.querySelector<SVGGElement>("#eye-half")!.style.display = this.emotion & (4 + 8) ? "inline" : "none";
-		svg.querySelectorAll<SVGGElement>(".eye-open").forEach(item => item.style.display = this.emotion & (1 + 4) ? "inline" : "none");
-		svg.querySelectorAll<SVGGElement>(".eye-close").forEach(item => item.style.display = this.emotion & (2 + 8) ? "inline" : "none");
+		svg.querySelector<SVGGElement>("#eye")!.style.display = this.emotion & (FaceComponent.EYES_NORMAL_OPEN | FaceComponent.EYES_NORMAL_CLOSE) ? "inline" : "none";
+		svg.querySelector<SVGGElement>("#eye-half")!.style.display = this.emotion & (FaceComponent.EYES_HALF_OPEN | FaceComponent.EYES_HALF_CLOSE) ? "inline" : "none";
+		svg.querySelectorAll<SVGGElement>(".eye-open").forEach(item => item.style.display = this.emotion & (FaceComponent.EYES_NORMAL_OPEN | FaceComponent.EYES_HALF_OPEN) ? "inline" : "none");
+		svg.querySelectorAll<SVGGElement>(".eye-close").forEach(item => item.style.display = this.emotion & (FaceComponent.EYES_NORMAL_CLOSE | FaceComponent.EYES_HALF_CLOSE) ? "inline" : "none");
 
-		svg.querySelector<SVGPathElement>("#mouth-smile")!.style.display = this.emotion & (16) ? "inline" : "none";
-		svg.querySelector<SVGPathElement>("#mouth-sad")!.style.display = this.emotion & (32) ? "inline" : "none";
-		svg.querySelector<SVGGElement>("#mouth-laugh")!.style.display = this.emotion & (64) ? "inline" : "none";
-		svg.querySelector<SVGGElement>("#mouth-mad")!.style.display = this.emotion & (128) ? "inline" : "none";
+		svg.querySelector<SVGPathElement>("#mouth-smile")!.style.display = this.emotion & FaceComponent.MOUTH_SMILE_CLOSE ? "inline" : "none";
+		svg.querySelector<SVGPathElement>("#mouth-sad")!.style.display = this.emotion & FaceComponent.MOUTH_SAD_CLOSE ? "inline" : "none";
+		svg.querySelector<SVGGElement>("#mouth-laugh")!.style.display = this.emotion & FaceComponent.MOUTH_SMILE_OPEN ? "inline" : "none";
+		svg.querySelector<SVGGElement>("#mouth-mad")!.style.display = this.emotion & FaceComponent.MOUTH_SAD_OPEN ? "inline" : "none";
 
-		svg.querySelector<SVGGElement>("#blush")!.style.opacity = this.emotion & (256) ? "1" : "0";
+		svg.querySelector<SVGGElement>("#blush")!.style.opacity = this.emotion & FaceComponent.FACE_BLUSH ? "1" : "0";
 
-		if (this.emotion & (512 + 1024)) {
-			svg.querySelector<SVGPathElement>(".left-brow")!.style.transform = `rotate(${this.emotion & 512 ? "-10" : "20"}deg)`;
-			svg.querySelector<SVGPathElement>(".right-brow")!.style.transform = `rotate(${this.emotion & 512 ? "10" : "-20"}deg)`;
+		if (this.emotion & (FaceComponent.BROWS_ANGRY | FaceComponent.BROWS_WORRIED)) {
+			svg.querySelector<SVGPathElement>(".left-brow")!.style.transform = `rotate(${this.emotion & FaceComponent.BROWS_ANGRY ? "-10" : "20"}deg)`;
+			svg.querySelector<SVGPathElement>(".right-brow")!.style.transform = `rotate(${this.emotion & FaceComponent.BROWS_ANGRY ? "10" : "-20"}deg)`;
 		} else
 			svg.querySelectorAll<SVGPathElement>(".brow").forEach(item => item.style.transform = "");
 
-		svg.querySelectorAll<SVGElement>(".summatia-head").forEach(item => item.style.transform = `translateY(${this.emotion & 2048 ? "5" : "0"}px)`);
+		svg.querySelectorAll<SVGElement>(".summatia-head").forEach(item => item.style.transform = `translateY(${this.emotion & FaceComponent.HEAD_LOWERED ? "5" : "0"}px)`);
 
-		svg.querySelector<SVGGElement>("#hands-table")!.style.display = this.emotion & (4096) ? "inline" : "none";
-		svg.querySelector<SVGGElement>("#hands-hold")!.style.display = this.emotion & (8192) ? "inline" : "none";
-		svg.querySelector<SVGGElement>("#hands-face")!.style.display = this.emotion & (16384) ? "inline" : "none";
+		svg.querySelector<SVGGElement>("#hands-table")!.style.display = this.emotion & FaceComponent.HANDS_TABLE ? "inline" : "none";
+		svg.querySelector<SVGGElement>("#hands-hold")!.style.display = this.emotion & FaceComponent.HANDS_HEAD ? "inline" : "none";
+		svg.querySelector<SVGGElement>("#hands-face")!.style.display = this.emotion & FaceComponent.HANDS_FACE ? "inline" : "none";
 
-		if (this.emotion & 32768)
+		if (this.emotion & FaceComponent.EYES_DOWN)
 			svg.querySelectorAll<SVGPathElement>(".pupil").forEach(item => item.style.transform = "translateY(18px)");
-		else if (this.emotion & 131072) {
+		else if (this.emotion & FaceComponent.EYES_LEFT) {
 			svg.querySelectorAll<SVGPathElement>(".left-pupil").forEach(item => item.style.transform = "translate(-14px, 9px)");
 			svg.querySelectorAll<SVGPathElement>(".right-pupil").forEach(item => item.style.transform = "translate(-24px, 9px)");
-		} else if (this.emotion & 262144) {
+		} else if (this.emotion & FaceComponent.EYES_RIGHT) {
 			svg.querySelectorAll<SVGPathElement>(".left-pupil").forEach(item => item.style.transform = "translate(20px, 9px)");
 			svg.querySelectorAll<SVGPathElement>(".right-pupil").forEach(item => item.style.transform = "translate(13px, 9px)");
 		} else
 			svg.querySelectorAll<SVGPathElement>(".pupil").forEach(item => item.style.transform = "");
+
+		svg.querySelectorAll<SVGGElement>(".tears").forEach(item => item.style.opacity = this.emotion & FaceComponent.FACE_TEARS ? "1" : "0");
 	}
 
 	private async next(key: string) {
