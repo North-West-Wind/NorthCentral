@@ -110,7 +110,7 @@ export default class RestaurantFloor extends Floor {
 		this.handsTableCanvas = document.createElement("canvas");
 		// hardcoded currently, can be dynamic from svg
 		this.canvas.width = this.handsHoldCanvas.width = this.handsTableCanvas.width = 443;
-		this.canvas.height = this.handsHoldCanvas.height = this.handsTableCanvas.height = 618;
+		this.canvas.height = this.handsHoldCanvas.height = this.handsTableCanvas.height = 900;
 		this.texture = new THREE.CanvasTexture(this.canvas);
 		this.handsHoldTexture = new THREE.CanvasTexture(this.handsHoldCanvas);
 		this.handsTableTexture = new THREE.CanvasTexture(this.handsTableCanvas);
@@ -154,9 +154,9 @@ export default class RestaurantFloor extends Floor {
 	}
 
 	spawn(scene: THREE.Scene) {
-		const floor = new THREE.Mesh(new THREE.BoxGeometry(400, 2, 1000), new THREE.MeshStandardMaterial({ color: 0x120d35 }));
+		/*const floor = new THREE.Mesh(new THREE.BoxGeometry(400, 2, 1000), new THREE.MeshStandardMaterial({ color: 0x120d35 }));
 		floor.position.set(0, this.num * 1000 - 40, -100);
-		scene.add(floor);
+		scene.add(floor);*/
 
 		const table = new THREE.Group();
 		const tableMat = new THREE.MeshStandardMaterial({ color: 0x824100 });
@@ -166,22 +166,22 @@ export default class RestaurantFloor extends Floor {
 		tableTop.position.set(0, this.num * 1000 - 8, -100);
 		table.add(tableTop);
 
-		const tableLeg0Geo = new THREE.CylinderGeometry(4, 2, 6, 8);
+		const tableLeg0Geo = new THREE.CylinderGeometry(4, 1, 6, 8);
 		const tableLeg0 = new THREE.Mesh(tableLeg0Geo, tableMat);
 		tableLeg0.position.set(0, this.num * 1000 - 11, -100);
 		table.add(tableLeg0);
 
-		const tableLeg1Geo = new THREE.CylinderGeometry(2, 2, 20, 8);
+		const tableLeg1Geo = new THREE.CylinderGeometry(1, 1, 20, 8);
 		const tableLeg1 = new THREE.Mesh(tableLeg1Geo, tableMat);
 		tableLeg1.position.set(0, this.num * 1000 - 24, -100);
 		table.add(tableLeg1);
 
-		const tableLeg2Geo = new THREE.CylinderGeometry(2, 4, 2, 16);
+		const tableLeg2Geo = new THREE.CylinderGeometry(1, 2, 2, 16);
 		const tableLeg2 = new THREE.Mesh(tableLeg2Geo, tableMat);
 		tableLeg2.position.set(0, this.num * 1000 - 35, -100);
 		table.add(tableLeg2);
 
-		const tableBottomGeo = new THREE.CylinderGeometry(6, 6, 1, 16);
+		const tableBottomGeo = new THREE.CylinderGeometry(3, 3, 1, 16);
 		const tableBottom = new THREE.Mesh(tableBottomGeo, tableMat);
 		tableBottom.position.set(0, this.num * 1000 - 36.5, -100);
 		table.add(tableBottom);
@@ -222,25 +222,25 @@ export default class RestaurantFloor extends Floor {
 		scene.add(table);
 
 		const summatia = new THREE.Mesh(new THREE.PlaneGeometry(this.canvas.width / 15, this.canvas.height / 15), new THREE.MeshBasicMaterial({ map: this.texture, transparent: true }));
-		summatia.position.set(0, this.num * 1000 - 4, -124);
+		summatia.position.set(0, this.num * 1000 - 13, -124);
 		scene.add(summatia);
 
 		const handsHold = new THREE.Mesh(new THREE.PlaneGeometry(this.canvas.width / 15, this.canvas.height / 15), new THREE.MeshBasicMaterial({ map: this.handsHoldTexture, transparent: true }));
-		handsHold.position.set(0, this.num * 1000 - 2, -110);
+		handsHold.position.set(0, this.num * 1000 - 9.5, -110);
 		handsHold.scale.set(0.8, 0.8, 0.8);
 		handsHold.visible = false;
 		scene.add(handsHold);
 
 		const handsTable = new THREE.Mesh(new THREE.PlaneGeometry(this.canvas.width / 15, this.canvas.height / 15), new THREE.MeshBasicMaterial({ map: this.handsTableTexture, transparent: true }));
-		handsTable.position.set(0, this.num * 1000 - 2, -115);
+		handsTable.position.set(0, this.num * 1000 - 9, -115);
 		handsTable.scale.set(0.9, 0.9, 0.9);
 		handsTable.visible = false;
 		scene.add(handsTable);
 
 		this.chair = new THREE.Group();
 		const chairMat = new THREE.MeshStandardMaterial({ color: 0x4d0000 });
-		const chairBack = new THREE.Mesh(new THREE.BoxGeometry(12, 18, 2), chairMat);
-		chairBack.position.set(0, this.num * 1000 - 12, -70);
+		const chairBack = new THREE.Mesh(new THREE.BoxGeometry(12, 16, 2), chairMat);
+		chairBack.position.set(0, this.num * 1000 - 13, -70);
 		this.chair.add(chairBack);
 
 		const chairLegGeo = new THREE.BoxGeometry(1, 15, 1);
@@ -259,6 +259,7 @@ export default class RestaurantFloor extends Floor {
 		const chairLegRF = new THREE.Mesh(chairLegGeo, chairMat);
 		chairLegRF.position.set(5.5, this.num * 1000 - 26, -80);
 		this.chair.add(chairLegRF);
+		this.chair.translateY(1);
 
 		if (this.phase <= Phase.TRANSITION) {
 			const coverGeo = new THREE.PlaneGeometry(200, 200);
@@ -271,7 +272,7 @@ export default class RestaurantFloor extends Floor {
 			scene.add(cover1, cover2);
 		}
 
-		return { table, summatia, handsHold, handsTable, floor };
+		return { table, summatia, handsHold, handsTable };
 	}
 
 	handleWheel(scroll: number) {
