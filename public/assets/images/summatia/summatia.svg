@@ -28,14 +28,14 @@
      inkscape:deskcolor="#d1d1d1"
      inkscape:document-units="px"
      inkscape:zoom="2.6773369"
-     inkscape:cx="157.2458"
-     inkscape:cy="806.21157"
+     inkscape:cx="188.24676"
+     inkscape:cy="163.40865"
      inkscape:window-width="1920"
      inkscape:window-height="1004"
      inkscape:window-x="1920"
      inkscape:window-y="1080"
      inkscape:window-maximized="1"
-     inkscape:current-layer="g19" />
+     inkscape:current-layer="g22" />
   <defs
      id="defs1">
     <inkscape:perspective
@@ -653,7 +653,8 @@
             </g>
           </g>
           <g
-             id="brows">
+             id="brows"
+             style="display:inline">
             <path
                id="rect29990-4"
                style="display:inline;fill:#1fdcc7;fill-opacity:1;stroke-width:91.8963;stroke-linecap:square;stroke-miterlimit:1.5;paint-order:fill markers stroke"
@@ -666,6 +667,42 @@
                style="display:inline;fill:#1fdcc7;fill-opacity:1;stroke-width:93.3623;stroke-linecap:square;stroke-miterlimit:1.5;paint-order:fill markers stroke"
                inkscape:label="left"
                d="m 985.90163,472.45743 14.33037,4.85804 24.4925,-2.3703 20.5024,-6.2287 10.9574,-5.28395 -13.3079,-2.65565 -22.6487,0.65008 -24.39122,3.55219 z"
+               sodipodi:nodetypes="ccccccccc"
+               class="brow left-brow" />
+          </g>
+          <g
+             id="brows-worried"
+             style="display:none">
+            <path
+               id="path11"
+               style="display:inline;fill:#1fdcc7;fill-opacity:1;stroke-width:91.8963;stroke-linecap:square;stroke-miterlimit:1.5;paint-order:fill markers stroke"
+               inkscape:label="right"
+               d="m 946.16981,459.87168 -11.68776,9.5703 -24.84038,5.3941 -24.59136,1.54776 -10.93806,-1.96546 11.57695,-6.51594 24.94766,-8.45421 24.69838,-4.60778 z"
+               class="brow right-brow"
+               sodipodi:nodetypes="ccccccccc" />
+            <path
+               id="path12"
+               style="display:inline;fill:#1fdcc7;fill-opacity:1;stroke-width:93.3623;stroke-linecap:square;stroke-miterlimit:1.5;paint-order:fill markers stroke"
+               inkscape:label="left"
+               d="m 986.85419,460.23266 11.8046,9.46634 23.82611,6.14958 21.3963,1.15917 12.1038,-1.21764 -11.5971,-7.04707 -21.5051,-7.13543 -24.13518,-5.00432 z"
+               sodipodi:nodetypes="ccccccccc"
+               class="brow left-brow" />
+          </g>
+          <g
+             id="brows-angry"
+             style="display:none">
+            <path
+               id="path13"
+               style="display:inline;fill:#1fdcc7;fill-opacity:1;stroke-width:91.8963;stroke-linecap:square;stroke-miterlimit:1.5;paint-order:fill markers stroke"
+               inkscape:label="right"
+               d="m 944.2131,478.65515 -14.90705,2.44424 -24.20945,-7.74876 -22.07062,-10.95528 -8.48991,-7.17117 13.28391,0.1455 25.83241,5.15227 23.69331,8.35874 z"
+               class="brow right-brow"
+               sodipodi:nodetypes="ccccccccc" />
+            <path
+               id="path18"
+               style="display:inline;fill:#1fdcc7;fill-opacity:1;stroke-width:93.3623;stroke-linecap:square;stroke-miterlimit:1.5;paint-order:fill markers stroke"
+               inkscape:label="left"
+               d="m 988.19865,478.39596 14.95625,2.29579 23.7088,-6.58736 19.1093,-9.69428 9.8734,-7.10641 -13.5669,-0.30439 -22.1917,4.57309 -23.40383,7.73372 z"
                sodipodi:nodetypes="ccccccccc"
                class="brow left-brow" />
           </g>

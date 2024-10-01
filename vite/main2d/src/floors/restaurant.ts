@@ -138,7 +138,14 @@ export default class RestaurantFloor extends Floor {
 
 		const say = document.querySelector<HTMLDivElement>("#summatia-say")!;
 		let message = "";
+		let skipped = false;
+		const skipClick = new Promise<boolean>((res) => window.addEventListener("click", () => res(skipped = true), { once: true }));
 		for (const char of data.message) {
+			if (skipped) {
+				message = data.message;
+				say.innerHTML = message;
+				break;
+			}
 			message += char;
 			say.innerHTML = message;
 			await wait(50);
@@ -146,7 +153,9 @@ export default class RestaurantFloor extends Floor {
 			if (pid != this.resets) return;
 		}
 		if (data.next) {
-			const waitForClick = new Promise<void>((res) => window.addEventListener("click", () => res(), { once: true }));
+			let waitForClick: Promise<any>;
+			if (skipped) waitForClick = new Promise<void>((res) => window.addEventListener("click", () => res(), { once: true }));
+			else waitForClick = skipClick;
 			if (getConfig().autoSummatia) await Promise.race([wait(1000 + data.message.length * 100), waitForClick]);
 			else await waitForClick;
 		}
