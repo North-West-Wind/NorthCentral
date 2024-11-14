@@ -1,6 +1,6 @@
 import * as THREE from "three";
 import { FLOORS, STATUS_FLOORS } from "../constants";
-import { SVGLoader, SVGResult } from "three/examples/jsm/loaders/SVGLoader.js";
+import { SVGLoader, SVGResult } from "three/addons/loaders/SVGLoader.js";
 
 export function realOrNotFoundFloor(index: number) {
 	if (index < 0 || index >= FLOORS.size) return STATUS_FLOORS.get("not-found")!;

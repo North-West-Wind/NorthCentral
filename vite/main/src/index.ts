@@ -1,5 +1,5 @@
 import * as THREE from "three";
-import WebGL from "three/examples/jsm/capabilities/WebGL.js";
+import WebGL from "three/addons/capabilities/WebGL.js";
 import { displayTexture, makeLift } from "./generators";
 import { camera, currentFloor, floor, ratio, targetFloor } from "./states";
 import { enableStylesheet, disableStylesheet } from "./helpers/css";

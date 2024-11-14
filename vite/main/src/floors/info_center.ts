@@ -8,7 +8,7 @@ import { CONTENTS } from "../constants";
 import { wait } from "../helpers/control";
 import { SVG_LOADER } from "../loaders";
 import { clamp, createSVGCenteredGroup, createSVGGroupWithCenter, randomBetween } from "../helpers/math";
-import { SVGResult } from "three/examples/jsm/loaders/SVGLoader.js";
+import { SVGResult } from "three/addons/loaders/SVGLoader.js";
 
 const info = document.getElementById("info") as HTMLDivElement;
 const PAGES = new Map<string, LazyLoader<string>>();
