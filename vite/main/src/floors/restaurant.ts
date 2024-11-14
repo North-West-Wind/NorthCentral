@@ -4,8 +4,7 @@ import { camera } from "../states";
 import { toggleContent } from "../helpers/html";
 import { readPage } from "../helpers/reader";
 import { LazyLoader } from "../types/misc";
-import { getConfig, setMusic, toggleMusic, wait, writeConfig } from "../helpers/control";
-import { SVG, Svg } from "@svgdotjs/svg.js";
+import { getConfig, setMusic, wait, writeConfig } from "../helpers/control";
 import { randomBetween } from "../helpers/math";
 
 type FireEntry = {
@@ -367,38 +366,40 @@ export default class RestaurantFloor extends Floor {
 		if (this.updateCanvas) {
 			this.updateCanvas = false;
 			this.summatiaSvg.get().then(svg => {
-				const draw = SVG();
-				draw.svg(svg);
-				this.enableByEmotion(draw);
+				const div = document.createElement("div");
+				div.innerHTML = svg;
+				this.enableByEmotion(div);
 				const img = document.createElement("img");
 				img.onload = () => {
 					this.canvas.getContext("2d")!.clearRect(0, 0, this.canvas.width, this.canvas.height);
 					this.canvas.getContext("2d")!.drawImage(img, 0, 0);
 					this.texture.needsUpdate = true;
 				}
-				img.src = 'data:image/svg+xml;base64,' + btoa(draw.svg(false));
+				img.src = 'data:image/svg+xml;base64,' + btoa(div.innerHTML);
 			});
 			this.meshes!.handsTable.visible = !!(this.emotion & (FaceComponent.HANDS_TABLE));
 			this.meshes!.handsHold.visible = !!(this.emotion & (FaceComponent.HANDS_HEAD));
 		}
 	}
 	
-	private enableByEmotion(draw: Svg) {
-		draw.find("#eye").forEach(item => item.css({ display: this.emotion & (FaceComponent.EYES_NORMAL_OPEN | FaceComponent.EYES_NORMAL_CLOSE) ? "inline" : "none" }));
-		draw.find("#eye-half").forEach(item => item.css({ display: this.emotion & (FaceComponent.EYES_HALF_OPEN | FaceComponent.EYES_HALF_CLOSE) ? "inline" : "none" }));
-		draw.find(".eye-open").forEach(item => item.css({ display: this.emotion & (FaceComponent.EYES_NORMAL_OPEN | FaceComponent.EYES_HALF_OPEN) ? "inline" : "none" }));
-		draw.find(".eye-close").forEach(item => item.css({ display: this.emotion & (FaceComponent.EYES_NORMAL_CLOSE | FaceComponent.EYES_HALF_CLOSE) ? "inline" : "none" }));
+	private enableByEmotion(div: HTMLDivElement) {
+		const svg = div.querySelector<SVGElement>("svg")!;
 
-		draw.find("#mouth-smile").forEach(item => item.css({ display: this.emotion & FaceComponent.MOUTH_SMILE_CLOSE ? "inline" : "none" }));
-		draw.find("#mouth-sad").forEach(item => item.css({ display: this.emotion & FaceComponent.MOUTH_SAD_CLOSE ? "inline" : "none" }));
-		draw.find("#mouth-laugh").forEach(item => item.css({ display: this.emotion & FaceComponent.MOUTH_SMILE_OPEN ? "inline" : "none" }));
-		draw.find("#mouth-mad").forEach(item => item.css({ display: this.emotion & FaceComponent.MOUTH_SAD_OPEN ? "inline" : "none" }));
+		svg.querySelector<SVGGElement>("#eye")!.style.display = this.emotion & (FaceComponent.EYES_NORMAL_OPEN | FaceComponent.EYES_NORMAL_CLOSE) ? "inline" : "none";
+		svg.querySelector<SVGGElement>("#eye-half")!.style.display = this.emotion & (FaceComponent.EYES_HALF_OPEN | FaceComponent.EYES_HALF_CLOSE) ? "inline" : "none";
+		svg.querySelectorAll<SVGGElement>(".eye-open").forEach(item => item.style.display = this.emotion & (FaceComponent.EYES_NORMAL_OPEN | FaceComponent.EYES_HALF_OPEN) ? "inline" : "none");
+		svg.querySelectorAll<SVGGElement>(".eye-close").forEach(item => item.style.display = this.emotion & (FaceComponent.EYES_NORMAL_CLOSE | FaceComponent.EYES_HALF_CLOSE) ? "inline" : "none");
 
-		draw.find("#blush").forEach(item => item.css({ opacity: this.emotion & FaceComponent.FACE_BLUSH ? "1" : "0" }));
+		svg.querySelector<SVGPathElement>("#mouth-smile")!.style.display = this.emotion & FaceComponent.MOUTH_SMILE_CLOSE ? "inline" : "none";
+		svg.querySelector<SVGPathElement>("#mouth-sad")!.style.display = this.emotion & FaceComponent.MOUTH_SAD_CLOSE ? "inline" : "none";
+		svg.querySelector<SVGGElement>("#mouth-laugh")!.style.display = this.emotion & FaceComponent.MOUTH_SMILE_OPEN ? "inline" : "none";
+		svg.querySelector<SVGGElement>("#mouth-mad")!.style.display = this.emotion & FaceComponent.MOUTH_SAD_OPEN ? "inline" : "none";
 
-		draw.find("#brows-angry").forEach(item => item.css({ display: this.emotion & FaceComponent.BROWS_ANGRY ? "inline" : "none" }));
-		draw.find("#brows-worried").forEach(item => item.css({ display: this.emotion & FaceComponent.BROWS_WORRIED ? "inline" : "none" }));
-		draw.find("#brows").forEach(item => item.css({ display: !(this.emotion & (FaceComponent.BROWS_ANGRY | FaceComponent.BROWS_WORRIED)) ? "inline" : "none" }));
+		svg.querySelector<SVGGElement>("#blush")!.style.opacity = this.emotion & FaceComponent.FACE_BLUSH ? "1" : "0";
+
+		svg.querySelector<SVGGElement>("#brows-angry")!.style.display = this.emotion & FaceComponent.BROWS_ANGRY ? "inline" : "none";
+		svg.querySelector<SVGGElement>("#brows-worried")!.style.display = this.emotion & FaceComponent.BROWS_WORRIED ? "inline" : "none";
+		svg.querySelector<SVGGElement>("#brows")!.style.display = !(this.emotion & (FaceComponent.BROWS_ANGRY | FaceComponent.BROWS_WORRIED)) ? "inline" : "none";
 
 		/*if (this.emotion & (FaceComponent.BROWS_ANGRY | FaceComponent.BROWS_WORRIED)) {
 			draw.find(".left-brow").forEach(item => item.css({ transform: `rotate(${this.emotion & FaceComponent.BROWS_ANGRY ? "-10" : "20"}deg)` }));
@@ -413,22 +414,22 @@ export default class RestaurantFloor extends Floor {
 		draw.find("#brows").forEach(item => item.css({ display: !(this.emotion & (512 + 1024)) ? "inline" : "none" }));
 		*/
 
-		draw.find(".summatia-head").forEach(item => item.css({ transform: `translateY(${this.emotion & FaceComponent.HEAD_LOWERED ? "5" : "0"}px)` }));
+		svg.querySelectorAll<SVGElement>(".summatia-head").forEach(item => item.style.transform = `translateY(${this.emotion & FaceComponent.HEAD_LOWERED ? "5" : "0"}px)`);
 
-		draw.find("#hands-face").forEach(item => item.css({ display: this.emotion & FaceComponent.HANDS_FACE ? "inline" : "none" }));
+		svg.querySelector<SVGGElement>("#hands-face")!.style.display = this.emotion & FaceComponent.HANDS_FACE ? "inline" : "none";
 
 		if (this.emotion & FaceComponent.EYES_DOWN)
-			draw.find(".pupil").forEach(item => item.css({ transform: "translateY(18px)" }));
+			svg.querySelectorAll<SVGPathElement>(".pupil").forEach(item => item.style.transform = "translateY(18px)");
 		else if (this.emotion & FaceComponent.EYES_LEFT) {
-			draw.find(".left-pupil").forEach(item => item.css({ transform: "translate(-14px, 9px)" }));
-			draw.find(".right-pupil").forEach(item => item.css({ transform: "translate(-24px, 9px)" }));
+			svg.querySelectorAll<SVGPathElement>(".left-pupil").forEach(item => item.style.transform = "translate(-14px, 9px)");
+			svg.querySelectorAll<SVGPathElement>(".right-pupil").forEach(item => item.style.transform = "translate(-24px, 9px)");
 		} else if (this.emotion & FaceComponent.EYES_RIGHT) {
-			draw.find(".left-pupil").forEach(item => item.css({ transform: "translate(20px, 9px)" }));
-			draw.find(".right-pupil").forEach(item => item.css({ transform: "translate(13px, 9px)" }));
+			svg.querySelectorAll<SVGPathElement>(".left-pupil").forEach(item => item.style.transform = "translate(20px, 9px)");
+			svg.querySelectorAll<SVGPathElement>(".right-pupil").forEach(item => item.style.transform = "translate(13px, 9px)");
 		} else
-			draw.find(".pupil").forEach(item => item.css({ transform: "" }));
+			svg.querySelectorAll<SVGPathElement>(".pupil").forEach(item => item.style.transform = "");
 
-		draw.find(".tears").forEach(item => item.css({ opacity: this.emotion & FaceComponent.FACE_TEARS ? "1" : "0" }));
+		svg.querySelectorAll<SVGGElement>(".tears").forEach(item => item.style.opacity = this.emotion & FaceComponent.FACE_TEARS ? "1" : "0");
 	}
 
 	loadContent(info: HTMLDivElement) {
