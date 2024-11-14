@@ -8,7 +8,7 @@ import { LazyLoader } from "../types/misc";
 
 const TEMPLATE = new LazyLoader(() => readPage("/contents/gallery/template.html"));
 
-const PAINTINGS = 20;
+const PAINTINGS = 22;
 const PAINTING_LENGTH = 50;
 const LENGTH_PER_PAINTING = PAINTING_LENGTH + 30;
 const FLOOR_LENGTH = Math.ceil((PAINTINGS - 1) * 0.5) * LENGTH_PER_PAINTING;
