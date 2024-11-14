@@ -65,7 +65,7 @@ export default class SheetMusicFloor extends Floor {
 		floor0.position.set(0, 4965, -200);
 		scene.add(floor0);
 
-		const spotLight = new THREE.SpotLight(0xffffff, 2, 300, Math.PI / 2, 1, 2);
+		const spotLight = new THREE.SpotLight(0xffffff, 15000, 300, Math.PI / 2, 1, 2);
 		spotLight.position.set(0, 5006, -215);
 		scene.add(spotLight);
 

@@ -214,7 +214,7 @@ export default class RestaurantFloor extends Floor {
 		candle.translateY(2);
 		table.add(candle);
 	
-		const pointLight = new THREE.PointLight(0xfff8be, 1, 50, 2);
+		const pointLight = new THREE.PointLight(0xfff8be, 200, 50, 2);
 		pointLight.position.set(0, this.num * 1000 - 0.5, -100);
 		table.add(pointLight);
 

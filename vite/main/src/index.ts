@@ -9,7 +9,7 @@ import { FLOORS } from "./constants";
 import "./handler";
 import { realOrNotFoundFloor } from "./helpers/math";
 
-if (!WebGL.isWebGLAvailable()) {
+if (!WebGL.isWebGL2Available()) {
   alert("WebGL is not supported! You have lost your privilege to the R³ space.");
   const split = window.location.href.split("/");
   split.splice(3, 0, "2d");
@@ -35,9 +35,8 @@ renderer.shadowMap.enabled = true;
 renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 export var midX: number, midY: number;
 
-export const pointLight = new THREE.PointLight(0xfff8be, 1.5, 300, 2);
+export const pointLight = new THREE.PointLight(0xfff8be, 450, 300, 1.2);
 pointLight.position.y = cam.position.y = passedInFloor > 0 ? 1000 * passedInFloor : 0;
-pointLight.castShadow = true;
 scene.add(pointLight);
 export const obj = makeLift(scene, passedInFloor);
 export const { doorL, doorR, buttonU, buttonD, sign, display } = obj;

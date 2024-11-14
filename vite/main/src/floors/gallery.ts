@@ -49,9 +49,8 @@ export default class GalleryFloor extends Floor {
 		objects.floor = floor;
 
 		for (let ii = 1; ii < Math.floor(FLOOR_LENGTH / LENGTH_PER_PAINTING); ii++) {
-			const pointLight = new THREE.PointLight(0xffffff, 1.4, 140, 2);
-			pointLight.position.set(0, this.num * 1000 + 25, -LENGTH_PER_PAINTING * (ii + 0.5) - 50);
-			pointLight.castShadow = true;
+			const pointLight = new THREE.PointLight(0xffffff, 92, 90, 0.9);
+			pointLight.position.set(0, this.num * 1000, -LENGTH_PER_PAINTING * (ii + 0.5) - 30);
 			scene.add(pointLight);
 			objects["light"+ii] = pointLight;
 		}

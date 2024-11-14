@@ -51,7 +51,7 @@ export default class NotFoundFloor extends Floor {
 		marshmallow.scale.set(10, 10, 10);
 		scene.add(marshmallow);
 	
-		const pointLight = new THREE.PointLight(0xffda82, 1.5, 300, 2);
+		const pointLight = new THREE.PointLight(0xffda82, 7500, 300, 2);
 		pointLight.position.set(0, -40 + 1000 * this.num + 15, -200)
 		pointLight.castShadow = true;
 		scene.add(pointLight);
