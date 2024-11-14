@@ -6,6 +6,8 @@ import * as fs from "fs";
 import * as path from "path";
 import { isbot } from "isbot";
 import { translateToEng } from "./translate";
+import compression from "compression";
+import sirv from "sirv";
 
 const root = path.resolve(__dirname, "../public");
 const PAGES = new Map(fs.readdirSync(path.join(root, "contents")).filter(file => file.endsWith(".html")).map(file => {
@@ -26,7 +28,8 @@ const SEO_CONFIG = {
 
 const app = express();
 
-app.use(express.static("public"));
+app.use(compression());
+app.use("/", sirv("./public", { extensions: [] }));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.set('views', path.resolve(__dirname, "../views"));
 app.set('view engine', 'ejs');
