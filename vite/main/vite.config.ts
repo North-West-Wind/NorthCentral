@@ -6,6 +6,9 @@ export default defineConfig({
   },
   build: {
     assetsDir: "js",
-    copyPublicDir: false
+    copyPublicDir: false,
+    rollupOptions: {
+      external: ["three"]
+    }
   }
 })
