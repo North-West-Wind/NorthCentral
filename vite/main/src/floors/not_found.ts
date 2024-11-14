@@ -2,7 +2,6 @@ import * as THREE from "three";
 import Floor from "../types/floor";
 import { camera } from "../states";
 import { GLTF_LOADED } from "../loaders";
-import { getConfig, toggleMusic, writeConfig } from "../helpers/control";
 import { infoPageHandler } from "./ground";
 
 type FireEntry = {
@@ -27,25 +26,25 @@ export default class NotFoundFloor extends Floor {
 		this.campfirePos = new THREE.Vector3(0, -50 + 1000 * this.num + 15, -200);
 	}
 
-	spawn(scene: THREE.Scene) {
+	async spawn(scene: THREE.Scene) {
 		const geometryF = new THREE.BoxGeometry(400, 2, 1000);
 		const materialF = new THREE.MeshStandardMaterial({ color: 0x5b2e00 });
 		const floor = new THREE.Mesh(geometryF, materialF);
 		floor.position.set(0, this.num * 1000 - 40.5, -50 - 80);
 		scene.add(floor);
 
-		const campfire = GLTF_LOADED.campfire;
+		const campfire = await GLTF_LOADED.campfire.get();
 		campfire.position.set(this.campfirePos.x, this.campfirePos.y, this.campfirePos.z);
 		campfire.scale.set(10, 10, 10);
 		scene.add(campfire);
 	
-		const stick = GLTF_LOADED.stick;
+		const stick = await GLTF_LOADED.stick.get();
 		stick.position.set(40, -50 + 1000 * this.num + 15, -150);
 		stick.setRotationFromAxisAngle(new THREE.Vector3(1, 0, -1), -Math.PI / 6);
 		stick.scale.set(1.5, 1.5, 1.5);
 		scene.add(stick);
 	
-		const marshmallow = GLTF_LOADED.marshmallow;
+		const marshmallow = await GLTF_LOADED.marshmallow.get();
 		marshmallow.position.set(11.25, -7.25 + 1000 * this.num + 15, -178);
 		marshmallow.setRotationFromAxisAngle(new THREE.Vector3(1, 0, 1), Math.PI / 4);
 		marshmallow.scale.set(10, 10, 10);

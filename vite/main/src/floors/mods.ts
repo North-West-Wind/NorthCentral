@@ -24,7 +24,7 @@ export default class ModsFloor extends Floor {
 		this.listenMove = true;
 	}
 
-	spawn(scene: THREE.Scene) {
+	async spawn(scene: THREE.Scene) {
 		for (let i = 0; i < 32; i++) {
 			const water = TEXTURE_LOADER.load(`/assets/textures/water/water_still-00-${(i < 10 ? "0" : "") + i}.png`, texture => {
 				texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
@@ -84,7 +84,7 @@ export default class ModsFloor extends Floor {
 			ocean.material = materialW;
 		}, 250);
 
-		const armorStand = GLTF_LOADED.armor_stand;
+		const armorStand = await GLTF_LOADED.armor_stand.get();
 		armorStand.position.set(-48, this.num * 1000 - 30.5, -114);
 		armorStand.rotation.set(0, Math.PI / 4, 0);
 		armorStand.scale.set(20, 20, 20);

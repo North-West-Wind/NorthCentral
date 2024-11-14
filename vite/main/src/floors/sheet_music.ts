@@ -9,19 +9,12 @@ import { LazyLoader } from "../types/misc";
 const SHEETS = 12;
 
 export const SHEETMUSIC_CONTENTS: LazyLoader<string>[] = [];
-export const SHEETMUSIC_TITLES: string[] = [];
 
-(async () => {
-	for (let i = 0; i < SHEETS; i++) {
-		const loader = new LazyLoader(() => readPage(`/contents/sheetmusic/info-${i}.html`));
-		SHEETMUSIC_CONTENTS.push(loader);
-		// be not lazy
-		const content = await loader.get();
-		SHEETMUSIC_TITLES.push(content.match(/\<h1\>(?<name>.+)\<\/h1\>/)![1]);
-	}
-})();
+for (let i = 0; i < SHEETS; i++) {
+	const loader = new LazyLoader(() => readPage(`/contents/sheetmusic/info-${i}.html`));
+	SHEETMUSIC_CONTENTS.push(loader);
+}
 
-const div = document.getElementById("info")!;
 export default class SheetMusicFloor extends Floor {
 	sheets?: THREE.Mesh[];
 
@@ -53,7 +46,7 @@ export default class SheetMusicFloor extends Floor {
 	}
 
 	async spawn(scene: THREE.Scene) {
-		const piano = GLTF_LOADED.piano;
+		const piano = await GLTF_LOADED.piano.get();
 		piano.position.set(0, 4956, -215);
 		piano.setRotationFromAxisAngle(new THREE.Vector3(0, 1, 0), -Math.PI / 6 - Math.random() * Math.PI * 2 / 3);
 		piano.scale.set(15, 15, 15);
