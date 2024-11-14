@@ -83,6 +83,7 @@ export default class GalleryFloor extends Floor {
 				texture.generateMipmaps = false;
 				texture.magFilter = THREE.NearestFilter;
 				texture.minFilter = THREE.LinearMipMapLinearFilter;
+				texture.colorSpace = THREE.SRGBColorSpace;
 			});
 			const xm = new THREE.MeshBasicMaterial({ map: texture });
 			const material = new THREE.MeshStandardMaterial({ color: 0xffffff });
@@ -101,6 +102,7 @@ export default class GalleryFloor extends Floor {
 
 		const geometryP = new THREE.BoxGeometry(50, 50, 2);
 		const texture = TEXTURE_LOADER.load(`/assets/pfps/${GalleryFloor.fileNames[PAINTINGS - 1]}`, texture => {
+			texture.generateMipmaps = false;
 			texture.magFilter = THREE.NearestFilter;
 			texture.minFilter = THREE.LinearMipMapLinearFilter;
 			texture.colorSpace = THREE.SRGBColorSpace;
