@@ -82,16 +82,12 @@ export default class RestaurantFloor extends Floor {
 	chair?: THREE.Group;
 	// canvas for texture
 	canvas: HTMLCanvasElement;
-	handsHoldCanvas: HTMLCanvasElement;
-	handsTableCanvas: HTMLCanvasElement;
 	// textures for summatia
 	texture: THREE.CanvasTexture;
-	handsHoldTexture: THREE.CanvasTexture;
-	handsTableTexture: THREE.CanvasTexture;
+	handsHoldTexture: LazyLoader<THREE.CanvasTexture>;
+	handsTableTexture: LazyLoader<THREE.CanvasTexture>;
 	// summatia svg
 	summatiaSvg: LazyLoader<string>;
-	handsHoldSvg: LazyLoader<string>;
-	handsTableSvg: LazyLoader<string>;
 	// summatia state
 	emotion = 17;
 	resets = 0;
@@ -105,37 +101,45 @@ export default class RestaurantFloor extends Floor {
 		this.phase = Phase.INITIAL;
 		this.candleLightPos = new THREE.Vector3(0, this.num * 1000 - 4, -100);
 		this.canvas = document.createElement("canvas");
-		this.handsHoldCanvas = document.createElement("canvas");
-		this.handsTableCanvas = document.createElement("canvas");
 		// hardcoded currently, can be dynamic from svg
-		this.canvas.width = this.handsHoldCanvas.width = this.handsTableCanvas.width = 443;
-		this.canvas.height = this.handsHoldCanvas.height = this.handsTableCanvas.height = 900;
+		this.canvas.width = 443;
+		this.canvas.height = 900;
 		this.texture = new THREE.CanvasTexture(this.canvas);
-		this.handsHoldTexture = new THREE.CanvasTexture(this.handsHoldCanvas);
-		this.handsTableTexture = new THREE.CanvasTexture(this.handsTableCanvas);
-		this.texture.colorSpace = this.handsHoldTexture.colorSpace = this.handsTableTexture.colorSpace = THREE.SRGBColorSpace;
+		this.handsHoldTexture = new LazyLoader(async () => {
+			const svg = await readPage(`/assets/images/summatia/hands-hold.svg`);
+			const img = document.createElement("img");
+			return await new Promise(res => {
+				img.onload = () => {
+					const canvas = document.createElement("canvas");
+					canvas.width = 443;
+					canvas.height = 900;
+					canvas.getContext("2d")!.drawImage(img, 0, 0);
+					const texture = new THREE.CanvasTexture(canvas);
+					texture.colorSpace = THREE.SRGBColorSpace;
+					res(texture);
+				}
+				img.src = 'data:image/svg+xml;base64,' + btoa(svg);
+			});
+		});
+		this.handsTableTexture = new LazyLoader(async () => {
+			const svg = await readPage(`/assets/images/summatia/hands-table.svg`);
+			const img = document.createElement("img");
+			return await new Promise(res => {
+				img.onload = () => {
+					const canvas = document.createElement("canvas");
+					canvas.width = 443;
+					canvas.height = 900;
+					canvas.getContext("2d")!.drawImage(img, 0, 0);
+					const texture = new THREE.CanvasTexture(canvas);
+					texture.colorSpace = THREE.SRGBColorSpace;
+					res(texture);
+				}
+				img.src = 'data:image/svg+xml;base64,' + btoa(svg);
+			});
+		});
+		this.texture.colorSpace = THREE.SRGBColorSpace;
 		// svgs
 		this.summatiaSvg = new LazyLoader(() => readPage(`/assets/images/summatia/summatia.svg`));
-		this.handsHoldSvg = new LazyLoader(() => readPage(`/assets/images/summatia/hands-hold.svg`));
-		this.handsTableSvg = new LazyLoader(() => readPage(`/assets/images/summatia/hands-table.svg`));
-		// preload
-		this.summatiaSvg.get();
-		this.handsHoldSvg.get().then(svg => {
-			const img = document.createElement("img");
-			img.onload = () => {
-				this.handsHoldCanvas.getContext("2d")!.drawImage(img, 0, 0);
-				this.handsHoldTexture.needsUpdate = true;
-			}
-			img.src = 'data:image/svg+xml;base64,' + btoa(svg);
-		});
-		this.handsTableSvg.get().then(svg => {
-			const img = document.createElement("img");
-			img.onload = () => {
-				this.handsTableCanvas.getContext("2d")!.drawImage(img, 0, 0);
-				this.handsTableTexture.needsUpdate = true;
-			}
-			img.src = 'data:image/svg+xml;base64,' + btoa(svg);
-		});
 		this.setupJazz();
 	}
 
@@ -152,7 +156,7 @@ export default class RestaurantFloor extends Floor {
 		if (this.phase == Phase.DATING) this.audio.play();
 	}
 
-	spawn(scene: THREE.Scene) {
+	async spawn(scene: THREE.Scene) {
 		/*const floor = new THREE.Mesh(new THREE.BoxGeometry(400, 2, 1000), new THREE.MeshStandardMaterial({ color: 0x120d35 }));
 		floor.position.set(0, this.num * 1000 - 40, -100);
 		scene.add(floor);*/
@@ -224,13 +228,13 @@ export default class RestaurantFloor extends Floor {
 		summatia.position.set(0, this.num * 1000 - 13, -124);
 		scene.add(summatia);
 
-		const handsHold = new THREE.Mesh(new THREE.PlaneGeometry(this.canvas.width / 15, this.canvas.height / 15), new THREE.MeshBasicMaterial({ map: this.handsHoldTexture, transparent: true }));
+		const handsHold = new THREE.Mesh(new THREE.PlaneGeometry(this.canvas.width / 15, this.canvas.height / 15), new THREE.MeshBasicMaterial({ map: await this.handsHoldTexture.get(), transparent: true }));
 		handsHold.position.set(0, this.num * 1000 - 9.5, -110);
 		handsHold.scale.set(0.8, 0.8, 0.8);
 		handsHold.visible = false;
 		scene.add(handsHold);
 
-		const handsTable = new THREE.Mesh(new THREE.PlaneGeometry(this.canvas.width / 15, this.canvas.height / 15), new THREE.MeshBasicMaterial({ map: this.handsTableTexture, transparent: true }));
+		const handsTable = new THREE.Mesh(new THREE.PlaneGeometry(this.canvas.width / 15, this.canvas.height / 15), new THREE.MeshBasicMaterial({ map: await this.handsTableTexture.get(), transparent: true }));
 		handsTable.position.set(0, this.num * 1000 - 9, -115);
 		handsTable.scale.set(0.9, 0.9, 0.9);
 		handsTable.visible = false;
