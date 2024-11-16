@@ -57,31 +57,62 @@ export default class SkyFarmFloor extends Floor {
 		const logs = new THREE.Mesh(geometryL, materialsL);
 		logs.position.set(0, 2994, -175);
 		scene.add(logs);
-	
-		const geometryL0 = new THREE.BoxGeometry(40, 16, 40);
-		const matSideL0 = new THREE.MeshBasicMaterial({ color: 0x888888, transparent: true, map: TEXTURE_LOADER.load("/assets/textures/tree/leaves.png", tex => { tex.wrapS = tex.wrapT = THREE.RepeatWrapping; tex.offset.set(0, 0); tex.repeat.set(5, 2); configTexture(tex); }) });
-		const matTopL0 = new THREE.MeshBasicMaterial({ color: 0x888888, transparent: true, map: TEXTURE_LOADER.load("/assets/textures/tree/leaves.png", tex => { tex.wrapS = tex.wrapT = THREE.RepeatWrapping; tex.offset.set(0, 0); tex.repeat.set(5, 5); configTexture(tex); }) });
-		const leaves0 = new THREE.Mesh(geometryL0, [matSideL0, matSideL0, matTopL0, matSideL0, matSideL0, matTopL0]);
-		leaves0.position.set(0, 2998, -175);
-	
-		const geometryL1 = new THREE.BoxGeometry(24, 8, 24);
-		const matSideL1 = new THREE.MeshBasicMaterial({ color: 0x888888, transparent: true, map: TEXTURE_LOADER.load("/assets/textures/tree/leaves.png", tex => { tex.wrapS = tex.wrapT = THREE.RepeatWrapping; tex.offset.set(0, 0); tex.repeat.set(3, 1); configTexture(tex); }) });
-		const matTopL1 = new THREE.MeshBasicMaterial({ color: 0x888888, transparent: true, map: TEXTURE_LOADER.load("/assets/textures/tree/leaves.png", tex => { tex.wrapS = tex.wrapT = THREE.RepeatWrapping; tex.offset.set(0, 0); tex.repeat.set(3, 3); configTexture(tex); }) });
-		const leaves1 = new THREE.Mesh(geometryL1, [matSideL1, matSideL1, matTopL1, matSideL1, matSideL1, matTopL1]);
-		leaves1.position.set(0, 3010, -175);
-	
-		const geometryL2 = new THREE.BoxGeometry(24, 8, 8);
-		const matSideL2 = new THREE.MeshBasicMaterial({ color: 0x888888, transparent: true, map: TEXTURE_LOADER.load("/assets/textures/tree/leaves.png", tex => { tex.wrapS = tex.wrapT = THREE.RepeatWrapping; tex.offset.set(0, 0); tex.repeat.set(3, 1); configTexture(tex); }) });
-		const matTopL2 = new THREE.MeshBasicMaterial({ color: 0x888888, transparent: true, map: TEXTURE_LOADER.load("/assets/textures/tree/leaves.png", configTexture) });
-		const leaves2 = new THREE.Mesh(geometryL2, [matTopL2, matSideL2, matSideL2, matTopL2, matSideL2, matSideL2]);
-		leaves2.position.set(0, 3018, -175);
-	
-		const geometryL3 = new THREE.BoxGeometry(8, 8, 24);
-		const matSideL3 = new THREE.MeshBasicMaterial({ color: 0x888888, transparent: true, map: TEXTURE_LOADER.load("/assets/textures/tree/leaves.png", tex => { tex.wrapS = tex.wrapT = THREE.RepeatWrapping; tex.offset.set(0, 0); tex.repeat.set(1, 3); configTexture(tex); }) });
-		const leaves3 = new THREE.Mesh(geometryL3, [matSideL2, matTopL2, matSideL3, matSideL2, matTopL2, matSideL3]);
-		leaves3.position.set(0, 3018, -175);
-		scene.add(leaves0, leaves1, leaves2, leaves3);
-		return { skyT, skyB, skyL, skyR, skyF, block, logs, leaves0, leaves1, leaves2, leaves3 };
+
+		const leavesTexture = TEXTURE_LOADER.load("/assets/textures/tree/leaves.png", configTexture);
+		const geometryLeaves = new THREE.BoxGeometry(8, 8, 8);
+		const materialLeaves = new THREE.MeshBasicMaterial({ color: 0x888888, transparent: true, map: leavesTexture });
+
+		const makeLeavesMesh = () => new THREE.Mesh(geometryLeaves, Array(6).fill(() => materialLeaves).map(x => x()));
+
+		const leavesGroup = new THREE.Group();
+
+		for (let ii = 0; ii < 5; ii++) {
+			for (let jj = 0; jj < 5; jj++) {
+				if (ii == 2 && jj == 2) continue;
+				for (let kk = 0; kk < 2; kk++) {
+					const leaves = makeLeavesMesh();
+					leaves.rotateX(Math.floor(Math.random() * 4) * Math.PI / 2);
+					leaves.rotateY(Math.floor(Math.random() * 4) * Math.PI / 2);
+					leaves.rotateZ(Math.floor(Math.random() * 4) * Math.PI / 2);
+					leaves.position.set((ii - 2) * 8, 2994 + (kk * 8), -175 + (jj - 2) * 8);
+					leavesGroup.add(leaves);
+				}
+			}
+		}
+
+		for (let ii = 0; ii < 3; ii++) {
+			for (let jj = 0; jj < 3; jj++) {
+				if (ii == 1 && jj == 1) continue;
+				const leaves = makeLeavesMesh();
+				leaves.rotateX(Math.floor(Math.random() * 4) * Math.PI / 2);
+				leaves.rotateY(Math.floor(Math.random() * 4) * Math.PI / 2);
+				leaves.rotateZ(Math.floor(Math.random() * 4) * Math.PI / 2);
+				leaves.position.set((ii - 1) * 8, 3010, -175 + (jj - 1) * 8);
+				leavesGroup.add(leaves);
+			}
+		}
+
+		for (let ii = 0; ii < 3; ii++) {
+			const leaves = makeLeavesMesh();
+			leaves.rotateX(Math.floor(Math.random() * 4) * Math.PI / 2);
+			leaves.rotateY(Math.floor(Math.random() * 4) * Math.PI / 2);
+			leaves.rotateZ(Math.floor(Math.random() * 4) * Math.PI / 2);
+			leaves.position.set((ii - 1) * 8, 3018, -175);
+			leavesGroup.add(leaves);
+		}
+
+		for (let ii = 0; ii < 3; ii++) {
+			const leaves = makeLeavesMesh();
+			leaves.rotateX(Math.floor(Math.random() * 4) * Math.PI / 2);
+			leaves.rotateY(Math.floor(Math.random() * 4) * Math.PI / 2);
+			leaves.rotateZ(Math.floor(Math.random() * 4) * Math.PI / 2);
+			leaves.position.set(0, 3018, -175 + (ii - 1) * 8);
+			leavesGroup.add(leaves);
+		}
+
+		scene.add(leavesGroup);
+
+		return { skyT, skyB, skyL, skyR, skyF, block, logs, leavesGroup };
 	}
 
 	handleWheel(scroll: number) {
