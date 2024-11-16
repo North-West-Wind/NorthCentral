@@ -1,12 +1,13 @@
 import * as THREE from "three";
 import WebGL from "three/addons/capabilities/WebGL.js";
 import { displayTexture, makeLift } from "./generators";
-import { camera, currentFloor, floor, ratio, targetFloor } from "./states";
+import { camera, currentFloor, DEBUG, floor, ratio, targetFloor } from "./states";
 import { enableStylesheet, disableStylesheet } from "./helpers/css";
 import { getConfig, writeConfig } from "./helpers/control";
 import { FLOORS } from "./constants";
 import "./handler";
 import { realOrNotFoundFloor } from "./helpers/math";
+import { FirstPersonControls } from "three/addons/Addons.js";
 
 if (!WebGL.isWebGL2Available()) {
   alert("WebGL is not supported! You have lost your privilege to the R³ space.");
@@ -32,6 +33,17 @@ const renderer = new THREE.WebGLRenderer({
 renderer.outputColorSpace = THREE.SRGBColorSpace;
 renderer.shadowMap.enabled = true;
 renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+
+// debugging
+let controls: FirstPersonControls;
+let clock: THREE.Clock;
+if (DEBUG) {
+  controls = new FirstPersonControls(cam, renderer.domElement);
+  controls.movementSpeed = 150;
+  controls.lookSpeed = 0.1;
+  clock = new THREE.Clock();
+}
+
 export var midX: number, midY: number;
 
 export const pointLight = new THREE.PointLight(0xfff8be, 450, 300, 1.2);
@@ -55,6 +67,7 @@ function resize() {
   renderer.setSize(window.innerWidth, window.innerHeight);
 
   renderer.render(scene, cam);
+  if (DEBUG) controls.handleResize();
   midX = window.innerWidth / 2;
   midY = window.innerHeight / 2;
   if (ratio(window.innerWidth / window.innerHeight) < 1) {
@@ -71,6 +84,7 @@ window.addEventListener("resize", () => resize());
 function animate() {
   requestAnimationFrame(animate);
 
+  if (DEBUG) controls.update(clock.getDelta());
   renderer.render(scene, cam);
 }
 

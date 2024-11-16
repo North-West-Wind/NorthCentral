@@ -1,6 +1,8 @@
 import { Camera } from "three";
 import Floor from "./types/floor";
 
+export const DEBUG = false;
+
 const internal: { floor?: Floor, currentFloor: number, targetFloor: number, started: boolean, camera?: Camera, rotatedX: number, rotatedY: number, ratio: number, touched: boolean } = {
 	currentFloor: 0,
 	targetFloor: 0,

@@ -5,6 +5,7 @@ import { camera } from "../states";
 import { toggleContent } from "../helpers/html";
 import { LazyLoader } from "../types/misc";
 import { fetchText } from "../helpers/reader";
+import { configTexture } from "../helpers/macro";
 
 enum ModPage {
 	AUTO_FISH = "auto-fish",
@@ -30,14 +31,13 @@ export default class ModsFloor extends Floor {
 				texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
 				texture.offset.set(0, 0);
 				texture.repeat.set(100, 100);
-				texture.magFilter = THREE.NearestFilter;
-				texture.minFilter = THREE.LinearMipMapLinearFilter;
+				configTexture(texture);
 			});
 			WATER_TEXTURES.push(water);
 		}
 
 		const geometryW = new THREE.BoxGeometry(1000, 10, 1000);
-		const materialW = new THREE.MeshBasicMaterial({ map: WATER_TEXTURES[0], opacity: 0.4, transparent: true });
+		const materialW = new THREE.MeshStandardMaterial({ map: WATER_TEXTURES[0], opacity: 1, transparent: true });
 		materialW.map!.needsUpdate = true;
 		const ocean = new THREE.Mesh(geometryW, materialW);
 		ocean.position.set(0, this.num * 1000 - 53.5, -550);
@@ -48,13 +48,17 @@ export default class ModsFloor extends Floor {
 			texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
 			texture.offset.set(0, 0);
 			texture.repeat.set(8, 5);
-			texture.magFilter = THREE.NearestFilter;
-			texture.minFilter = THREE.LinearMipMapLinearFilter;
+			configTexture(texture);
 		});
 		const materialF = new THREE.MeshStandardMaterial({ map: oakF });
 		const oakFloor = new THREE.Mesh(geometryF, materialF);
 		oakFloor.position.set(0, this.num * 1000 - 40.5, -90);
 		scene.add(oakFloor);
+
+		const spotLight = new THREE.SpotLight(0xfff8be, 4, 75, Math.PI / 2 - 0.001, 0, 0.01);
+		spotLight.position.set(0, this.num * 1000 - 42, -120);
+		spotLight.target.position.set(0, this.num * 1000 - 50, -120);
+		scene.add(spotLight);
 
 		const geometryR = new THREE.BoxGeometry(3, 80, 3);
 		const materialR = new THREE.MeshStandardMaterial({ color: 0xad7726 });
@@ -79,7 +83,7 @@ export default class ModsFloor extends Floor {
 		this.textureUpdater = setInterval(() => {
 			if (!ocean) return;
 			oceanCounter = ++oceanCounter % 32;
-			const materialW = new THREE.MeshBasicMaterial({ map: WATER_TEXTURES[oceanCounter], opacity: 0.4, transparent: true });
+			const materialW = new THREE.MeshStandardMaterial({ map: WATER_TEXTURES[oceanCounter], opacity: 1, transparent: true });
 			materialW.map!.needsUpdate = true;
 			ocean.material = materialW;
 		}, 250);
@@ -103,12 +107,12 @@ export default class ModsFloor extends Floor {
 	
 		const geometryB = new THREE.BoxGeometry(5, 7.5, 5);
 		const materials = [
-				new THREE.MeshBasicMaterial({ map: TEXTURE_LOADER.load("/assets/textures/diamond_boots/side_0.png", tex => { tex.magFilter = THREE.NearestFilter; tex.minFilter = THREE.LinearMipMapLinearFilter; }) }),
-				new THREE.MeshBasicMaterial({ map: TEXTURE_LOADER.load("/assets/textures/diamond_boots/side_1.png", tex => { tex.magFilter = THREE.NearestFilter; tex.minFilter = THREE.LinearMipMapLinearFilter; }) }),
-				new THREE.MeshBasicMaterial({ map: TEXTURE_LOADER.load("/assets/textures/diamond_boots/bottom.png", tex => { tex.magFilter = THREE.NearestFilter; tex.minFilter = THREE.LinearMipMapLinearFilter; }) }),
-				new THREE.MeshBasicMaterial({ map: TEXTURE_LOADER.load("/assets/textures/diamond_boots/side_2.png", tex => { tex.magFilter = THREE.NearestFilter; tex.minFilter = THREE.LinearMipMapLinearFilter; }) }),
-				new THREE.MeshBasicMaterial({ map: TEXTURE_LOADER.load("/assets/textures/diamond_boots/side_3.png", tex => { tex.magFilter = THREE.NearestFilter; tex.minFilter = THREE.LinearMipMapLinearFilter; }) }),
-				new THREE.MeshBasicMaterial({ map: TEXTURE_LOADER.load("/assets/textures/diamond_boots/bottom.png", tex => { tex.magFilter = THREE.NearestFilter; tex.minFilter = THREE.LinearMipMapLinearFilter; }) }),
+				new THREE.MeshBasicMaterial({ map: TEXTURE_LOADER.load("/assets/textures/diamond_boots/side_0.png", configTexture) }),
+				new THREE.MeshBasicMaterial({ map: TEXTURE_LOADER.load("/assets/textures/diamond_boots/side_1.png", configTexture) }),
+				new THREE.MeshBasicMaterial({ map: TEXTURE_LOADER.load("/assets/textures/diamond_boots/bottom.png", configTexture) }),
+				new THREE.MeshBasicMaterial({ map: TEXTURE_LOADER.load("/assets/textures/diamond_boots/side_2.png", configTexture) }),
+				new THREE.MeshBasicMaterial({ map: TEXTURE_LOADER.load("/assets/textures/diamond_boots/side_3.png", configTexture) }),
+				new THREE.MeshBasicMaterial({ map: TEXTURE_LOADER.load("/assets/textures/diamond_boots/bottom.png", configTexture) }),
 		];
 		const bootL = new THREE.Mesh(geometryB, materials);
 		const bootR = new THREE.Mesh(geometryB, materials);
@@ -120,7 +124,7 @@ export default class ModsFloor extends Floor {
 		bootR.translateX(2.5);
 		scene.add(bootL, bootR);
 	
-		return { ocean, oakFloor, fishingRod, string, holder, armorStand, bootL, bootR };
+		return { ocean, oakFloor, pointLight: spotLight, fishingRod, string, holder, armorStand, bootL, bootR };
 	}
 
 	despawn(scene: THREE.Scene) {

@@ -3,7 +3,7 @@ import { scene, buttonD, buttonU, display, doorL, doorR, midX, midY, sign, point
 import { toggleContent } from "./helpers/html";
 import { FLOORS } from "./constants";
 import { displayTexture } from "./generators";
-import { camera, currentFloor, floor, ratio, rotatedX, rotatedY, started, targetFloor, touched } from "./states";
+import { camera, currentFloor, DEBUG, floor, ratio, rotatedX, rotatedY, started, targetFloor, touched } from "./states";
 import { getConfig, wait } from "./helpers/control";
 import { clamp } from "./helpers/math";
 
@@ -91,7 +91,7 @@ window.addEventListener("mousedown", e => {
 });
 
 window.addEventListener("mousemove", (e) => {
-	if (touched()) return;
+	if (DEBUG || touched()) return;
 	offsets.x = -((e.clientX - midX) / midX) * 2;
 	offsets.y = -((e.clientY - midY) / midY);
 	const mouse2D = new THREE.Vector2((e.clientX / window.innerWidth) * 2 - 1, -(e.clientY / window.innerHeight) * 2 + 1);
@@ -239,12 +239,14 @@ function update() {
 		}
 		if (scrollVelocity) handleWheel(scrollVelocity);
 	}
-	// move the camera around
-	const cam = camera();
-	// 60deg left/right
-	// offset.x normalized to 2
-	const point = new THREE.Vector3(cam.position.x - offsets.x * 10 * clamp(1 / ratio(), Math.tan(Math.PI / 6), Math.tan(Math.PI / 3)) - rotatedX() * 10, cam.position.y + (offsets.y + rotatedY()) * 10, cam.position.z - 20);
-	cam.lookAt(point);
+	if (!DEBUG) {
+		// move the camera around
+		const cam = camera();
+		// 60deg left/right
+		// offset.x normalized to 2
+		const point = new THREE.Vector3(cam.position.x - offsets.x * 10 * clamp(1 / ratio(), Math.tan(Math.PI / 6), Math.tan(Math.PI / 3)) - rotatedX() * 10, cam.position.y + (offsets.y + rotatedY()) * 10, cam.position.z - 20);
+		cam.lookAt(point);
+	}
 }
 
 let ticking = false;
