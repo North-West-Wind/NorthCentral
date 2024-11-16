@@ -1,6 +1,6 @@
 export class LazyLoader<T> {
-	loader: () => (Promise<T> | T);
-	value?: T;
+	private loader: () => (Promise<T> | T);
+	private value?: T;
 
 	constructor(loader: () => (Promise<T> | T)) {
 		this.loader = loader;
@@ -8,6 +8,10 @@ export class LazyLoader<T> {
 
 	async get() {
 		if (this.value === undefined) this.value = await this.loader();
+		return this.value;
+	}
+
+	got() {
 		return this.value;
 	}
 }

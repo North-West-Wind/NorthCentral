@@ -1,4 +1,4 @@
-import { readPage } from "../helpers/reader";
+import { fetchText } from "../helpers/reader";
 import { toggleContent } from "../main";
 import Floor from "../types/floor";
 import { LazyLoader } from "../types/misc";
@@ -9,7 +9,7 @@ enum ModPage {
 };
 
 const MOD_CONTENTS = new Map<string, LazyLoader<string>>();
-for (const page of Object.values(ModPage)) MOD_CONTENTS.set(page, new LazyLoader(() => readPage(`/contents/mods/${page}.html`)));
+for (const page of Object.values(ModPage)) MOD_CONTENTS.set(page, new LazyLoader(() => fetchText(`/contents/mods/${page}.html`)));
 
 export default class MoreBootsFloor extends Floor {
 	constructor() {

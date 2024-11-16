@@ -1,5 +1,5 @@
 import { randomBetween } from "../helpers/math";
-import { readPage } from "../helpers/reader";
+import { fetchText } from "../helpers/reader";
 import Floor from "../types/floor";
 import { LazyLoader } from "../types/misc";
 
@@ -51,7 +51,7 @@ export default class NotFoundFloor extends Floor {
 	spawnTimer?: NodeJS.Timer;
 
 	constructor() {
-		super("not-found", 404, { content: new LazyLoader(() => readPage(`/contents/2d/${this.num}-${this.id}.html`)) });
+		super("not-found", 404, { content: new LazyLoader(() => fetchText(`/contents/2d/${this.num}-${this.id}.html`)) });
 	}
 
 	loadSvg(background: HTMLDivElement) {

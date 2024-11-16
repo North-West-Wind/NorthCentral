@@ -1,8 +1,8 @@
-import { readPage } from "../helpers/reader";
+import { fetchText } from "../helpers/reader";
 import Floor from "../types/floor";
 import { LazyLoader } from "../types/misc";
 
-const TEMPLATE = new LazyLoader(() => readPage("/contents/gallery/template.html"));
+const TEMPLATE = new LazyLoader(() => fetchText("/contents/gallery/template.html"));
 let FILES: string[] = [];
 
 fetch(`/api/config`).then(async res => {

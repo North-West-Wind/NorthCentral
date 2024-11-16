@@ -4,7 +4,7 @@ import { GLTF_LOADED, TEXTURE_LOADER } from "../loaders";
 import { camera } from "../states";
 import { toggleContent } from "../helpers/html";
 import { LazyLoader } from "../types/misc";
-import { readPage } from "../helpers/reader";
+import { fetchText } from "../helpers/reader";
 
 enum ModPage {
 	AUTO_FISH = "auto-fish",
@@ -13,7 +13,7 @@ enum ModPage {
 
 const WATER_TEXTURES: THREE.Texture[] = [];
 const MOD_CONTENTS = new Map<string, LazyLoader<string>>();
-for (const page of Object.values(ModPage)) MOD_CONTENTS.set(page, new LazyLoader(() => readPage(`/contents/mods/${page}.html`)));
+for (const page of Object.values(ModPage)) MOD_CONTENTS.set(page, new LazyLoader(() => fetchText(`/contents/mods/${page}.html`)));
 
 export default class ModsFloor extends Floor {
 	textureUpdater?: NodeJS.Timer;

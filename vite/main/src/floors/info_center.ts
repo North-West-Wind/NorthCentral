@@ -2,7 +2,7 @@ import * as THREE from "three";
 import Floor, { Generated } from "../types/floor";
 import { camera } from "../states";
 import { toggleContent } from "../helpers/html";
-import { readPage } from "../helpers/reader";
+import { fetchText } from "../helpers/reader";
 import { LazyLoader } from "../types/misc";
 import { CONTENTS } from "../constants";
 import { wait } from "../helpers/control";
@@ -16,7 +16,7 @@ fetch(`/api/config`).then(async res => {
 	if (!res.ok) return;
 	const files = <string[]>(await res.json()).info;
 	for (const file of files)
-		PAGES.set(file.split(".").slice(0, -1).join("."), new LazyLoader(() => readPage(`/contents/info-center/${file}`)));
+		PAGES.set(file.split(".").slice(0, -1).join("."), new LazyLoader(() => fetchText(`/contents/info-center/${file}`)));
 });
 
 const topLength = 120, bottomLength = 108, topDepth = 25;

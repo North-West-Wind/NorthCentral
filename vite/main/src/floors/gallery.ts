@@ -2,11 +2,11 @@ import * as THREE from "three";
 import Floor from "../types/floor";
 import { camera } from "../states";
 import { TEXTURE_LOADER } from "../loaders";
-import { readPage } from "../helpers/reader";
+import { fetchText } from "../helpers/reader";
 import { toggleContent } from "../helpers/html";
 import { LazyLoader } from "../types/misc";
 
-const TEMPLATE = new LazyLoader(() => readPage("/contents/gallery/template.html"));
+const TEMPLATE = new LazyLoader(() => fetchText("/contents/gallery/template.html"));
 
 const PAINTINGS = 22;
 const PAINTING_LENGTH = 50;

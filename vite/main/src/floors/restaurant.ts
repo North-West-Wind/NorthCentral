@@ -2,7 +2,7 @@ import * as THREE from "three";
 import Floor from "../types/floor";
 import { camera } from "../states";
 import { toggleContent } from "../helpers/html";
-import { readPage } from "../helpers/reader";
+import { fetchJson, fetchText } from "../helpers/reader";
 import { LazyLoader } from "../types/misc";
 import { getConfig, setMusic, wait, writeConfig } from "../helpers/control";
 import { randomBetween } from "../helpers/math";
@@ -56,16 +56,6 @@ type SummatiaData = {
 	}
 } & { emotions: { [key: string]: number } }
 
-let summatiaData: SummatiaData;
-
-fetch("/data/summatia.json").then(async res => {
-	if (res.ok) summatiaData = await res.json();
-});
-
-function validKeyOrElse(key: string, fallback: string) {
-	return summatiaData && Object.keys(summatiaData).includes(key) ? key : fallback;
-}
-
 const MUSICS = {
 	jazz0: `Music by <a href="https://pixabay.com/users/denis-pavlov-music-35636692/?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=168726">Denis Pavlov</a> from <a href="https://pixabay.com//?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=168726">Pixabay</a>`,
 	jazz1: `Music by <a href="https://pixabay.com/users/denis-pavlov-music-35636692/?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=219314">Denis Pavlov</a> from <a href="https://pixabay.com/music//?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=219314">Pixabay</a>`,
@@ -88,6 +78,7 @@ export default class RestaurantFloor extends Floor {
 	handsTableTexture: LazyLoader<THREE.CanvasTexture>;
 	// summatia svg
 	summatiaSvg: LazyLoader<string>;
+	summatiaData: LazyLoader<SummatiaData>;
 	// summatia state
 	emotion = 17;
 	resets = 0;
@@ -106,7 +97,7 @@ export default class RestaurantFloor extends Floor {
 		this.canvas.height = 900;
 		this.texture = new THREE.CanvasTexture(this.canvas);
 		this.handsHoldTexture = new LazyLoader(async () => {
-			const svg = await readPage(`/assets/images/summatia/hands-hold.svg`);
+			const svg = await fetchText(`/assets/images/summatia/hands-hold.svg`);
 			const img = document.createElement("img");
 			return await new Promise(res => {
 				img.onload = () => {
@@ -122,7 +113,7 @@ export default class RestaurantFloor extends Floor {
 			});
 		});
 		this.handsTableTexture = new LazyLoader(async () => {
-			const svg = await readPage(`/assets/images/summatia/hands-table.svg`);
+			const svg = await fetchText(`/assets/images/summatia/hands-table.svg`);
 			const img = document.createElement("img");
 			return await new Promise(res => {
 				img.onload = () => {
@@ -139,7 +130,8 @@ export default class RestaurantFloor extends Floor {
 		});
 		this.texture.colorSpace = THREE.SRGBColorSpace;
 		// svgs
-		this.summatiaSvg = new LazyLoader(() => readPage(`/assets/images/summatia/summatia.svg`));
+		this.summatiaSvg = new LazyLoader(() => fetchText(`/assets/images/summatia/summatia.svg`));
+		this.summatiaData = new LazyLoader(() => fetchJson("/data/summatia.json"));
 		this.setupJazz();
 	}
 
@@ -465,6 +457,7 @@ export default class RestaurantFloor extends Floor {
 	}
 
 	private async next(key: string) {
+		const summatiaData = await this.summatiaData.get();
 		const data = summatiaData[key];
 		if (!data) return;
 		let pid = this.resets;
@@ -515,6 +508,11 @@ export default class RestaurantFloor extends Floor {
 			}
 			ans.style.opacity = "1";
 		} else if (data.next) this.next(data.next);
-		else this.next(validKeyOrElse(getConfig().summatia, "first"));
+		else this.next(this.validKeyOrElse(getConfig().summatia, "first"));
+	}
+
+	private validKeyOrElse(key: string, fallback: string) {
+		const summatiaData = this.summatiaData.got();
+		return summatiaData && Object.keys(summatiaData).includes(key) ? key : fallback;
 	}
 }

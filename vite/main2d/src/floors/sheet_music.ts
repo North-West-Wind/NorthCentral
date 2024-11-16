@@ -1,4 +1,4 @@
-import { readPage } from "../helpers/reader";
+import { fetchText } from "../helpers/reader";
 import Floor from "../types/floor";
 import { LazyLoader } from "../types/misc";
 
@@ -9,7 +9,7 @@ export const SHEETMUSIC_TITLES: string[] = [];
 
 (async () => {
 	for (let i = 0; i < SHEETS; i++) {
-		const loader = new LazyLoader(() => readPage(`/contents/sheetmusic/info-${i}.html`));
+		const loader = new LazyLoader(() => fetchText(`/contents/sheetmusic/info-${i}.html`));
 		SHEETMUSIC_CONTENTS.push(loader);
 		// be not lazy
 		const content = await loader.get();

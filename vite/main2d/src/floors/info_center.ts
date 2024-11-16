@@ -1,6 +1,6 @@
 import { wait } from "../helpers/control";
 import { randomBetween } from "../helpers/math";
-import { readPage } from "../helpers/reader";
+import { fetchText } from "../helpers/reader";
 import { toggleContent } from "../main";
 import Floor from "../types/floor";
 import { LazyLoader } from "../types/misc";
@@ -10,7 +10,7 @@ fetch(`/api/config`).then(async res => {
 	if (!res.ok) return;
 	const files = <string[]>(await res.json()).info;
 	for (const file of files)
-		PAGES.set(file.split(".").slice(0, -1).join("."), new LazyLoader(() => readPage(`/contents/info-center/${file}`)));
+		PAGES.set(file.split(".").slice(0, -1).join("."), new LazyLoader(() => fetchText(`/contents/info-center/${file}`)));
 });
 
 export default class InfoCenterFloor extends Floor {

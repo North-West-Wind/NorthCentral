@@ -6,7 +6,7 @@ import RestaurantFloor from "./floors/restaurant";
 import NotFoundFloor from "./floors/not_found";
 import SheetMusicFloor from "./floors/sheet_music";
 import SkyFarmFloor from "./floors/sky_farm";
-import { readPage } from "./helpers/reader";
+import { fetchText } from "./helpers/reader";
 import Floor from "./types/floor";
 import { LazyLoader } from "./types/misc";
 
@@ -33,4 +33,4 @@ addFloor(new GalleryFloor());
 addStatusFloor(new NotFoundFloor());
 
 for (const floor of Array.from(FLOORS.values()).concat(Array.from(STATUS_FLOORS.values())))
-	CONTENTS.set(floor.num, new LazyLoader(() => readPage(`/contents/${floor.num}-${floor.id}.html`)));
+	CONTENTS.set(floor.num, new LazyLoader(() => fetchText(`/contents/${floor.num}-${floor.id}.html`)));

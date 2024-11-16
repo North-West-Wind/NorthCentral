@@ -1,6 +1,6 @@
 import * as THREE from "three";
 import { LazyLoader } from "./misc";
-import { readPage } from "../helpers/reader";
+import { fetchText } from "../helpers/reader";
 
 export type Generated = { [key: string]: THREE.Object3D }
 
@@ -13,12 +13,13 @@ export default abstract class Floor {
 	listenMove = false;
 	listenUpdate = false;
 	special = false;
-	protected meshes?: Generated;
+	protected meshes: Generated;
 
 	constructor(id: string, num: number, loaders?: { content?: LazyLoader<string> }) {
 		this.id = id;
 		this.num = num;
-		this.content = loaders?.content || new LazyLoader(() => readPage(`/contents/${num}-${id}.html`));
+		this.content = loaders?.content || new LazyLoader(() => fetchText(`/contents/${num}-${id}.html`));
+		this.meshes = {};
 	}
 
 	abstract spawn(scene: THREE.Scene): Generated | Promise<Generated>;
@@ -32,7 +33,7 @@ export default abstract class Floor {
 		for (const ob of Object.values(this.meshes))
 			if (ob)
 				scene.remove(ob);
-		this.meshes = undefined;
+		this.meshes = {};
 	}
 
 	abstract handleWheel(scroll: number): boolean;

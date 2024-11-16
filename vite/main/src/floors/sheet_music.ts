@@ -3,7 +3,7 @@ import Floor, { Generated } from "../types/floor";
 import { GLTF_LOADED } from "../loaders";
 import { camera, rotatedY, started } from "../states";
 import { toggleContent } from "../helpers/html";
-import { readPage } from "../helpers/reader";
+import { fetchText } from "../helpers/reader";
 import { LazyLoader } from "../types/misc";
 
 const SHEETS = 12;
@@ -11,7 +11,7 @@ const SHEETS = 12;
 export const SHEETMUSIC_CONTENTS: LazyLoader<string>[] = [];
 
 for (let i = 0; i < SHEETS; i++) {
-	const loader = new LazyLoader(() => readPage(`/contents/sheetmusic/info-${i}.html`));
+	const loader = new LazyLoader(() => fetchText(`/contents/sheetmusic/info-${i}.html`));
 	SHEETMUSIC_CONTENTS.push(loader);
 }
 
